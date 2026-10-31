@@ -1,6 +1,5 @@
 export type SinkCase = {
   id: string;
-  date: string;
   title: string;
   description: string;
   before: string;
@@ -13,7 +12,7 @@ export type SinkCase = {
 export const sinkCases: SinkCase[] = [
   {
     id: 'case-01',
-    title: '창원 오래된 주방 싱크볼 교체',
+    title: '오래된 주방 싱크볼 교체',
     description: '기존 싱크볼을 철거하고 새 스테인리스 싱크볼로 교체한 사례입니다. 싱크대볼 교체를 계획하신다면 상판 타공 상태와 배수구 위치도 함께 확인하는 것이 좋습니다.',
     before: '/images/cases/case-01-before.jpg',
     after: '/images/cases/case-01-after.jpg',
@@ -23,7 +22,7 @@ export const sinkCases: SinkCase[] = [
   },
   {
     id: 'case-02',
-    title: '부산 명지 낡은 개수대를 사각 싱크볼로 교체',
+    title: '낡은 개수대를 사각 싱크볼로 교체',
     description: '사용감이 있는 기존 개수대를 철거하고 반듯한 라인의 사각 싱크볼로 교체했습니다. 사각볼 교체로 세척 공간을 깔끔하게 정리한 사례입니다.',
     before: '/images/cases/case-02-before.jpg',
     after: '/images/cases/case-02-after.jpg',
@@ -33,7 +32,7 @@ export const sinkCases: SinkCase[] = [
   },
   {
     id: 'case-03',
-    title: '김해 주방 분위기를 바꾸는 사각볼 / 씽크볼 교체',
+    title: '주방 분위기를 바꾸는 사각볼 교체',
     description: '기존 싱크볼을 철거한 뒤 깊이감 있는 사각 싱크볼을 설치했습니다. 기존 주방 상판과 주변 설비를 확인해 알맞게 교체하는 것이 중요합니다.',
     before: '/images/cases/case-03-before.jpg',
     after: '/images/cases/case-03-after.jpg',
@@ -43,7 +42,7 @@ export const sinkCases: SinkCase[] = [
   },
   {
     id: 'case-04',
-    title: '양산 오래된 싱크대 싱크볼과 개수대 수전 주변 정리',
+    title: '오래된 씽크볼과 수전 주변 정리',
     description: '오래 사용한 씽크볼을 새 제품으로 교체한 사례입니다. 싱크볼뿐 아니라 배수구와 수전 주변의 연결 상태까지 꼼꼼하게 확인합니다.',
     before: '/images/cases/case-04-before.jpg',
     after: '/images/cases/case-04-after.jpg',
@@ -53,7 +52,7 @@ export const sinkCases: SinkCase[] = [
   },
   {
     id: 'case-05',
-    title: '진주 싱크볼 개수대 교체 설치',
+    title: '싱크대 개수대 교체 시공',
     description: '기존 개수대를 철거하고 새 싱크볼로 교체했습니다. 싱크대볼 교체는 제품 크기와 상판 상태, 배수 연결 구조를 먼저 확인한 뒤 진행합니다.',
     before: '/images/cases/case-05-before.jpg',
     after: '/images/cases/case-05-after.jpg',

@@ -50,7 +50,7 @@ export default function Cases() {
                   </div>
                 </div>
                 <div className="card-body" style={{ padding: 22 }}>
-                  <div className="premium-eyebrow">{item.date} · SINK REPLACEMENT</div>
+                  <div className="premium-eyebrow">SINK REPLACEMENT</div>
                   <h3 style={{ margin: '10px 0' }}>{item.title}</h3>
                   <p style={{ color: '#777', lineHeight: 1.75 }}>{item.description}</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginTop: 15 }}>
