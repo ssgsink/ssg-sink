@@ -945,3 +945,25 @@ textarea {
     font-size: 30px;
   }
 }
+
+/* REAL KITCHEN HERO IMAGE */
+.premium-hero-visual {
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  background-image:
+    linear-gradient(to top, rgba(0, 0, 0, .42), transparent 38%),
+    url('/images/shinsegae-sink-kitchen.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.premium-hero-visual::before,
+.premium-hero-visual::after {
+  display: none;
+}
+
+.hero-visual-label {
+  left: 22px;
+  bottom: 18px;
+}
