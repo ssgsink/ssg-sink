@@ -448,6 +448,26 @@ section {
     linear-gradient(145deg, #8b8d85, #484d46 55%, #252923);
 }
 
+/* SINK BOWL TYPE PHOTOS */
+.type-image {
+  width: 100%;
+  height: 190px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 5px;
+  background-image: url('/images/shinsegae-sink-types.jpg');
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+}
+
+.square-image {
+  background-position: left center;
+}
+
+.under-image {
+  background-position: right center;
+}
+
 .premium-type-card::before {
   content: "";
   position: absolute;
