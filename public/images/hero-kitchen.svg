@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1100" viewBox="0 0 1800 1100" role="img" aria-labelledby="title desc">
+<title id="title">밝고 현대적인 주방과 사각 싱크볼</title><desc id="desc">따뜻한 자연광이 들어오는 아파트 주방, 스테인리스 사각 싱크볼과 수전</desc>
+<defs>
+ <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#e8e5dc"/><stop offset="1" stop-color="#c9c5b9"/></linearGradient>
+ <linearGradient id="counter" x2="0" y2="1"><stop stop-color="#f8f8f4"/><stop offset="1" stop-color="#c8cbc8"/></linearGradient>
+ <linearGradient id="steel" x2="1" y2="1"><stop stop-color="#f7f9f8"/><stop offset=".5" stop-color="#9da8aa"/><stop offset="1" stop-color="#e5e9e7"/></linearGradient>
+ <linearGradient id="cab" x2="0" y2="1"><stop stop-color="#d6c7b2"/><stop offset="1" stop-color="#aa9984"/></linearGradient>
+ <linearGradient id="shade" x2="1" y2="0"><stop stop-color="#152631" stop-opacity=".78"/><stop offset=".62" stop-color="#152631" stop-opacity=".2"/><stop offset="1" stop-color="#152631" stop-opacity=".05"/></linearGradient>
+ <filter id="blur"><feGaussianBlur stdDeviation="22"/></filter>
+</defs>
+<rect width="1800" height="1100" fill="url(#wall)"/>
+<rect x="0" y="0" width="520" height="680" fill="#d9e1df"/>
+<rect x="36" y="36" width="450" height="600" fill="#eef2ef"/>
+<path d="M260 36v600M36 330h450" stroke="#c4ceca" stroke-width="18"/>
+<ellipse cx="250" cy="270" rx="240" ry="300" fill="#fff" opacity=".32" filter="url(#blur)"/>
+<rect x="590" y="105" width="1110" height="390" rx="4" fill="#b9aa96"/>
+<rect x="620" y="135" width="500" height="330" fill="#e8e2d7"/>
+<rect x="1140" y="135" width="530" height="330" fill="#e4ded3"/>
+<path d="M1125 135v330M1390 135v330" stroke="#c4b7a5" stroke-width="8"/>
+<rect x="0" y="650" width="1800" height="110" fill="url(#counter)"/>
+<path d="M0 650h1800" stroke="#fff" stroke-width="12" opacity=".8"/>
+<rect x="0" y="760" width="1800" height="340" fill="url(#cab)"/>
+<path d="M0 760h1800M590 760v340M1180 760v340" stroke="#8f806e" stroke-width="8" opacity=".6"/>
+<rect x="690" y="685" width="690" height="58" rx="20" fill="#8e9998" opacity=".55"/>
+<rect x="720" y="660" width="650" height="100" rx="18" fill="url(#steel)" stroke="#879294" stroke-width="8"/>
+<rect x="755" y="680" width="580" height="64" rx="10" fill="#879395"/>
+<rect x="770" y="687" width="550" height="47" rx="7" fill="#687779"/>
+<path d="M1040 680v-185c0-95 150-95 150 0v70" fill="none" stroke="#3e4b4d" stroke-width="28" stroke-linecap="round"/>
+<path d="M1190 565v24" stroke="#3e4b4d" stroke-width="28" stroke-linecap="round"/>
+<circle cx="1040" cy="680" r="18" fill="#596668"/>
+<rect x="1450" y="600" width="220" height="36" rx="8" fill="#f2eee7"/>
+<rect x="1490" y="520" width="30" height="80" rx="12" fill="#788a72"/>
+<ellipse cx="1505" cy="505" rx="55" ry="25" fill="#7e9878" transform="rotate(-22 1505 505)"/>
+<ellipse cx="1570" cy="490" rx="45" ry="20" fill="#91a68a" transform="rotate(25 1570 490)"/>
+<rect width="1800" height="1100" fill="url(#shade)"/>
+</svg>

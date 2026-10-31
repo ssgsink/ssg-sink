@@ -1,0 +1,4 @@
+네이버 서치어드바이저 소유확인 메타태그를 받으면 app/layout.tsx의 metadata.verification.naver 값에 입력하세요.
+예: verification: { naver: '네이버에서_발급받은_인증값' }
+실제 도메인으로 연결한 뒤 app/robots.ts, app/sitemap.ts, app/layout.tsx의 example.co.kr을 모두 실제 도메인으로 변경하세요.
+카카오톡 채널 URL을 받으면 app/contact/page.tsx의 카카오톡 상담 영역을 실제 링크 버튼으로 변경하세요.
