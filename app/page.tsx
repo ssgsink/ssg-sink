@@ -110,6 +110,7 @@ export default function Home() {
             <a href="/services/" className="premium-type-card square-type">
               <div className="type-number">01 / SQUARE</div>
               <div className="type-card-content">
+                <div className="type-image square-image"></div>
                 <h3>사각 싱크볼 교체</h3>
                 <p>넓고 깔끔한 디자인으로 주방에 세련된 변화를</p>
                 <span>자세히 보기 ↗</span>
@@ -118,6 +119,7 @@ export default function Home() {
             <a href="/services/" className="premium-type-card under-type">
               <div className="type-number">02 / UNDERMOUNT</div>
               <div className="type-card-content">
+                <div className="type-image under-image"></div>
                 <h3>언더싱크볼 교체</h3>
                 <p>상판과 자연스럽게 이어지는 심플한 주방 공간</p>
                 <span>자세히 보기 ↗</span>
