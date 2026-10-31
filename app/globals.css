@@ -468,17 +468,11 @@ section {
   background-position: right center;
 }
 
-.premium-type-card::before {
+.premium-type-card::after {
   content: "";
   position: absolute;
-  width: 62%;
-  height: 42%;
-  right: 10%;
-  top: 13%;
-  border: 8px solid rgba(245,246,241,.8);
-  border-radius: 8px 8px 25px 25px;
-  background: linear-gradient(135deg, #d9dcd5, #858b84);
-  box-shadow: 0 20px 35px rgba(0,0,0,.25);
+  inset: 45% 0 0;
+  background: linear-gradient(transparent, rgba(0,0,0,.72));
 }
 
 .premium-type-card::after {
