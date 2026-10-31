@@ -9,11 +9,11 @@ const areas = [
   'busan-haeundae', 'busan-saha', 'busan-geumjeong', 'busan-gangseo',
   'busan-yeonje', 'busan-suyeong', 'busan-sasang', 'busan-gijang',
   'changwon',
-  'changwon-uichang', 'changwon-seongsan',
-  'changwon-masanhappo', 'changwon-masanhoewon', 'changwon-jinhae',
-  'masan', 'jinhae', 'gimhae', 'yangsan', 'jinju',
-  'sacheon', 'geoje', 'tongyeong', 'goseong',
-  'miryang', 'haman', 'changnyeong', 'gyeongnam'
+  'masan',
+  'jinhae',
+  'gimhae', 'yangsan', 'jinju', 'sacheon',
+  'geoje', 'tongyeong', 'goseong', 'miryang',
+  'haman', 'changnyeong', 'gyeongnam'
 ];
 export default function sitemap():MetadataRoute.Sitemap {
   const now = new Date();
