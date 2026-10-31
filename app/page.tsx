@@ -1,4 +1,3 @@
-
 const areas = [
   ['부산 전체', 'busan'],
   ['부산 중구', 'busan-jung'],
@@ -32,36 +31,169 @@ const areas = [
   ['창녕', 'changnyeong'],
   ['경남 기타 지역', 'gyeongnam'],
 ];
-export default function Home(){return <>
-<section className="hero"><div className="wrap"><div className="hero-copy"><div className="eyebrow">BUSAN · GYEONGNAM SINK BOWL SPECIALIST</div><h1>싱크볼 하나만 바꿔도<br/>주방이 달라집니다.</h1><p className="lead">오래 사용한 싱크볼, 떨어짐·부식·오염으로 불편한 개수대.<br/>신세계싱크에서 새 싱크볼 교체를 상담해 보세요.</p><div className="btn-row"><a className="btn btn-primary" href="tel:01055043858">전화 상담 010-5504-3858</a><a className="btn btn-light" href="/contact/">사진으로 교체 상담하기</a></div></div></div></section>
-<section className="section"><div className="wrap"><div className="section-head"><div><div className="kicker">WHY SHINSEGAE SINK</div><h2>싱크볼 교체, 필요한 부분을 꼼꼼하게</h2><p>주방 환경과 기존 상판·하부장 상태를 확인한 뒤 교체 방법을 안내합니다.</p></div><a className="text-link" href="/about/">업체 소개 보기 →</a></div><div className="grid3"><article className="card"><div className="card-body"><div className="icon-box">▣</div><h3>싱크볼 교체 전문</h3><p>사각싱크볼, 언더싱크볼 등 주방 환경에 맞는 교체 상담을 진행합니다.</p></div></article><article className="card"><div className="card-body"><div className="icon-box">⌖</div><h3>부산·경남 출장 상담</h3><p>부산과 경남 지역의 교체 가능 여부와 방문 일정을 상담해 드립니다.</p></div></article><article className="card"><div className="card-body"><div className="icon-box">▧</div><h3>사진으로 먼저 상담</h3><p>싱크볼 전체 사진과 하부장 사진을 보내주시면 교체 가능 여부를 확인하는 데 도움이 됩니다.</p></div></article></div></div></section>
-<section className="section section-soft"><div className="wrap"><div className="section-head"><div><div className="kicker">SINK BOWL TYPES</div><h2>우리 집 주방에 어울리는 싱크볼</h2><p>기존 싱크대 구조와 상판 타공 크기를 확인하고 제품을 선택하세요.</p></div></div><div className="grid3"><article className="card"><div className="photo-placeholder"/><div className="card-body"><h3>사각싱크볼</h3><p>넉넉한 내부 공간과 깔끔한 디자인을 원하는 주방에 추천합니다.</p></div></article><article className="card"><div className="photo-placeholder"/><div className="card-body"><h3>언더싱크볼</h3><p>상판 아래쪽에 설치하는 방식으로 상판과 싱크볼 경계를 깔끔하게 정리합니다.</p></div></article><article className="card"><div className="photo-placeholder"/><div className="card-body"><h3>일반 싱크볼</h3><p>기존 주방 구조와 사용 환경에 맞춰 교체 방법을 상담합니다.</p></div></article></div></div></section>
-<section className="section">
-  <div className="wrap">
-    <div className="section-head">
-      <div>
-        <div className="kicker">SERVICE AREA</div>
-        <h2>부산·경남 싱크볼 교체 상담 지역</h2>
-        <p>지역명을 선택하면 해당 지역의 싱크볼 교체 안내를 확인할 수 있습니다.</p>
-      </div>
-    </div>
 
-    <h3>부산 지역</h3>
-    <div className="area-links">
-      {areas.slice(0, 17).map(([n, s]) => (
-        <a key={s} href={`/areas/${s}/`}>{n} 싱크볼 교체</a>
-      ))}
-    </div>
+export default function Home() {
+  return (
+    <>
+      <section className="premium-hero">
+        <div className="wrap premium-hero-inner">
+          <div className="premium-hero-copy">
+            <div className="premium-kicker">SINK BOWL SPECIALIST</div>
+            <h1>
+              주방의 품격을 바꾸는
+              <br />
+              <span>싱크볼 교체</span>
+            </h1>
+            <p>
+              매일 사용하는 싱크볼,
+              <br />
+              완성도 높은 시공으로 주방의 분위기를 새롭게 바꿔드립니다.
+            </p>
+            <div className="premium-actions">
+              <a href="tel:01055043858" className="gold-button">
+                전화 상담 010-5504-3858
+              </a>
+              <a href="/cases/" className="outline-button">
+                시공 사례 보기
+              </a>
+            </div>
+            <div className="premium-note">
+              부산 · 김해 · 양산 · 창원 · 경남 전 지역 출장 시공
+            </div>
+          </div>
+          <div className="premium-hero-visual">
+            <div className="hero-visual-label">
+              <span>SHINSEGAE SINK</span>
+              <strong>DETAIL MAKES THE DIFFERENCE</strong>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <div style={{ borderTop: '1px solid #ddd', margin: '32px 0' }} />
+      <section className="premium-intro">
+        <div className="wrap">
+          <div className="premium-eyebrow">WHY SHINSEGAE SINK</div>
+          <h2>싱크볼 하나로 달라지는 주방</h2>
+          <p>
+            오래 사용해 낡고 불편해진 싱크볼부터
+            새로운 분위기를 원하는 주방까지.
+            신세계싱크가 꼼꼼하게 교체해 드립니다.
+          </p>
+          <div className="premium-values">
+            <div>
+              <span>01</span>
+              <strong>전문 시공</strong>
+              <p>싱크볼 교체에 집중한 전문 작업</p>
+            </div>
+            <div>
+              <span>02</span>
+              <strong>꼼꼼한 마감</strong>
+              <p>설치부터 마무리까지 세심하게</p>
+            </div>
+            <div>
+              <span>03</span>
+              <strong>부산·경남 출장</strong>
+              <p>지역에 맞춰 편리하게 상담</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <h3>경남 지역</h3>
-    <div className="area-links">
-      {areas.slice(17).map(([n, s]) => (
-        <a key={s} href={`/areas/${s}/`}>{n} 싱크볼 교체</a>
-      ))}
-    </div>
-  </div>
-</section>
-  <section className="band"><div className="wrap band-inner"><div><h2>싱크볼 교체가 필요하신가요?</h2><p>싱크대 사진을 준비해 주시면 보다 정확한 상담에 도움이 됩니다.</p></div><a className="btn btn-primary" href="/contact/">상담 신청하기 →</a></div></section>
-</>}
+      <section className="premium-types">
+        <div className="wrap">
+          <div className="premium-section-heading">
+            <div className="premium-eyebrow">SINK BOWL TYPES</div>
+            <h2>원하는 스타일로 새롭게</h2>
+            <p>주방 상판과 사용 환경에 어울리는 싱크볼을 선택해 보세요.</p>
+          </div>
+          <div className="premium-type-grid">
+            <a href="/services/" className="premium-type-card square-type">
+              <div className="type-number">01 / SQUARE</div>
+              <div className="type-card-content">
+                <h3>사각 싱크볼 교체</h3>
+                <p>넓고 깔끔한 디자인으로 주방에 세련된 변화를</p>
+                <span>자세히 보기 ↗</span>
+              </div>
+            </a>
+            <a href="/services/" className="premium-type-card under-type">
+              <div className="type-number">02 / UNDERMOUNT</div>
+              <div className="type-card-content">
+                <h3>언더싱크볼 교체</h3>
+                <p>상판과 자연스럽게 이어지는 심플한 주방 공간</p>
+                <span>자세히 보기 ↗</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="premium-process">
+        <div className="wrap">
+          <div className="premium-section-heading">
+            <div className="premium-eyebrow">OUR PROCESS</div>
+            <h2>상담부터 시공까지 꼼꼼하게</h2>
+          </div>
+          <div className="premium-steps">
+            <div><span>01</span><strong>상담 문의</strong><p>지역과 교체 희망 사항 확인</p></div>
+            <div><span>02</span><strong>사진 확인</strong><p>싱크볼과 하부장 상태 확인</p></div>
+            <div><span>03</span><strong>제품 및 일정 안내</strong><p>시공 가능 여부와 비용 안내</p></div>
+            <div><span>04</span><strong>교체 시공</strong><p>설치와 마무리 상태 점검</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="premium-cases">
+        <div className="wrap premium-case-inner">
+          <div>
+            <div className="premium-eyebrow">INSTALLATION STORIES</div>
+            <h2>실제 시공 사례로 확인하세요</h2>
+            <p>
+              부산과 경남 곳곳에서 진행한
+              다양한 싱크볼 교체 사례를 확인하실 수 있습니다.
+            </p>
+            <a href="/cases/" className="dark-button">시공 사례 보러 가기 ↗</a>
+          </div>
+          <div className="premium-case-mark">SINK<br />BOWL<br /><span>RENEWAL</span></div>
+        </div>
+      </section>
+
+      <section className="premium-areas">
+        <div className="wrap">
+          <div className="premium-section-heading">
+            <div className="premium-eyebrow">SERVICE AREA</div>
+            <h2>부산·경남 싱크볼 교체 상담 지역</h2>
+            <p>지역을 선택하면 해당 지역의 싱크볼 교체 안내를 확인할 수 있습니다.</p>
+          </div>
+
+          <h3 className="area-heading">부산 지역</h3>
+          <div className="premium-area-links">
+            {areas.slice(0, 17).map(([name, slug]) => (
+              <a key={slug} href={`/areas/${slug}/`}>{name} 싱크볼 교체</a>
+            ))}
+          </div>
+
+          <div className="premium-area-divider" />
+
+          <h3 className="area-heading">경남 지역</h3>
+          <div className="premium-area-links">
+            {areas.slice(17).map(([name, slug]) => (
+              <a key={slug} href={`/areas/${slug}/`}>{name} 싱크볼 교체</a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="premium-contact">
+        <div className="wrap">
+          <div className="premium-eyebrow">CONTACT US</div>
+          <h2>우리 집 싱크볼 교체,<br />편하게 상담해 보세요.</h2>
+          <p>싱크볼 사진과 지역을 알려주시면 상담에 도움이 됩니다.</p>
+          <a href="tel:01055043858" className="gold-button">
+            전화 상담 010-5504-3858
+          </a>
+          <div className="contact-brand">신세계싱크 <span>SINK BOWL SPECIALIST</span></div>
+        </div>
+      </section>
+    </>
+  );
+}
