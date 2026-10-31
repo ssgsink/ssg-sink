@@ -1,7 +1,20 @@
 import type { MetadataRoute } from 'next';
 const domain = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'https://shinsegae-sink.vercel.app');
 const base = domain.replace(/\/$/, '');
-const areas=['busan','changwon','masan','jinhae','gimhae','yangsan','jinju','geoje','tongyeong','miryang','sacheon','gyeongnam'];
+
+const areas = [
+  'busan',
+  'busan-jung', 'busan-seo', 'busan-dong', 'busan-yeongdo',
+  'busan-busanjin', 'busan-dongnae', 'busan-nam', 'busan-buk',
+  'busan-haeundae', 'busan-saha', 'busan-geumjeong', 'busan-gangseo',
+  'busan-yeonje', 'busan-suyeong', 'busan-sasang', 'busan-gijang',
+  'changwon',
+  'changwon-uichang', 'changwon-seongsan',
+  'changwon-masanhappo', 'changwon-masanhoewon', 'changwon-jinhae',
+  'masan', 'jinhae', 'gimhae', 'yangsan', 'jinju',
+  'sacheon', 'geoje', 'tongyeong', 'goseong',
+  'miryang', 'haman', 'changnyeong', 'gyeongnam'
+];
 export default function sitemap():MetadataRoute.Sitemap {
   const now = new Date();
   return [
