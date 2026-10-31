@@ -8,8 +8,7 @@ const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || (vercelProductionDomain ? `
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: '신세계싱크 | 부산·경남 싱크볼 교체 전문', template: '%s | 신세계싱크' },
-  description: '부산·경남 싱크볼 교체 전문 신세계싱크. 사각싱크볼, 언더싱크볼, 싱크대볼 및 개수대 교체 상담. 시공 사례와 교체 안내를 확인하고 전화·문자로 문의하세요.',
-  alternates: { canonical: '/' },
+  description: '신세계싱크｜부산·경남 전 지역 싱크볼 교체 전문 업체. 사각 싱크볼부터 언더 씽크볼까지, 다양한 싱크대볼 교체 및 설치 가능합니다.',  alternates: { canonical: '/' },
   openGraph: { type: 'website', locale: 'ko_KR', siteName: '신세계싱크', title: '신세계싱크 | 부산·경남 싱크볼 교체 전문', description: '싱크볼 하나만 바꿔도 주방이 달라집니다. 부산·경남 싱크볼 교체 전문 신세계싱크.', images: [{ url: '/og-image.png', width: 1200, height: 630, alt: '신세계싱크 부산·경남 싱크볼 교체 전문' }] },
   twitter: { card: 'summary_large_image', title: '신세계싱크 | 부산·경남 싱크볼 교체 전문', images: ['/og-image.png'] },
   robots: { index: true, follow: true },
