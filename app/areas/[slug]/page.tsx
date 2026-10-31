@@ -3,30 +3,71 @@ import { notFound } from 'next/navigation';
 
 type AreaInfo = { name: string; fullName: string; focus: string; localNote: string };
 const areas: Record<string, AreaInfo> = {
-  busan: { name: '부산', fullName: '부산광역시', focus: '부산 싱크볼 교체와 사각싱크볼 교체', localNote: '부산 각 구·군의 아파트와 주택에서 싱크볼 교체가 필요한 경우 사진으로 먼저 상담할 수 있습니다.' },
-  changwon: { name: '창원', fullName: '창원시', focus: '창원 싱크볼 교체와 사각싱크볼 교체', localNote: '창원 지역에서 오래된 싱크볼, 부식된 개수대, 처지거나 떨어진 싱크볼 교체를 상담합니다.' },
-  masan: { name: '마산', fullName: '마산 지역', focus: '마산 싱크볼 교체와 사각볼 교체', localNote: '마산 지역의 아파트와 주택 주방 구조에 맞춰 기존 싱크볼 규격과 상판 상태를 확인합니다.' },
-  jinhae: { name: '진해', fullName: '창원시 진해구', focus: '진해 싱크볼 교체와 씽크볼 교체', localNote: '진해 지역에서 싱크대볼이나 개수대 교체가 필요할 때 기존 제품 사진과 치수를 바탕으로 상담합니다.' },
-  gimhae: { name: '김해', fullName: '김해시', focus: '김해 싱크볼 교체와 사각싱크볼 교체', localNote: '김해 지역의 주방 환경과 상판 타공 크기를 확인해 교체 가능한 싱크볼 형태를 안내합니다.' },
-  yangsan: { name: '양산', fullName: '양산시', focus: '양산 싱크볼 교체와 사각볼 교체', localNote: '양산 지역에서 싱크볼이 녹슬거나 떨어지는 등 교체가 필요한 상황을 사진으로 먼저 확인합니다.' },
-  jinju: { name: '진주', fullName: '진주시', focus: '진주 싱크볼 교체와 개수대 교체', localNote: '진주 지역의 싱크대 구조와 기존 싱크볼 크기를 확인한 뒤 교체 상담을 진행합니다.' },
-  geoje: { name: '거제', fullName: '거제시', focus: '거제 싱크볼 교체와 사각씽크볼 교체', localNote: '거제 지역에서 기존 개수대를 새 싱크볼로 바꾸려는 경우 사진과 거주 지역을 알려주세요.' },
-  tongyeong: { name: '통영', fullName: '통영시', focus: '통영 싱크볼 교체와 싱크대볼 교체', localNote: '통영 지역의 주택 및 아파트 주방에 맞는 싱크볼 교체 가능 여부를 상담합니다.' },
-  miryang: { name: '밀양', fullName: '밀양시', focus: '밀양 싱크볼 교체와 언더싱크볼 교체', localNote: '밀양 지역에서 언더싱크볼이나 일반 싱크볼을 교체하려는 경우 설치 구조부터 확인합니다.' },
-  sacheon: { name: '사천', fullName: '사천시', focus: '사천 싱크볼 교체와 개수대 교체', localNote: '사천 지역의 싱크볼 교체는 기존 볼의 크기와 상판·하부장 상태를 확인한 뒤 안내합니다.' },
-  gyeongnam: { name: '경남', fullName: '경상남도', focus: '경남 싱크볼 교체와 사각싱크볼 교체', localNote: '경남 지역은 시·군과 현장 위치에 따라 출장 가능 일정이 달라질 수 있으므로 먼저 문의해 주세요.' },
+  busan: { name: '부산', fullName: '부산광역시', focus: '부산 싱크볼 교체 및 부산 사각싱크볼 교체', localNote: '부산 전 지역 아파트와 주택의 싱크볼, 씽크볼, 싱크대볼 교체 상담을 제공합니다.' },
+  busan-jung: { name: '부산 중구', fullName: '부산광역시 중구', focus: '부산 중구 싱크볼 교체', localNote: '부산 중구 주택과 아파트의 오래된 싱크볼 교체 및 사각싱크볼 시공을 상담합니다.' },
+  busan-seo: { name: '부산 서구', fullName: '부산광역시 서구', focus: '부산 서구 싱크볼 교체', localNote: '부산 서구 지역의 싱크볼, 씽크볼 및 싱크대볼 교체를 안내합니다.' },
+  busan-dong: { name: '부산 동구', fullName: '부산광역시 동구', focus: '부산 동구 싱크볼 교체', localNote: '부산 동구 주방 환경에 맞는 싱크볼 교체와 설치 상담을 제공합니다.' },
+  busan-yeongdo: { name: '부산 영도구', fullName: '부산광역시 영도구', focus: '부산 영도구 싱크볼 교체', localNote: '영도구 아파트와 주택의 싱크볼 교체 및 사각싱크볼 설치를 상담합니다.' },
+  busan-busanjin: { name: '부산 부산진구', fullName: '부산광역시 부산진구', focus: '부산 부산진구 싱크볼 교체', localNote: '부산진구 싱크대볼 교체와 언더싱크볼, 사각싱크볼 시공을 안내합니다.' },
+  busan-dongnae: { name: '부산 동래구', fullName: '부산광역시 동래구', focus: '부산 동래구 싱크볼 교체', localNote: '동래구 주방의 노후 싱크볼 교체와 새로운 싱크볼 설치를 상담합니다.' },
+  busan-nam: { name: '부산 남구', fullName: '부산광역시 남구', focus: '부산 남구 싱크볼 교체', localNote: '부산 남구 지역의 싱크볼 교체와 주방 개수대 개선을 안내합니다.' },
+  busan-buk: { name: '부산 북구', fullName: '부산광역시 북구', focus: '부산 북구 싱크볼 교체', localNote: '북구 아파트와 주택의 사각싱크볼 및 일반 싱크볼 교체를 상담합니다.' },
+  busan-haeundae: { name: '부산 해운대구', fullName: '부산광역시 해운대구', focus: '부산 해운대구 싱크볼 교체', localNote: '해운대구 아파트와 주택의 싱크볼 교체 및 고급 사각싱크볼 시공을 안내합니다.' },
+  busan-saha: { name: '부산 사하구', fullName: '부산광역시 사하구', focus: '부산 사하구 싱크볼 교체', localNote: '사하구 지역의 싱크볼, 씽크볼, 싱크대볼 교체 상담을 제공합니다.' },
+  busan-geumjeong: { name: '부산 금정구', fullName: '부산광역시 금정구', focus: '부산 금정구 싱크볼 교체', localNote: '금정구 주방에 맞는 싱크볼 교체와 언더싱크볼 설치를 상담합니다.' },
+  busan-gangseo: { name: '부산 강서구', fullName: '부산광역시 강서구', focus: '부산 강서구 싱크볼 교체', localNote: '부산 강서구 주택과 아파트의 싱크볼 교체 및 설치를 안내합니다.' },
+  busan-yeonje: { name: '부산 연제구', fullName: '부산광역시 연제구', focus: '부산 연제구 싱크볼 교체', localNote: '연제구 싱크대 개수대 교체와 사각싱크볼 시공을 상담합니다.' },
+  busan-suyeong: { name: '부산 수영구', fullName: '부산광역시 수영구', focus: '부산 수영구 싱크볼 교체', localNote: '수영구 아파트와 주택의 싱크볼 교체 및 주방 개선을 안내합니다.' },
+  busan-sasang: { name: '부산 사상구', fullName: '부산광역시 사상구', focus: '부산 사상구 싱크볼 교체', localNote: '사상구 지역의 싱크볼 교체와 사각싱크볼 설치 상담을 제공합니다.' },
+  busan-gijang: { name: '부산 기장군', fullName: '부산광역시 기장군', focus: '부산 기장군 싱크볼 교체', localNote: '기장군 주택과 아파트의 싱크볼 및 싱크대볼 교체를 상담합니다.' },
+
+  changwon: { name: '창원', fullName: '경상남도 창원시', focus: '창원 싱크볼 교체 및 창원 사각싱크볼 교체', localNote: '창원 전 지역의 싱크볼, 씽크볼, 싱크대볼 교체와 사각싱크볼 설치를 안내합니다.' },
+  changwon-uichang: { name: '창원 의창구', fullName: '경상남도 창원시 의창구', focus: '창원 의창구 싱크볼 교체', localNote: '의창구 아파트와 주택의 싱크볼 교체 및 사각싱크볼 설치를 상담합니다.' },
+  changwon-seongsan: { name: '창원 성산구', fullName: '경상남도 창원시 성산구', focus: '창원 성산구 싱크볼 교체', localNote: '성산구 주방의 오래된 싱크볼 교체와 언더싱크볼 시공을 안내합니다.' },
+  changwon-masanhappo: { name: '창원 마산합포구', fullName: '경상남도 창원시 마산합포구', focus: '창원 마산합포구 싱크볼 교체', localNote: '마산합포구 아파트와 주택의 싱크볼 교체 및 개수대 교체를 상담합니다.' },
+  changwon-masanhoewon: { name: '창원 마산회원구', fullName: '경상남도 창원시 마산회원구', focus: '창원 마산회원구 싱크볼 교체', localNote: '마산회원구 지역의 사각싱크볼과 일반 싱크볼 교체를 안내합니다.' },
+  changwon-jinhae: { name: '창원 진해구', fullName: '경상남도 창원시 진해구', focus: '창원 진해구 싱크볼 교체', localNote: '진해구 주택과 아파트의 싱크볼 교체 및 설치 상담을 제공합니다.' },
+
+  masan: { name: '마산', fullName: '경상남도 창원시 마산 지역', focus: '마산 싱크볼 교체 및 마산 사각싱크볼 교체', localNote: '마산합포구와 마산회원구를 포함한 마산 지역의 싱크볼 교체를 안내합니다.' },
+  jinhae: { name: '진해', fullName: '경상남도 창원시 진해구', focus: '진해 싱크볼 교체 및 진해 사각싱크볼 교체', localNote: '진해 지역 아파트와 주택의 싱크볼, 씽크볼 교체를 상담합니다.' },
+  gimhae: { name: '김해', fullName: '경상남도 김해시', focus: '김해 싱크볼 교체 및 김해 사각싱크볼 교체', localNote: '김해와 장유, 율하 등 김해 지역의 싱크볼 교체 및 설치를 안내합니다.' },
+  yangsan: { name: '양산', fullName: '경상남도 양산시', focus: '양산 싱크볼 교체 및 양산 사각싱크볼 교체', localNote: '양산 지역 아파트와 주택의 싱크볼 교체 및 개수대 교체를 상담합니다.' },
+  jinju: { name: '진주', fullName: '경상남도 진주시', focus: '진주 싱크볼 교체 및 진주 사각싱크볼 교체', localNote: '진주 지역의 싱크볼, 씽크볼, 싱크대볼 교체와 설치를 안내합니다.' },
+  sacheon: { name: '사천', fullName: '경상남도 사천시', focus: '사천 싱크볼 교체 및 사천 사각싱크볼 교체', localNote: '사천 지역 주택과 아파트의 싱크볼 교체 및 사각싱크볼 시공을 상담합니다.' },
+  geoje: { name: '거제', fullName: '경상남도 거제시', focus: '거제 싱크볼 교체 및 거제 사각싱크볼 교체', localNote: '거제 지역의 싱크볼 교체와 주방 개수대 개선을 안내합니다.' },
+  tongyeong: { name: '통영', fullName: '경상남도 통영시', focus: '통영 싱크볼 교체 및 통영 사각싱크볼 교체', localNote: '통영 지역 아파트와 주택의 싱크볼 교체 및 설치 상담을 제공합니다.' },
+  goseong: { name: '고성', fullName: '경상남도 고성군', focus: '고성 싱크볼 교체 및 고성 사각싱크볼 교체', localNote: '고성군 주택과 아파트의 싱크볼, 싱크대볼 교체를 안내합니다.' },
+  miryang: { name: '밀양', fullName: '경상남도 밀양시', focus: '밀양 싱크볼 교체 및 밀양 사각싱크볼 교체', localNote: '밀양 지역의 싱크볼 교체와 언더싱크볼 설치를 상담합니다.' },
+  haman: { name: '함안', fullName: '경상남도 함안군', focus: '함안 싱크볼 교체 및 함안 사각싱크볼 교체', localNote: '함안군 주택과 아파트의 싱크볼 교체 및 개수대 교체를 안내합니다.' },
+  changnyeong: { name: '창녕', fullName: '경상남도 창녕군', focus: '창녕 싱크볼 교체 및 창녕 사각싱크볼 교체', localNote: '창녕 지역의 싱크볼과 싱크대볼 교체, 설치 상담을 제공합니다.' },
+  gyeongnam: { name: '경남 기타 지역', fullName: '경상남도 전 지역', focus: '경남 싱크볼 교체 및 경남 사각싱크볼 교체', localNote: '위 지역 외 경남 지역도 거리와 작업 일정에 따라 싱크볼 교체 상담이 가능합니다.' },
 };
 export function generateStaticParams() { return Object.keys(areas).map((slug) => ({ slug })); }
 export const dynamicParams = false;
+ 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params; const area = areas[slug]; if (!area) return {};
+  const { slug } = await params;
+  const area = areas[slug];
+  if (!area) return {};
+
+  const title = `${area.name} 싱크볼 교체 | 사각싱크볼·언더싱크볼 시공 | 신세계싱크`;
+  const description = `신세계싱크는 ${area.fullName} 싱크볼·씽크볼·싱크대볼 교체 전문 업체입니다. ${area.localNote} 사각싱크볼과 언더싱크볼 교체 상담을 제공합니다.`;
+
   return {
-    title: `${area.name} 싱크볼 교체 | 씽크볼·싱크대볼·개수대 교체`,
-    description: `${area.name} 싱크볼 교체 전문 신세계싱크. ${area.name} 씽크볼 교체, 싱크대볼 교체, 개수대 교체, 사각싱크볼·사각씽크볼 교체 상담.`,
+    title,
+    description,
     alternates: { canonical: `/areas/${slug}/` },
-    openGraph: { title: `${area.name} 싱크볼 교체 | 신세계싱크`, description: `${area.name} 지역 싱크볼·개수대 교체 상담 안내`, images: ['/og-image.png'] },
+    openGraph: {
+      type: 'website',
+      locale: 'ko_KR',
+      siteName: '신세계싱크',
+      title,
+      description,
+      images: ['/og-image.png'],
+    },
   };
 }
+
 export default async function AreaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params; const area = areas[slug]; if (!area) notFound();
   return <>
