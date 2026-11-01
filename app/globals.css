@@ -998,3 +998,74 @@ textarea {
  .mobile-contact-sms{background:#b89a66;color:#161616!important}
  #sms-consult{scroll-margin-top:110px}
 }
+
+
+/* Regional landing pages: visual-first layout, scoped to avoid affecting other pages */
+.local-page{color:#102540;background:#fff}
+.local-page .wrap{max-width:1180px}
+.local-hero{background:linear-gradient(120deg,#f3f8ff 0%,#fff 65%);overflow:hidden}
+.local-breadcrumb{display:flex;align-items:center;gap:11px;padding:22px 0;color:#536479;font-size:12px}
+.local-breadcrumb strong{color:#0a284b}
+.local-hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;min-height:390px;padding:12px 0 48px}
+.local-eyebrow{display:block;color:#1472b8;font-size:11px;font-weight:800;letter-spacing:1.6px}
+.local-hero h1{margin:14px 0 18px;font-size:clamp(34px,4.4vw,58px);line-height:1.2;letter-spacing:-2px}
+.local-hero h1 span{color:#1267a7}
+.local-hero-copy>p{color:#475b70;font-size:16px;line-height:1.9}
+.local-trust{display:flex;flex-wrap:wrap;gap:10px;margin:25px 0}
+.local-trust span{padding:10px 13px;border:1px solid #d9e5f2;border-radius:9px;background:#fff;box-shadow:0 4px 12px #123b6510;font-size:12px;font-weight:700}
+.local-trust b{color:#1683c3;margin-right:4px}
+.local-hero-link{display:inline-flex;gap:15px;align-items:center;padding:11px 0;border-bottom:2px solid #1267a7;color:#125f99;font-size:13px;font-weight:800}
+.local-hero-photo{min-height:340px;position:relative;overflow:hidden;border-radius:22px 22px 22px 65px;background:#cbd5df url('/images/shinsegae-sink-types.jpg') left center/200% 100% no-repeat;box-shadow:0 22px 50px #0d2d4a26}
+.local-hero-photo span{position:absolute;left:20px;bottom:18px;background:#092947d9;color:#fff;padding:8px 12px;font-size:10px;letter-spacing:1px;border-radius:5px}
+.local-section{padding:76px 0}
+.local-section-heading{margin-bottom:28px}
+.local-section-heading h2{margin:8px 0 9px;font-size:clamp(25px,3vw,36px);line-height:1.35;letter-spacing:-1.3px}
+.local-section-heading p{margin:0;color:#586a7a;font-size:14px}
+.local-reason-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.local-reason{padding:26px 19px;border:1px solid #e1e9f1;border-radius:15px;text-align:center;box-shadow:0 6px 18px #0b376012;background:#fff}
+.local-reason>span{display:block;color:#1580bc;font-size:35px;line-height:1.2;margin-bottom:14px}
+.local-reason strong{display:block;font-size:17px}
+.local-reason p{font-size:12px;color:#617182;line-height:1.7;margin:10px 0 0}
+.local-detail-note{margin:24px 0 0;color:#617182;font-size:13px}
+.local-work{background:#f0f6fc}
+.local-case-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.local-case-card{overflow:hidden;border:1px solid #dbe6f0;background:#fff;border-radius:14px;box-shadow:0 8px 22px #102e4912;transition:transform .2s,box-shadow .2s}
+.local-case-card:hover{transform:translateY(-4px);box-shadow:0 14px 28px #102e4926}
+.local-case-image{height:215px;position:relative;background:#e2eaf1}
+.local-case-image img{display:block;width:100%;height:100%;object-fit:cover}
+.local-case-image span{position:absolute;right:12px;bottom:12px;padding:6px 10px;border-radius:7px;background:#092d4bcc;color:white;font-size:11px}
+.local-case-body{padding:19px}
+.local-case-body>span{font-size:11px;color:#1672ac;font-weight:800}
+.local-case-body h3{font-size:17px;line-height:1.5;margin:6px 0 9px}
+.local-case-body p{font-size:12px;color:#687988;line-height:1.7;margin:0 0 12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.local-case-body strong{font-size:12px;color:#1169a8}
+.local-all-cases{display:inline-block;margin-top:24px;font-size:14px;font-weight:800;color:#115d9a}
+.local-empty-cases{display:grid;grid-template-columns:200px 1fr;gap:28px;align-items:center;padding:25px;border:1px solid #dbe6f0;border-radius:14px;background:white}
+.local-empty-visual{height:140px;border-radius:10px;background:#c9d6e0 url('/images/shinsegae-sink-types.jpg') right center/200% 100% no-repeat}
+.local-empty-cases h3{margin:0 0 5px;font-size:20px}
+.local-empty-cases p{font-size:13px;color:#647687}
+.local-empty-cases a{color:#1267a7;font-weight:800;font-size:13px}
+.local-prep-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.local-prep-card{position:relative;padding:26px 30px 26px 80px;border-right:1px solid #d9e3ed}
+.local-prep-card:last-child{border-right:0}
+.local-prep-symbol{position:absolute;left:20px;top:27px;font-size:34px;color:#1678b7}
+.local-prep-card h2{margin:0 0 18px;font-size:clamp(20px,2.1vw,25px)}
+.local-prep-card ul{margin:0;padding:17px 20px 17px 35px;background:#eff6ff;border-radius:12px;color:#213c55;font-size:13px;line-height:2}
+.local-prep-card p{font-size:14px;color:#586b7c}
+.local-contact{padding:55px 0;background:linear-gradient(110deg,#052749,#075183);color:white}
+.local-contact-grid{display:grid;grid-template-columns:1fr 1.2fr;align-items:center;gap:36px}
+.local-contact .local-eyebrow{color:#95ccef}
+.local-contact h2{margin:7px 0;font-size:clamp(25px,3vw,35px);letter-spacing:-1px}
+.local-contact h2 em{font-style:normal;color:#ffbb56}
+.local-contact p{margin:0;color:#d3e5f4;font-size:13px}
+.local-contact-actions{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.local-contact-actions a{min-height:92px;border-radius:15px;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px;box-shadow:0 6px 16px #0002;transition:transform .2s}
+.local-contact-actions a:hover{transform:translateY(-3px)}
+.local-contact-call{background:linear-gradient(135deg,#ff9d16,#f25a15);color:#fff}
+.local-contact-sms{background:#fff;color:#08457d}
+.local-contact-icon{font-size:29px;line-height:1}
+.local-contact-actions strong{display:block;font-size:18px}
+.local-contact-actions small{display:block;font-size:12px;font-weight:700}
+.local-contact-arrow{font-size:17px;align-self:flex-start}
+@media(max-width:900px){.local-hero-grid{gap:22px}.local-reason-grid{grid-template-columns:repeat(2,1fr)}.local-case-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.local-contact-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.local-breadcrumb{padding:16px 0}.local-hero-grid{grid-template-columns:1fr;padding-bottom:35px}.local-hero-photo{min-height:245px;border-radius:14px 14px 14px 35px}.local-hero h1{font-size:36px}.local-hero-copy>p{font-size:14px}.local-section{padding:50px 0}.local-reason-grid{gap:10px}.local-reason{padding:20px 10px}.local-reason strong{font-size:14px}.local-reason p{font-size:11px}.local-case-grid{grid-template-columns:1fr}.local-case-image{height:230px}.local-prep-grid{grid-template-columns:1fr;gap:12px}.local-prep-card{padding:16px 12px 20px 60px;border-right:0;border-bottom:1px solid #d9e3ed}.local-prep-symbol{left:10px;top:18px}.local-contact{padding:45px 0}.local-contact-actions{gap:10px}.local-contact-actions a{min-height:82px;padding:10px 6px;gap:6px}.local-contact-icon{font-size:22px}.local-contact-actions strong{font-size:15px}.local-contact-actions small{font-size:10px}.local-empty-cases{grid-template-columns:1fr}.local-empty-visual{height:170px}}
