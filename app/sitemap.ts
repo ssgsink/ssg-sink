@@ -18,14 +18,14 @@ const areas = [
 ];
 export default async function sitemap():Promise<MetadataRoute.Sitemap> {
   const manual = await getManualCases();
-  const now = new Date();
+  // Static pages do not have a trustworthy last-modified timestamp at request time.
   return [
-    {url:base,lastModified:now,changeFrequency:'weekly',priority:1},
-    {url:`${base}/about/`,lastModified:now,changeFrequency:'monthly',priority:.7},
-    {url:`${base}/services/`,lastModified:now,changeFrequency:'monthly',priority:.9},
-    {url:`${base}/cases/`,lastModified:now,changeFrequency:'weekly',priority:.9},
-    {url:`${base}/contact/`,lastModified:now,changeFrequency:'monthly',priority:.8},
+    {url:base,changeFrequency:'weekly',priority:1},
+    {url:`${base}/about/`,changeFrequency:'monthly',priority:.7},
+    {url:`${base}/services/`,changeFrequency:'monthly',priority:.9},
+    {url:`${base}/cases/`,changeFrequency:'weekly',priority:.9},
+    {url:`${base}/contact/`,changeFrequency:'monthly',priority:.8},
     ...manual.map(item=>({url:`${base}/cases/${item.slug}/`,lastModified:new Date(item.created_at),changeFrequency:'monthly' as const,priority:.6})),
-    ...areas.map(slug=>({url:`${base}/areas/${slug}/`,lastModified:now,changeFrequency:'monthly' as const,priority:.7}))
+    ...areas.map(slug=>({url:`${base}/areas/${slug}/`,changeFrequency:'monthly' as const,priority:.7}))
   ];
 }

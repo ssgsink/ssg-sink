@@ -1,3 +1,5 @@
+import type {Metadata} from 'next';
+export const metadata:Metadata={alternates:{canonical:'/'}};
 const areas = [
   ['부산 전체', 'busan'],
   ['부산 중구', 'busan-jung'],
