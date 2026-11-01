@@ -1099,3 +1099,19 @@ textarea {
  .local-contact-actions small{font-size:12px}
  .local-contact-arrow{font-size:13px}
 }
+
+/* Compact regional contact CTAs: avoid oversized full-width cards */
+.local-contact-actions{grid-template-columns:repeat(2,minmax(0,210px));justify-content:start;gap:12px}
+.local-contact-actions a{min-height:60px;padding:9px 12px;border-radius:9px;gap:8px}
+.local-contact-icon{font-size:18px}
+.local-contact-actions strong{font-size:16px}
+.local-contact-actions small{font-size:11px}
+.local-contact-arrow{font-size:12px}
+@media(max-width:700px){
+ .local-contact-actions{grid-template-columns:repeat(2,minmax(0,190px));justify-content:start;gap:10px}
+ .local-contact-actions a{min-height:56px;padding:8px 9px;border-radius:8px;gap:6px}
+ .local-contact-icon{font-size:16px}
+ .local-contact-actions strong{font-size:15px}
+ .local-contact-actions small{font-size:10px}
+ .local-contact-arrow{font-size:11px}
+}
