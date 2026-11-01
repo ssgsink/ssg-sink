@@ -70,9 +70,16 @@ export default function Home() {
 
       <section className="premium-intro premium-intro-refined">
         <div className="wrap">
-          <div className="premium-eyebrow">WHY SHINSEGAE SINK</div>
-          <h2>싱크볼 하나로 새로워지는 주방</h2>
-          <p>오래된 싱크볼을 교체하고 주방의 분위기를 새롭게 바꿔보세요.<br/>상담부터 시공, 마무리까지 신세계싱크가 꼼꼼하게 함께합니다.</p>
+          <div className="premium-intro-story">
+            <div className="premium-intro-story-copy">
+              <div className="premium-eyebrow">WHY SHINSEGAE SINK</div>
+              <h2>싱크볼 하나로<br/>새로워지는 주방</h2>
+              <p>오래된 싱크볼을 교체하고 주방의 분위기를 새롭게 바꿔보세요.<br/>상담부터 시공, 마무리까지 신세계싱크가 꼼꼼하게 함께합니다.</p>
+            </div>
+            <div className="premium-intro-story-photo" role="img" aria-label="실제 주방의 싱크볼 사진">
+              <span>SMALL CHANGE, BETTER KITCHEN</span>
+            </div>
+          </div>
           <div className="premium-values">
             <div>
               <span>01</span>
