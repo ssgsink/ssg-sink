@@ -1357,3 +1357,13 @@ textarea {
 .premium-areas-refined .premium-area-city-links a{justify-content:center;text-align:center;background:#eee8dc;border:1px solid #d8cbb5;color:#35332e;border-radius:5px;box-shadow:none;font-weight:650;letter-spacing:.01em;transition:background .2s,border-color .2s,transform .2s}
 .premium-areas-refined .premium-area-city-links a:hover{background:#dfd1b9;border-color:#b99a65;transform:translateY(-1px)}
 .premium-areas-refined .premium-area-city-links a:focus-visible{outline:2px solid #8b6b3f;outline-offset:3px}
+
+/* Homepage installation stories: restore strong premium contrast */
+.premium-cases{background:#30312c;color:#fff}
+.premium-cases .premium-case-inner h2{color:#fff}
+.premium-cases .premium-case-inner p{color:#e2ddd2}
+.premium-cases .premium-eyebrow{color:#d6b57d}
+.premium-cases .premium-case-mark{color:rgba(255,255,255,.16)}
+.premium-cases .premium-case-mark span{color:#d6b57d}
+.premium-cases .dark-button{background:#b99a65;color:#20221d;border:1px solid #b99a65}
+.premium-cases .dark-button:hover{background:#d0b17c;border-color:#d0b17c}
