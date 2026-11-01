@@ -1,0 +1,1 @@
+import type {Metadata} from 'next';export const metadata:Metadata={robots:{index:false,follow:false},title:'시공 사례 관리자'};export default function AdminLayout({children}:{children:React.ReactNode}){return children;}
