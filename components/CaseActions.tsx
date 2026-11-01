@@ -1,6 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import {supabaseClient} from '@/lib/supabase';
+import {deleteCaseAndImages} from '@/lib/delete-case';
 
 export default function CaseActions({caseId}:{caseId?:string}){
  const [authorized,setAuthorized]=useState(false);
@@ -19,8 +20,8 @@ export default function CaseActions({caseId}:{caseId?:string}){
   const client=supabaseClient();if(!client)return;
   setDeleting(true);setError('');
   try{
-   const {error:deleteError}=await client.from('case_posts').delete().eq('id',caseId).select('id');
-   if(deleteError)throw deleteError;
+   const result=await deleteCaseAndImages(client,caseId);
+   if(result.warning){setError(result.warning);setDeleting(false);return;}
    window.location.reload();
   }catch(e){setError(e instanceof Error?e.message:'삭제하지 못했습니다. 다시 시도해 주세요.');setDeleting(false)}
  }
