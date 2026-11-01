@@ -122,23 +122,25 @@ export default async function Home() {
           <div className="premium-section-heading">
             <div className="premium-eyebrow">SERVICE AREA</div>
             <h2>부산·경남 싱크볼 교체 상담 지역</h2>
-            <p>지역을 선택하면 해당 지역의 싱크볼 교체 안내를 확인할 수 있습니다.</p>
+            <p>아래 지역 버튼을 누르면 상담 안내 페이지로 이동합니다.</p>
           </div>
 
           <div className="premium-area-links premium-area-compact premium-area-city-links">
             {areas.map(([name, slug]) => (
-              <a key={slug} href={`/areas/${slug}/`}>{name}</a>
+              <a key={slug} href={`/contact/?region=${encodeURIComponent(name)}`}>{name}</a>
             ))}
           </div>
         </div>
       </section>
 
       <section className="premium-contact premium-contact-refined home-blue-contact">
-        <div className="wrap">
-          <div className="premium-eyebrow">CONTACT US</div>
-          <h2>우리 집 싱크볼 교체,<br />편하게 상담해 보세요.</h2>
-          <p>싱크볼 사진과 지역을 알려주시면 상담에 도움이 됩니다.</p>
-          <div className="premium-actions premium-contact-buttons"><a href="tel:01055043858" className="gold-button">☎ 전화 상담</a><a href={smsHref} className="outline-button">✉ 문자 상담</a></div>
+        <div className="wrap home-contact-row">
+          <div className="home-contact-copy">
+            <div className="premium-eyebrow">CONTACT US</div>
+            <h2>지금, 편하게 상담하세요!</h2>
+            <p>싱크볼 사진과 지역을 알려주시면 상담에 도움이 됩니다.</p>
+          </div>
+          <div className="premium-actions premium-contact-buttons home-contact-actions"><a href="tel:01055043858" className="gold-button">☎ 전화 상담하기</a><a href={smsHref} className="outline-button home-sms-button">✉ 문자 상담하기</a></div>
           
         </div>
       </section>
