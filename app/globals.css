@@ -1069,3 +1069,33 @@ textarea {
 .local-contact-arrow{font-size:17px;align-self:flex-start}
 @media(max-width:900px){.local-hero-grid{gap:22px}.local-reason-grid{grid-template-columns:repeat(2,1fr)}.local-case-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.local-contact-grid{grid-template-columns:1fr}}
 @media(max-width:700px){.local-breadcrumb{padding:16px 0}.local-hero-grid{grid-template-columns:1fr;padding-bottom:35px}.local-hero-photo{min-height:245px;border-radius:14px 14px 14px 35px}.local-hero h1{font-size:36px}.local-hero-copy>p{font-size:14px}.local-section{padding:50px 0}.local-reason-grid{gap:10px}.local-reason{padding:20px 10px}.local-reason strong{font-size:14px}.local-reason p{font-size:11px}.local-case-grid{grid-template-columns:1fr}.local-case-image{height:230px}.local-prep-grid{grid-template-columns:1fr;gap:12px}.local-prep-card{padding:16px 12px 20px 60px;border-right:0;border-bottom:1px solid #d9e3ed}.local-prep-symbol{left:10px;top:18px}.local-contact{padding:45px 0}.local-contact-actions{gap:10px}.local-contact-actions a{min-height:82px;padding:10px 6px;gap:6px}.local-contact-icon{font-size:22px}.local-contact-actions strong{font-size:15px}.local-contact-actions small{font-size:10px}.local-empty-cases{grid-template-columns:1fr}.local-empty-visual{height:170px}}
+
+/* Regional mobile readability: +2px text and more compact consultation buttons */
+@media(max-width:700px){
+ .local-breadcrumb{font-size:14px}
+ .local-eyebrow{font-size:13px}
+ .local-hero-copy>p{font-size:16px}
+ .local-trust span{font-size:14px}
+ .local-hero-link{font-size:15px}
+ .local-hero-photo span{font-size:12px}
+ .local-section-heading p{font-size:16px}
+ .local-reason strong{font-size:16px}
+ .local-reason p{font-size:13px}
+ .local-detail-note{font-size:15px}
+ .local-case-image span{font-size:13px}
+ .local-case-body>span{font-size:13px}
+ .local-case-body h3{font-size:19px}
+ .local-case-body p{font-size:14px}
+ .local-case-body strong{font-size:14px}
+ .local-all-cases{font-size:16px}
+ .local-empty-cases p,.local-empty-cases a{font-size:15px}
+ .local-prep-card ul{font-size:15px}
+ .local-prep-card p{font-size:16px}
+ .local-contact p{font-size:15px}
+ .local-contact-actions{gap:10px}
+ .local-contact-actions a{min-height:64px;padding:9px 8px;gap:8px;border-radius:10px;box-shadow:0 3px 10px #0002}
+ .local-contact-icon{font-size:18px}
+ .local-contact-actions strong{font-size:17px}
+ .local-contact-actions small{font-size:12px}
+ .local-contact-arrow{font-size:13px}
+}
