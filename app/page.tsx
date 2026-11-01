@@ -34,6 +34,8 @@ const areas = [
   ['경남 기타 지역', 'gyeongnam'],
 ];
 
+const smsHref = 'sms:01055043858?body=' + encodeURIComponent('[싱크볼 교체 상담]\n*싱크볼 전체 사진과 하부장 내부 사진과 아래 정보를 보내주시면 감사하겠습니다.\n\n거주 지역(시 · 동):\n싱크볼 가로 · 세로 크기(mm):\n상담 내용:');
+
 export default function Home() {
   return (
     <>
@@ -51,16 +53,10 @@ export default function Home() {
               <br />
               완성도 높은 시공으로 주방의 분위기를 새롭게 바꿔드립니다.
             </p>
-            <div className="premium-actions">
-              <a href="tel:01055043858" className="gold-button">
-                전화 상담 010-5504-3858
-              </a>
-              <a href="/cases/" className="outline-button">
-                시공 사례 보기
-              </a>
-            </div>
-            <div className="premium-note">
-              부산 · 김해 · 양산 · 창원 · 마산 · 진해 · 진주 등 경남 전 지역 출장 시공
+            <div className="premium-actions premium-actions-three">
+              <a href="tel:01055043858" className="gold-button">☎ 전화 상담</a>
+              <a href={smsHref} className="outline-button">✉ 문자 상담</a>
+              <a href="/cases/" className="outline-button">▣ 시공 사례</a>
             </div>
           </div>
           <div className="premium-hero-visual">
@@ -72,15 +68,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="premium-intro">
+      <section className="premium-intro premium-intro-refined">
         <div className="wrap">
           <div className="premium-eyebrow">WHY SHINSEGAE SINK</div>
-          <h2>싱크볼 하나로 달라지는 주방</h2>
-          <p>
-            오래 사용해 낡고 불편해진 싱크볼부터
-            새로운 분위기를 원하는 주방까지.
-            신세계싱크가 꼼꼼하게 교체해 드립니다.
-          </p>
+          <h2>싱크볼 하나로 새로워지는 주방</h2>
+          <p>오래된 싱크볼을 교체하고 주방의 분위기를 새롭게 바꿔보세요.<br/>상담부터 시공, 마무리까지 신세계싱크가 꼼꼼하게 함께합니다.</p>
           <div className="premium-values">
             <div>
               <span>01</span>
@@ -159,7 +151,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="premium-areas">
+      <section className="premium-areas premium-areas-refined">
         <div className="wrap">
           <div className="premium-section-heading">
             <div className="premium-eyebrow">SERVICE AREA</div>
@@ -168,7 +160,7 @@ export default function Home() {
           </div>
 
           <h3 className="area-heading">부산 지역</h3>
-          <div className="premium-area-links">
+          <div className="premium-area-links premium-area-compact">
             {areas.slice(0, 17).map(([name, slug]) => (
               <a key={slug} href={`/areas/${slug}/`}>{name} 싱크볼 교체</a>
             ))}
@@ -185,15 +177,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="premium-contact">
+      <section className="premium-contact premium-contact-refined">
         <div className="wrap">
           <div className="premium-eyebrow">CONTACT US</div>
           <h2>우리 집 싱크볼 교체,<br />편하게 상담해 보세요.</h2>
           <p>싱크볼 사진과 지역을 알려주시면 상담에 도움이 됩니다.</p>
-          <a href="tel:01055043858" className="gold-button">
-            전화 상담 010-5504-3858
-          </a>
-          <div className="contact-brand">신세계싱크 <span>SINK BOWL SPECIALIST</span></div>
+          <div className="premium-actions premium-contact-buttons"><a href="tel:01055043858" className="gold-button">☎ 전화 상담</a><a href={smsHref} className="outline-button">✉ 문자 상담</a></div>
+          
         </div>
       </section>
     </>
