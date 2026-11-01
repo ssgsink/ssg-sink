@@ -96,19 +96,67 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
     }
     return has(area.name);
   }).slice(0,6);
-  return <>
-    <section className="page-hero"><div className="wrap"><div className="breadcrumbs"><a href="/">홈</a> / 지역별 안내 / {area.name}</div><div className="kicker">LOCAL SINK BOWL SERVICE</div><h1>{area.name} 싱크볼 교체</h1><p>{area.localNote}</p></div></section>
-    <section className="section"><div className="wrap content">
-      <h2>{area.focus}</h2>
-      <p>{area.fullName}에서 싱크볼이 낡거나 녹이 생긴 경우, 배수구 주변 오염이 심한 경우, 싱크볼이 처지거나 떨어진 경우에는 새 싱크볼로 교체하는 방법을 고려할 수 있습니다. 기존 개수대를 사각싱크볼로 바꾸고 싶은 경우에도 먼저 규격과 설치 구조를 확인해야 합니다.</p>
-      <p>싱크볼 교체는 제품의 가로·세로 크기뿐 아니라 상판 타공 형태, 상판 소재, 수전과 배수구 위치, 하부장 안쪽의 고정 상태에 따라 작업 방법이 달라집니다. 사각볼 교체나 언더싱크볼 교체를 원하신다면 현재 싱크대 사진을 함께 보내주세요.</p>
-      {areaCases.length>0&&<section style={{marginTop:36}}><h2>{area.name} 실제 시공 사례</h2><p>직접 등록한 시공 사례 중 해당 지역의 작업을 소개합니다.</p><div className="case-grid">{areaCases.map(item=><article className="case-card" key={item.id}><a href={'/cases/'+item.slug+'/'}>{(item.after_url||item.before_url)&&<img className="case-blog-image" src={item.after_url||item.before_url||''} alt={item.title+' 교체 시공 사진'}/>}<div className="case-copy"><strong>{item.title}</strong><p>{item.description}</p><span style={{color:'#0758a6'}}>시공 전후 사진 보기 →</span></div></a></article>)}</div><p><a href="/cases/">전체 시공 사례 보기 →</a></p></section>}
-      <h2 style={{marginTop:35}}>이런 경우 교체 상담을 받아보세요</h2>
-      <ul className="list-check"><li>오래 사용해 표면이 변색되거나 부식된 싱크볼</li><li>고정 부위가 떨어지거나 싱크볼이 아래로 처진 경우</li><li>기존 투볼 싱크볼을 원볼 또는 사각싱크볼로 바꾸고 싶은 경우</li><li>싱크대 개수대와 배수구 주변을 새롭게 정리하고 싶은 경우</li></ul>
-      <h2 style={{marginTop:35}}>상담 전에 준비해 주세요</h2>
-      <ul className="list-check"><li>싱크볼 전체와 상판이 함께 보이는 사진</li><li>싱크볼 가로·세로 크기 (mm)</li><li>싱크대 하부장 내부와 고정 부위 사진</li><li>상세 거주 지역과 희망하는 교체 형태</li></ul>
-      <div className="notice">실제 출장 가능 여부와 작업 비용은 지역, 제품 규격, 상판 소재 및 현장 상태에 따라 달라집니다. 사진 상담 후 필요한 내용을 추가로 확인해 드립니다.</div>
-      <div className="btn-row"><a className="btn btn-blue" href="tel:01055043858">전화 상담 010-5504-3858</a><a className="btn btn-blue" href="/contact/">문자·사진 상담 안내</a></div>
-    </div></section>
-  </>;
+  const smsHref = 'sms:01055043858?body=' + encodeURIComponent("[싱크볼 교체 상담]\n*싱크볼 전체 사진과 하부장 내부 사진과 아래 정보를 보내주시면 감사하겠습니다.\n\n거주 지역(시 · 동):\n싱크볼 가로 · 세로 크기(mm):\n상담 내용:");
+  return <main className="local-page">
+    <section className="local-hero">
+      <div className="wrap">
+        <nav className="local-breadcrumb" aria-label="현재 위치"><a href="/">홈</a><span>›</span><span>지역별 안내</span><span>›</span><strong>{area.name}</strong></nav>
+        <div className="local-hero-grid">
+          <div className="local-hero-copy">
+            <span className="local-eyebrow">{area.fullName} · SINK BOWL SERVICE</span>
+            <h1>{area.name} <span>싱크볼 교체</span></h1>
+            <p>{area.localNote}<br/>현재 주방에 맞는 교체 방법을 사진으로 상담해 드립니다.</p>
+            <div className="local-trust">
+              <span><b>✓</b> 대표 직접 시공</span><span><b>✓</b> 꼼꼼한 마무리</span><span><b>✓</b> 부산·경남 출장 상담</span>
+            </div>
+            <a className="local-hero-link" href="#local-consult">교체 상담 바로가기 <span aria-hidden="true">↗</span></a>
+          </div>
+          <div className="local-hero-photo" role="img" aria-label="사각 싱크볼과 언더 싱크볼 제품 사진"><span>신세계싱크 · SINK BOWL SPECIALIST</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section className="local-section local-needs">
+      <div className="wrap">
+        <div className="local-section-heading"><span className="local-eyebrow">WHEN TO REPLACE</span><h2>이런 경우, 싱크볼 교체를 고려해 보세요</h2><p>오래된 싱크볼의 상태와 주방 구조에 따라 적합한 교체 방법이 달라집니다.</p></div>
+        <div className="local-reason-grid">
+          <div className="local-reason"><span aria-hidden="true">◉</span><strong>누수·물샘</strong><p>배수구 주변이나 고정 부위에서 물이 새는 경우</p></div>
+          <div className="local-reason"><span aria-hidden="true">✦</span><strong>녹·오염</strong><p>물때와 얼룩, 표면 손상이 심해진 경우</p></div>
+          <div className="local-reason"><span aria-hidden="true">⌁</span><strong>처짐·탈락</strong><p>싱크볼이 아래로 처지거나 떨어진 경우</p></div>
+          <div className="local-reason"><span aria-hidden="true">▣</span><strong>주방 분위기 변경</strong><p>투볼을 원볼 또는 사각 싱크볼로 바꾸고 싶은 경우</p></div>
+        </div>
+        <p className="local-detail-note">교체 전에는 상판 타공 크기와 소재, 수전·배수구 위치, 하부장 내부 고정 상태를 함께 확인해야 합니다.</p>
+      </div>
+    </section>
+
+    <section className="local-section local-work">
+      <div className="wrap">
+        <div className="local-section-heading"><span className="local-eyebrow">REAL INSTALLATION</span><h2>{area.name} 실제 시공 사례</h2><p>직접 등록한 현장 사진으로 시공 결과를 확인해 보세요.</p></div>
+        {areaCases.length > 0 ? <>
+          <div className="local-case-grid">{areaCases.map(item => <a className="local-case-card" key={item.id} href={'/cases/'+item.slug+'/'}>
+            {(item.after_url||item.before_url) && <div className="local-case-image"><img src={item.after_url||item.before_url||''} alt={item.title+' 실제 시공 사진'} loading="lazy"/><span>시공 사진 보기 ↗</span></div>}
+            <div className="local-case-body"><span>시공 사례</span><h3>{item.title}</h3>{item.description&&<p>{item.description}</p>}<strong>자세히 보기 →</strong></div>
+          </a>)}</div>
+          <a className="local-all-cases" href="/cases/">전체 시공 사례 보기 <span aria-hidden="true">→</span></a>
+        </> : <div className="local-empty-cases"><div className="local-empty-visual" aria-hidden="true"></div><div><h3>실제 시공 사례를 준비하고 있습니다</h3><p>다른 지역의 싱크볼 교체 전후 사진도 확인해 보세요.</p><a href="/cases/">전체 시공 사례 확인 →</a></div></div>}
+      </div>
+    </section>
+
+    <section className="local-section local-prep">
+      <div className="wrap local-prep-grid">
+        <div className="local-prep-card"><span className="local-prep-symbol" aria-hidden="true">☑</span><h2>상담 전, 이렇게 준비해 주세요</h2><ul><li>싱크볼 전체와 상판이 함께 보이는 사진</li><li>싱크볼 가로·세로 크기(mm)</li><li>싱크대 하부장 내부와 고정 부위 사진</li><li>거주 지역(시·동)과 희망 교체 형태</li></ul></div>
+        <div className="local-prep-card local-prep-second"><span className="local-prep-symbol" aria-hidden="true">✧</span><h2>사진으로 간편하게 상담하세요</h2><p>사진과 기본 정보를 보내주시면 제품 규격과 설치 구조를 확인하고 상담해 드립니다.</p><p>출장 가능 여부와 작업 비용은 지역, 제품 규격, 상판 소재 및 현장 상태에 따라 달라집니다.</p></div>
+      </div>
+    </section>
+
+    <section className="local-contact" id="local-consult">
+      <div className="wrap local-contact-grid">
+        <div><span className="local-eyebrow">CONTACT US</span><h2>{area.name} 싱크볼 교체 <em>상담 문의</em></h2><p>전화 또는 문자로 편하게 문의해 주세요.<br/>문자 상담 시 사진을 직접 첨부하실 수 있습니다.</p></div>
+        <div className="local-contact-actions">
+          <a className="local-contact-call" href="tel:01055043858" aria-label="010-5504-3858 전화 상담 연결"><span className="local-contact-icon" aria-hidden="true">☎</span><span><strong>전화 상담</strong><small>010-5504-3858</small></span><span className="local-contact-arrow" aria-hidden="true">↗</span></a>
+          <a className="local-contact-sms" href={smsHref} aria-label="010-5504-3858 문자 상담 앱 열기"><span className="local-contact-icon" aria-hidden="true">✉</span><span><strong>문자 상담</strong><small>사진 첨부 후 전송</small></span><span className="local-contact-arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>;
 }
