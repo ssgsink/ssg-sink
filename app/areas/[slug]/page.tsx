@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!area) return {};
 
   const title = `${area.name} 싱크볼 교체 | 사각싱크볼·언더싱크볼 시공 | 신세계싱크`;
-  const description = `신세계싱크는 ${area.fullName} 싱크볼·씽크볼·싱크대볼 교체 전문 업체입니다. ${area.localNote} 사각싱크볼과 언더싱크볼 교체 상담을 제공합니다.`;
+  const description = `신세계싱크는 ${area.fullName} 싱크볼·씽크볼·싱크대볼·개수대 교체 상담 업체입니다. ${area.localNote} 사각싱크볼과 언더싱크볼 교체 상담을 제공합니다.`;
 
   return {
     title,
@@ -118,7 +118,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
 
     <section className="local-section local-needs">
       <div className="wrap">
-        <div className="local-section-heading"><span className="local-eyebrow">WHEN TO REPLACE</span><h2>이런 경우, 싱크볼 교체를 고려해 보세요</h2><p>오래된 싱크볼의 상태와 주방 구조에 따라 적합한 교체 방법이 달라집니다.</p></div>
+        <div className="local-section-heading"><span className="local-eyebrow">WHEN TO REPLACE</span><h2>이런 경우, 싱크볼 교체를 고려해 보세요</h2><p>{area.name}에서 씽크볼 교체나 싱크대볼 교체를 알아보고 계신가요? 오래된 주방 개수대 교체부터 사각 싱크볼 교체, 일반 언더 싱크볼 설치까지 주방 구조에 맞는 방법을 상담해 드립니다.</p></div>
         <div className="local-reason-grid">
           <div className="local-reason"><span aria-hidden="true">◉</span><strong>누수·물샘</strong><p>배수구 주변이나 고정 부위에서 물이 새는 경우</p></div>
           <div className="local-reason"><span aria-hidden="true">✦</span><strong>녹·오염</strong><p>물때와 얼룩, 표면 손상이 심해진 경우</p></div>
