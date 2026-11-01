@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import MobileContactBar from '@/components/MobileContactBar';
 
 const vercelProductionDomain = process.env.VERCEL_PROJECT_PRODUCTION_URL;
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || (vercelProductionDomain ? `https://${vercelProductionDomain}` : 'https://ssg-sink.vercel.app')).replace(/\/$/, '');
@@ -16,5 +17,5 @@ export const metadata: Metadata = {
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const jsonLd = { '@context': 'https://schema.org', '@type': 'HomeAndConstructionBusiness', name: '신세계싱크', url: siteUrl, telephone: '+82-10-5504-3858', description: '부산·경남 싱크볼 교체 전문 업체', areaServed: ['부산광역시', '경상남도'], knowsAbout: ['싱크볼 교체', '씽크볼 교체', '사각싱크볼 교체', '사각씽크볼 교체', '언더싱크볼 교체', '싱크대볼 교체', '개수대 교체'] };
-  return <html lang="ko"><body><script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}/><Header/><main>{children}</main><Footer/></body></html>;
+  return <html lang="ko"><body><script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}/><Header/><main>{children}</main><Footer/><MobileContactBar/></body></html>;
 }
