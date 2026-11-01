@@ -1453,3 +1453,17 @@ textarea {
 .home-blue-contact .outline-button:hover{color:#252b31;background:#fff}
 @media(max-width:900px){.home-case-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.home-case-card img{height:230px}}
 @media(max-width:560px){.home-case-gallery{gap:10px}.home-case-card img{height:150px}.home-case-card-info{padding:10px}.home-case-card-info strong{font-size:12px}.home-case-card-info span{font-size:11px}.home-blue-hero .premium-hero-inner{min-height:0}}
+
+/* Consultation strip: copy on left, direct call and SMS actions on right */
+.home-blue-contact .home-contact-row{display:flex;align-items:center;justify-content:space-between;gap:36px}
+.home-blue-contact .home-contact-copy{flex:1;min-width:0}
+.home-blue-contact .home-contact-copy h2{font-size:clamp(25px,2.7vw,36px);margin:6px 0 10px}
+.home-blue-contact .home-contact-copy p{margin:0;color:#d5dce4}
+.home-blue-contact .home-contact-actions{flex-shrink:0;display:flex;gap:12px;justify-content:flex-end}
+.home-blue-contact .home-contact-actions a{border-radius:100px;min-width:168px;padding:13px 22px;white-space:nowrap}
+.home-blue-contact .home-contact-actions .gold-button{background:#1769d3;border-color:#1769d3;color:#fff}
+.home-blue-contact .home-contact-actions .gold-button:hover{background:#0d57b6;border-color:#0d57b6}
+.home-blue-contact .home-contact-actions .home-sms-button{background:#08ad68;border-color:#08ad68;color:#fff}
+.home-blue-contact .home-contact-actions .home-sms-button:hover{background:#078e57;border-color:#078e57;color:#fff}
+@media(max-width:850px){.home-blue-contact .home-contact-row{flex-direction:column;align-items:stretch;gap:22px}.home-blue-contact .home-contact-actions{justify-content:flex-start}}
+@media(max-width:470px){.home-blue-contact .home-contact-actions{gap:8px}.home-blue-contact .home-contact-actions a{min-width:0;flex:1;padding:12px 9px;font-size:12px}}
