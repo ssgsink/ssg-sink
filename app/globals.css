@@ -1377,3 +1377,16 @@ textarea {
 .premium-cases .premium-case-mark span{color:#94744b}
 .premium-cases .dark-button{background:#292b26;color:#fff;border:1px solid #292b26}
 .premium-cases .dark-button:hover{background:#41443b;border-color:#41443b}
+
+/* Homepage: alternate only the two neutral colors chosen from the introduction and process */
+.premium-intro-refined{background:#faf9f6}
+.premium-process{background:#eae8e1}
+.premium-cases{background:#faf9f6;color:#252722}
+.premium-cases .premium-case-inner h2{color:#252722}
+.premium-cases .premium-case-inner p{color:#514f48}
+.premium-cases .premium-eyebrow{color:#a78551}
+.premium-cases .premium-case-mark{color:rgba(72,67,56,.12)}
+.premium-cases .premium-case-mark span{color:#a78551}
+.premium-cases .dark-button{background:#292b26;color:#fff;border-color:#292b26}
+.premium-cases .dark-button:hover{background:#41443b;border-color:#41443b}
+.premium-areas-refined{background:#eae8e1}
