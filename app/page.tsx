@@ -1,23 +1,7 @@
 import type {Metadata} from 'next';
 export const metadata:Metadata={alternates:{canonical:'/'}};
 const areas = [
-  ['부산 전체', 'busan'],
-  ['부산 중구', 'busan-jung'],
-  ['부산 서구', 'busan-seo'],
-  ['부산 동구', 'busan-dong'],
-  ['부산 영도구', 'busan-yeongdo'],
-  ['부산 부산진구', 'busan-busanjin'],
-  ['부산 동래구', 'busan-dongnae'],
-  ['부산 남구', 'busan-nam'],
-  ['부산 북구', 'busan-buk'],
-  ['부산 해운대구', 'busan-haeundae'],
-  ['부산 사하구', 'busan-saha'],
-  ['부산 금정구', 'busan-geumjeong'],
-  ['부산 강서구', 'busan-gangseo'],
-  ['부산 연제구', 'busan-yeonje'],
-  ['부산 수영구', 'busan-suyeong'],
-  ['부산 사상구', 'busan-sasang'],
-  ['부산 기장군', 'busan-gijang'],
+  ['부산', 'busan'],
   ['창원', 'changwon'],
   ['마산', 'masan'],
   ['진해', 'jinhae'],
@@ -31,7 +15,6 @@ const areas = [
   ['밀양', 'miryang'],
   ['함안', 'haman'],
   ['창녕', 'changnyeong'],
-  ['경남 기타 지역', 'gyeongnam'],
 ];
 
 const smsHref = 'sms:01055043858?body=' + encodeURIComponent('[싱크볼 교체 상담]\n*싱크볼 전체 사진과 하부장 내부 사진과 아래 정보를 보내주시면 감사하겠습니다.\n\n거주 지역(시 · 동):\n싱크볼 가로 · 세로 크기(mm):\n상담 내용:');
@@ -138,19 +121,9 @@ export default function Home() {
             <p>지역을 선택하면 해당 지역의 싱크볼 교체 안내를 확인할 수 있습니다.</p>
           </div>
 
-          <h3 className="area-heading">부산 지역</h3>
-          <div className="premium-area-links premium-area-compact">
-            {areas.slice(0, 17).map(([name, slug]) => (
-              <a key={slug} href={`/areas/${slug}/`}>{name} 싱크볼 교체</a>
-            ))}
-          </div>
-
-          <div className="premium-area-divider" />
-
-          <h3 className="area-heading">경남 지역</h3>
-          <div className="premium-area-links">
-            {areas.slice(17).map(([name, slug]) => (
-              <a key={slug} href={`/areas/${slug}/`}>{name} 싱크볼 교체</a>
+          <div className="premium-area-links premium-area-compact premium-area-city-links">
+            {areas.map(([name, slug]) => (
+              <a key={slug} href={`/areas/${slug}/`}>{name}<span aria-hidden="true">↗</span></a>
             ))}
           </div>
         </div>
