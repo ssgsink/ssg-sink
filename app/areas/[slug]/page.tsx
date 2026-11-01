@@ -1,3 +1,4 @@
+import {getManualCases} from '@/lib/supabase';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -65,12 +66,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function AreaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params; const area = areas[slug]; if (!area) notFound();
+  const cases = await getManualCases();
+  const areaCases = cases.filter(item => {
+    const region = item.region.trim().replace(/\s+/g,'');
+    const label = area.name.replace(/\s+/g,'');
+    if(slug === 'gyeongnam') return ['창원','마산','진해','김해','양산','진주','사천','거제','통영','고성','밀양','함안','창녕'].some(name=>region.includes(name));
+    if(slug === 'busan') return region.includes('부산');
+    if(slug === 'changwon') return ['창원','마산','진해'].some(name=>region.includes(name));
+    if(slug === 'masan'||slug === 'jinhae') return region.includes(label);
+    if(slug.startsWith('busan-')) return region.includes(label)||region.includes(label.replace('부산',''))&&region.includes('부산');
+    return region.includes(label);
+  }).slice(0,6);
   return <>
     <section className="page-hero"><div className="wrap"><div className="breadcrumbs"><a href="/">홈</a> / 지역별 안내 / {area.name}</div><div className="kicker">LOCAL SINK BOWL SERVICE</div><h1>{area.name} 싱크볼 교체</h1><p>{area.localNote}</p></div></section>
     <section className="section"><div className="wrap content">
       <h2>{area.focus}</h2>
       <p>{area.fullName}에서 싱크볼이 낡거나 녹이 생긴 경우, 배수구 주변 오염이 심한 경우, 싱크볼이 처지거나 떨어진 경우에는 새 싱크볼로 교체하는 방법을 고려할 수 있습니다. 기존 개수대를 사각싱크볼로 바꾸고 싶은 경우에도 먼저 규격과 설치 구조를 확인해야 합니다.</p>
       <p>싱크볼 교체는 제품의 가로·세로 크기뿐 아니라 상판 타공 형태, 상판 소재, 수전과 배수구 위치, 하부장 안쪽의 고정 상태에 따라 작업 방법이 달라집니다. 사각볼 교체나 언더싱크볼 교체를 원하신다면 현재 싱크대 사진을 함께 보내주세요.</p>
+      {areaCases.length>0&&<section style={{marginTop:36}}><h2>{area.name} 실제 시공 사례</h2><p>직접 등록한 시공 사례 중 해당 지역의 작업을 소개합니다.</p><div className="case-grid">{areaCases.map(item=><article className="case-card" key={item.id}><a href={'/cases/'+item.slug+'/'}>{(item.after_url||item.before_url)&&<img className="case-blog-image" src={item.after_url||item.before_url||''} alt={item.title+' 교체 시공 사진'}/>}<div className="case-copy"><strong>{item.title}</strong><p>{item.description}</p><span style={{color:'#0758a6'}}>시공 전후 사진 보기 →</span></div></a></article>)}</div><p><a href="/cases/">전체 시공 사례 보기 →</a></p></section>}
       <h2 style={{marginTop:35}}>이런 경우 교체 상담을 받아보세요</h2>
       <ul className="list-check"><li>오래 사용해 표면이 변색되거나 부식된 싱크볼</li><li>고정 부위가 떨어지거나 싱크볼이 아래로 처진 경우</li><li>기존 투볼 싱크볼을 원볼 또는 사각싱크볼로 바꾸고 싶은 경우</li><li>싱크대 개수대와 배수구 주변을 새롭게 정리하고 싶은 경우</li></ul>
       <h2 style={{marginTop:35}}>상담 전에 준비해 주세요</h2>
