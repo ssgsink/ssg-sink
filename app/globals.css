@@ -1194,3 +1194,23 @@ textarea {
  .site-detail-top{padding:35px 0 24px}
  .site-detail-copy{font-size:16px}
 }
+
+/* Home page: harmonize original premium sections with regional blue design */
+.premium-hero{background:linear-gradient(115deg,#eff7ff,#fff)}
+.premium-hero-copy h1{color:#0a2e52}
+.premium-hero-copy h1 span{color:#1269a8}
+.premium-kicker,.premium-eyebrow{color:#1579b6}
+.premium-hero-copy>p,.premium-note{color:#526a7e}
+.premium-intro,.premium-process,.premium-areas{background:#fff}
+.premium-types,.premium-cases{background:#f0f6fc}
+.premium-section-heading h2,.premium-intro h2,.premium-case-inner h2{color:#0b2d50}
+.premium-values>div,.premium-steps>div{border-radius:13px;border:1px solid #dce8f2;box-shadow:0 6px 18px #12395a0d}
+.premium-area-links a{border-radius:9px}
+.premium-contact{background:linear-gradient(110deg,#062849,#075080)}
+.premium-contact h2{color:#fff}
+.premium-contact .premium-eyebrow{color:#95ccef}
+.premium-contact p{color:#d5e8f7}
+@media(max-width:700px){
+ .premium-intro p,.premium-section-heading p,.premium-hero-copy>p,.premium-case-inner p{font-size:16px}
+ .premium-steps p,.premium-values p{font-size:14px}
+}
