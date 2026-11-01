@@ -4,6 +4,7 @@ import type {SupabaseClient} from '@supabase/supabase-js';
 import type {CasePost} from '@/lib/supabase';
 
 type Candidate={name:string;path:string;created_at?:string};
+type ScanResult={candidates:Candidate[];recentUnused:number;used:number;other:number};
 const bucket='case-images';
 const uuidFile=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(jpg|jpeg|png|webp|gif|heic|avif)$/i;
 function pathFromUrl(url:string,origin:string){
@@ -32,26 +33,33 @@ async function usedPaths(client:SupabaseClient){
 }
 async function candidates(client:SupabaseClient,userId:string){
  const found:Candidate[]=[];
+ let recentUnused=0,other=0;
  for(let offset=0;;offset+=100){
   const {data,error}=await client.storage.from(bucket).list(userId,{limit:100,offset,sortBy:{column:'name',order:'asc'}});
   if(error)throw error;
   for(const file of data||[]){
-   if(!uuidFile.test(file.name)||!file.id||!file.created_at)continue;
-   const age=Date.now()-new Date(file.created_at).getTime();
-   if(!Number.isFinite(age)||age<24*60*60*1000)continue;
+   if(!uuidFile.test(file.name)||!file.id||!file.created_at){other++;continue;}
    found.push({name:file.name,path:userId+'/'+file.name,created_at:file.created_at});
   }
   if(!data||data.length<100)break;
   if(offset>99900)throw Error('사진이 너무 많아 안전하게 전체 조회할 수 없습니다.');
  }
  const used=await usedPaths(client);
- return found.filter(file=>!used.has(file.path));
+ const candidates:Candidate[]=[];
+ let usedCount=0;
+ for(const file of found){
+  if(used.has(file.path)){usedCount++;continue;}
+  const age=Date.now()-new Date(file.created_at!).getTime();
+  if(!Number.isFinite(age)||age<24*60*60*1000){recentUnused++;continue;}
+  candidates.push(file);
+ }
+ return {candidates,recentUnused,used:usedCount,other} satisfies ScanResult;
 }
 export default function OrphanImageCleanup({client,userId}:{client:SupabaseClient;userId:string}){
- const [found,setFound]=useState<Candidate[]|null>(null),[selected,setSelected]=useState(false),[busy,setBusy]=useState(false),[message,setMessage]=useState('');
+ const [found,setFound]=useState<Candidate[]|null>(null),[stats,setStats]=useState<Omit<ScanResult,'candidates'>|null>(null),[selected,setSelected]=useState(false),[busy,setBusy]=useState(false),[message,setMessage]=useState('');
  async function scan(){
-  setBusy(true);setMessage('');setSelected(false);setFound(null);
-  try{const result=await candidates(client,userId);setFound(result);setMessage('현재 게시글에서 사용하지 않는 사진 후보를 조회했습니다.');}
+  setBusy(true);setMessage('');setSelected(false);setFound(null);setStats(null);
+  try{const result=await candidates(client,userId);setFound(result.candidates);setStats({recentUnused:result.recentUnused,used:result.used,other:result.other});setMessage('사진 조회를 완료했습니다.');}
   catch(e){setMessage(e instanceof Error?e.message:'조회에 실패했습니다.')}
   finally{setBusy(false)}
  }
@@ -63,7 +71,7 @@ export default function OrphanImageCleanup({client,userId}:{client:SupabaseClien
    // Re-read both the file listing and ALL case references immediately before removal.
    const fresh=await candidates(client,userId);
    const approved=new Set(found.map(f=>f.path));
-   const safe=fresh.filter(f=>approved.has(f.path));
+   const safe=fresh.candidates.filter(f=>approved.has(f.path));
    if(!safe.length){setFound([]);setMessage('삭제할 사진이 없습니다.');return}
    let removed=0;
    for(let i=0;i<safe.length;i+=50){
@@ -81,7 +89,8 @@ export default function OrphanImageCleanup({client,userId}:{client:SupabaseClien
   <p>현재 게시글에서 사용하지 않는 업로드 사진을 찾아 정리합니다. 24시간 이내 사진, 외부 사진, 다른 폴더의 사진은 제외합니다. 먼저 목록을 확인한 후 직접 삭제를 승인해야 합니다.</p>
   <button type="button" disabled={busy} onClick={scan}>{busy?'처리 중...':'미사용 사진 조회'}</button>
   {found&&<div style={{marginTop:16}}>
-   <p><strong>삭제 후보 {found.length}개</strong> — 현재 게시글에서 참조하지 않는 사진입니다.</p>
+   <p><strong>삭제 후보 {found.length}개</strong> — 현재 게시글에서 참조하지 않는 24시간 이상 지난 사진입니다.</p>
+   {stats&&<p>24시간 이내라 제외된 미사용 사진: <strong>{stats.recentUnused}개</strong><br/>현재 게시글에서 사용 중인 사진: <strong>{stats.used}개</strong><br/>파일명·형식 등이 조회 조건에 맞지 않는 항목: <strong>{stats.other}개</strong></p>}
    {found.length>0&&<>
     <div style={{maxHeight:260,overflowY:'auto',border:'1px solid #eee',padding:8}}>
      {found.map(f=><div key={f.path} style={{fontSize:12,padding:4,overflowWrap:'anywhere'}}>{f.name}</div>)}
