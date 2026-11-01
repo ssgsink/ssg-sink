@@ -1,5 +1,7 @@
+import {getManualCases} from '@/lib/supabase';
 import type {Metadata} from 'next';
 export const metadata:Metadata={alternates:{canonical:'/'}};
+export const revalidate=60;
 const areas = [
   ['부산', 'busan'],
   ['양산', 'yangsan'],
@@ -19,10 +21,11 @@ const areas = [
 
 const smsHref = 'sms:01055043858?body=' + encodeURIComponent('[싱크볼 교체 상담]\n*싱크볼 전체 사진과 하부장 내부 사진과 아래 정보를 보내주시면 감사하겠습니다.\n\n거주 지역(시 · 동):\n싱크볼 가로 · 세로 크기(mm):\n상담 내용:');
 
-export default function Home() {
+export default async function Home() {
+  const cases = (await getManualCases()).filter(item=>Boolean(item.after_url)).slice(0,4);
   return (
     <>
-      <section className="premium-hero">
+      <section className="premium-hero home-blue-hero">
         <div className="wrap premium-hero-inner">
           <div className="premium-hero-copy">
             <div className="premium-kicker">SINK BOWL SPECIALIST</div>
@@ -37,7 +40,7 @@ export default function Home() {
               완성도 높은 시공으로 주방의 분위기를 새롭게 바꿔드립니다.
             </p>
             <div className="premium-actions premium-actions-three">
-              <a href="tel:01055043858" className="gold-button">☎ 전화 상담</a>
+              <a href="tel:01055043858" className="gold-button home-blue-button">☎ 전화 상담</a>
               <a href={smsHref} className="outline-button">✉ 문자 상담</a>
               <a href="/cases/" className="outline-button">▣ 시공 사례</a>
             </div>
@@ -51,7 +54,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="premium-intro premium-intro-refined home-tone-ivory" style={{backgroundColor:"#faf9f6"}}>
+      <section className="premium-intro premium-intro-refined home-tone-ivory home-blue-intro" >
         <div className="wrap">
           <div className="premium-intro-story">
             <div className="premium-intro-story-copy">
@@ -83,7 +86,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="premium-process home-tone-gray" style={{backgroundColor:"#eae8e1"}}>
+      <section className="premium-process home-tone-gray home-blue-process" >
         <div className="wrap">
           <div className="premium-section-heading">
             <div className="premium-eyebrow">OUR PROCESS</div>
@@ -98,7 +101,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="premium-cases home-tone-ivory home-case-light" style={{backgroundColor:"#faf9f6",color:"#252722"}}>
+      <section className="premium-cases home-tone-ivory home-case-light home-blue-cases" >
         <div className="wrap premium-case-inner">
           <div>
             <div className="premium-eyebrow">INSTALLATION STORIES</div>
@@ -107,13 +110,14 @@ export default function Home() {
               부산과 경남 곳곳에서 진행한
               다양한 싱크볼 교체 사례를 확인하실 수 있습니다.
             </p>
-            <a href="/cases/" className="dark-button">시공 사례 보러 가기 ↗</a>
+            {cases.length===0&&<p className="home-case-empty">등록된 교체 후 사진을 준비 중입니다.</p>}
           </div>
-          <div className="premium-case-mark">SINK<br />BOWL<br /><span>RENEWAL</span></div>
+          <div className="home-case-gallery">{cases.map(item=><a className="home-case-card" href={`/cases/${item.slug}/`} key={item.id}><img src={item.after_url!} alt={`${item.title} 교체 후 사진`} loading="lazy"/><div className="home-case-card-info"><strong>{item.title}</strong><span>{item.region}</span></div></a>)}</div>
+          <div className="home-case-more"><a href="/cases/" className="dark-button">더 많은 시공 사례 보기</a></div>
         </div>
       </section>
 
-      <section className="premium-areas premium-areas-refined home-tone-gray" style={{backgroundColor:"#eae8e1"}}>
+      <section className="premium-areas premium-areas-refined home-tone-gray home-blue-areas" style={{backgroundColor:"#eae8e1"}}>
         <div className="wrap">
           <div className="premium-section-heading">
             <div className="premium-eyebrow">SERVICE AREA</div>
@@ -129,7 +133,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="premium-contact premium-contact-refined">
+      <section className="premium-contact premium-contact-refined home-blue-contact">
         <div className="wrap">
           <div className="premium-eyebrow">CONTACT US</div>
           <h2>우리 집 싱크볼 교체,<br />편하게 상담해 보세요.</h2>
