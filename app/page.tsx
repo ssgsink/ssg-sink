@@ -51,7 +51,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="premium-intro premium-intro-refined">
+      <section className="premium-intro premium-intro-refined home-tone-ivory" style={{backgroundColor:"#faf9f6"}}>
         <div className="wrap">
           <div className="premium-intro-story">
             <div className="premium-intro-story-copy">
@@ -83,7 +83,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="premium-process">
+      <section className="premium-process home-tone-gray" style={{backgroundColor:"#eae8e1"}}>
         <div className="wrap">
           <div className="premium-section-heading">
             <div className="premium-eyebrow">OUR PROCESS</div>
@@ -98,7 +98,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="premium-cases">
+      <section className="premium-cases home-tone-ivory home-case-light" style={{backgroundColor:"#faf9f6",color:"#252722"}}>
         <div className="wrap premium-case-inner">
           <div>
             <div className="premium-eyebrow">INSTALLATION STORIES</div>
@@ -113,7 +113,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="premium-areas premium-areas-refined">
+      <section className="premium-areas premium-areas-refined home-tone-gray" style={{backgroundColor:"#eae8e1"}}>
         <div className="wrap">
           <div className="premium-section-heading">
             <div className="premium-eyebrow">SERVICE AREA</div>

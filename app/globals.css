@@ -1390,3 +1390,22 @@ textarea {
 .premium-cases .dark-button{background:#292b26;color:#fff;border-color:#292b26}
 .premium-cases .dark-button:hover{background:#41443b;border-color:#41443b}
 .premium-areas-refined{background:#eae8e1}
+
+/* Homepage palette: explicit color coordination for alternating sections */
+.home-tone-ivory{background-color:#faf9f6}
+.home-tone-gray{background-color:#eae8e1}
+.home-tone-ivory .premium-eyebrow,.home-tone-gray .premium-eyebrow{color:#8c6838}
+.home-tone-ivory h2,.home-tone-gray h2{color:#252722}
+.home-tone-ivory p,.home-tone-gray p{color:#55534c}
+.home-tone-ivory .premium-values>div,.home-tone-gray .premium-steps>div{background:#fffdf9;border-color:#d6cdbd;color:#252722}
+.home-tone-ivory .premium-values>div strong,.home-tone-gray .premium-steps>div strong{color:#252722}
+.home-tone-ivory .premium-values>div p,.home-tone-gray .premium-steps>div p{color:#625e55}
+.home-tone-ivory .premium-values>div span,.home-tone-gray .premium-steps>div span{color:#916d3d}
+.home-case-light .premium-case-inner h2{color:#252722}
+.home-case-light .premium-case-inner p{color:#514f48}
+.home-case-light .premium-case-mark{color:rgba(61,60,53,.15)}
+.home-case-light .premium-case-mark span{color:#98764a}
+.home-case-light .dark-button{display:inline-block;background:#292b26;color:#fff;border:1px solid #292b26}
+.home-case-light .dark-button:hover{background:#44463d;border-color:#44463d;color:#fff}
+.home-tone-gray .premium-area-city-links a{background:#faf9f6;color:#252722;border-color:#cfc6b6}
+.home-tone-gray .premium-area-city-links a:hover{background:#dfd2bb;border-color:#ad8e5f;color:#252722}
