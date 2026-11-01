@@ -68,14 +68,33 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
   const { slug } = await params; const area = areas[slug]; if (!area) notFound();
   const cases = await getManualCases();
   const areaCases = cases.filter(item => {
-    const region = item.region.trim().replace(/\s+/g,'');
-    const label = area.name.replace(/\s+/g,'');
-    if(slug === 'gyeongnam') return ['창원','마산','진해','김해','양산','진주','사천','거제','통영','고성','밀양','함안','창녕'].some(name=>region.includes(name));
-    if(slug === 'busan') return region.includes('부산');
-    if(slug === 'changwon') return ['창원','마산','진해'].some(name=>region.includes(name));
-    if(slug === 'masan'||slug === 'jinhae') return region.includes(label);
-    if(slug.startsWith('busan-')) return region.includes(label)||region.includes(label.replace('부산',''))&&region.includes('부산');
-    return region.includes(label);
+    // Use the entered region and the case title: titles often include the district
+    // while the admin region field contains only the broader city.
+    const region = item.region.replace(/\s+/g, '');
+    const title = item.title.replace(/\s+/g, '');
+    const combined = region + ' ' + title;
+    const has = (name: string) => combined.includes(name.replace(/\s+/g, ''));
+    const busanDistricts: Record<string, string[]> = {
+      'busan-jung': ['중구'], 'busan-seo': ['서구'], 'busan-dong': ['동구'],
+      'busan-yeongdo': ['영도구'], 'busan-busanjin': ['부산진구'],
+      'busan-dongnae': ['동래구'], 'busan-nam': ['남구'], 'busan-buk': ['북구'],
+      'busan-haeundae': ['해운대구', '해운대'], 'busan-saha': ['사하구'],
+      'busan-geumjeong': ['금정구'], 'busan-gangseo': ['강서구'],
+      'busan-yeonje': ['연제구'], 'busan-suyeong': ['수영구'],
+      'busan-sasang': ['사상구'], 'busan-gijang': ['기장군', '기장']
+    };
+    const gyeongnamCities = ['창원','마산','진해','김해','양산','진주','사천','거제','통영','고성','밀양','함안','창녕'];
+    if (slug === 'gyeongnam') return gyeongnamCities.some(has);
+    if (slug === 'busan') return has('부산') || (region.includes('부산') && title.length > 0);
+    if (slug === 'changwon') return ['창원','마산','진해'].some(has);
+    if (slug === 'masan' || slug === 'jinhae') return has(area.name);
+    if (slug.startsWith('busan-')) {
+      // District-only terms must be supported by explicit Busan context.
+      // Avoid assigning generic "중구/남구" cases from other cities.
+      const isBusan = has('부산') || region.includes('부산');
+      return isBusan && (busanDistricts[slug] || []).some(has);
+    }
+    return has(area.name);
   }).slice(0,6);
   return <>
     <section className="page-hero"><div className="wrap"><div className="breadcrumbs"><a href="/">홈</a> / 지역별 안내 / {area.name}</div><div className="kicker">LOCAL SINK BOWL SERVICE</div><h1>{area.name} 싱크볼 교체</h1><p>{area.localNote}</p></div></section>
