@@ -1367,3 +1367,13 @@ textarea {
 .premium-cases .premium-case-mark span{color:#d6b57d}
 .premium-cases .dark-button{background:#b99a65;color:#20221d;border:1px solid #b99a65}
 .premium-cases .dark-button:hover{background:#d0b17c;border-color:#d0b17c}
+
+/* Installation stories: warm stone bridge between greige process and ivory areas */
+.premium-cases{background:#dcd9d0;color:#252722}
+.premium-cases .premium-case-inner h2{color:#252722}
+.premium-cases .premium-case-inner p{color:#514f48}
+.premium-cases .premium-eyebrow{color:#886a3f}
+.premium-cases .premium-case-mark{color:rgba(72,67,56,.15)}
+.premium-cases .premium-case-mark span{color:#94744b}
+.premium-cases .dark-button{background:#292b26;color:#fff;border:1px solid #292b26}
+.premium-cases .dark-button:hover{background:#41443b;border-color:#41443b}
