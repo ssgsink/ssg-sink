@@ -1352,3 +1352,8 @@ textarea {
 @media(max-width:900px){.premium-area-city-links{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:700px){.premium-area-city-links{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px!important}.premium-areas-refined .premium-area-city-links a{padding:12px 10px;font-size:14px;min-height:48px}}
 @media(max-width:380px){.premium-area-city-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Homepage service-area buttons: understated warm sand, no arrow glyph */
+.premium-areas-refined .premium-area-city-links a{justify-content:center;text-align:center;background:#eee8dc;border:1px solid #d8cbb5;color:#35332e;border-radius:5px;box-shadow:none;font-weight:650;letter-spacing:.01em;transition:background .2s,border-color .2s,transform .2s}
+.premium-areas-refined .premium-area-city-links a:hover{background:#dfd1b9;border-color:#b99a65;transform:translateY(-1px)}
+.premium-areas-refined .premium-area-city-links a:focus-visible{outline:2px solid #8b6b3f;outline-offset:3px}
