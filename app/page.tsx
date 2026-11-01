@@ -2,19 +2,18 @@ import type {Metadata} from 'next';
 export const metadata:Metadata={alternates:{canonical:'/'}};
 const areas = [
   ['부산', 'busan'],
+  ['양산', 'yangsan'],
+  ['김해', 'gimhae'],
   ['창원', 'changwon'],
   ['마산', 'masan'],
   ['진해', 'jinhae'],
-  ['김해', 'gimhae'],
-  ['양산', 'yangsan'],
   ['진주', 'jinju'],
   ['사천', 'sacheon'],
+  ['밀양', 'miryang'],
   ['거제', 'geoje'],
   ['통영', 'tongyeong'],
   ['고성', 'goseong'],
-  ['밀양', 'miryang'],
   ['함안', 'haman'],
-  ['창녕', 'changnyeong'],
   ['기타 지역', 'gyeongnam'],
 ];
 
@@ -124,7 +123,7 @@ export default function Home() {
 
           <div className="premium-area-links premium-area-compact premium-area-city-links">
             {areas.map(([name, slug]) => (
-              <a key={slug} href={`/areas/${slug}/`}>{name}<span aria-hidden="true">↗</span></a>
+              <a key={slug} href={`/areas/${slug}/`}>{name}</a>
             ))}
           </div>
         </div>
