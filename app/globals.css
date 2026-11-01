@@ -1115,3 +1115,82 @@ textarea {
  .local-contact-actions small{font-size:10px}
  .local-contact-arrow{font-size:11px}
 }
+
+
+/* Shared public-page design, aligned with regional landing pages */
+.site-hero{background:linear-gradient(115deg,#f0f7ff,#fff);padding:25px 0 52px}
+.site-crumb{display:flex;gap:10px;color:#60768c;font-size:13px;margin-bottom:32px}
+.site-crumb a{color:#1267a7}
+.site-hero-grid{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:36px}
+.site-kicker{color:#1377b5;font-size:12px;letter-spacing:1.6px;font-weight:800}
+.site-hero h1{color:#0b2d50;font-size:clamp(32px,4vw,49px);line-height:1.25;letter-spacing:-1.6px;margin:12px 0 18px}
+.site-hero p{color:#52677a;font-size:16px;line-height:1.85}
+.site-hero-image{height:290px;border-radius:20px 20px 20px 52px;box-shadow:0 15px 35px #113d6023;background:#dce7f0 url('/images/shinsegae-sink-types.jpg') left center/200% 100% no-repeat}
+.site-hero-image.under{background-position:right center}
+.site-section{padding:65px 0}
+.site-soft{background:#f0f6fc}
+.site-heading{margin-bottom:24px}
+.site-heading h2{font-size:clamp(25px,3vw,34px);color:#0b2d50;margin:8px 0 10px;letter-spacing:-1px}
+.site-heading p{color:#617386;font-size:15px}
+.site-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.site-card{border:1px solid #dce8f2;background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 7px 20px #102e4910}
+.site-card-body{padding:24px}
+.site-card h3{font-size:20px;color:#10395f;margin:0 0 12px}
+.site-card p{color:#596e80;font-size:15px;line-height:1.8}
+.site-card-image{height:195px;background:#dce7f0 url('/images/shinsegae-sink-types.jpg') left center/200% 100% no-repeat}
+.site-card-image.under{background-position:right center}
+.site-number{display:inline-flex;width:35px;height:35px;border-radius:10px;background:#e6f3fc;color:#1168a3;align-items:center;justify-content:center;font-weight:800;margin-bottom:13px}
+.site-checks{padding:20px 24px 20px 42px;background:#edf6ff;border-radius:14px;color:#214564;line-height:2;font-size:15px}
+.site-callout{background:linear-gradient(110deg,#062849,#075080);color:#fff;padding:45px 0}
+.site-callout h2{color:#fff;font-size:clamp(25px,3vw,33px);margin:8px 0}
+.site-callout p{color:#d5e8f7}
+.site-callout-inner{display:flex;align-items:center;justify-content:space-between;gap:25px}
+.site-actions{display:flex;flex-wrap:wrap;gap:10px}
+.site-action{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;padding:10px 17px;border-radius:9px;font-size:15px;font-weight:800;text-decoration:none}
+.site-action.phone{background:#ff8b16;color:white}
+.site-action.sms{background:white;color:#075083}
+.site-action.secondary{background:#e8f4fd;color:#0a609b}
+.site-action-icon{font-size:17px}
+.site-photo-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.site-photo-pair figure{margin:0;background:#fff;border:1px solid #dbe7f0;border-radius:13px;overflow:hidden}
+.site-photo-pair img{width:100%;height:290px;object-fit:cover;display:block}
+.site-photo-pair figcaption{padding:12px 16px;color:#164d78;font-weight:800}
+.site-detail-copy{font-size:16px;line-height:1.95;color:#415b71;white-space:pre-wrap}
+.site-detail-top{padding:50px 0 35px;background:linear-gradient(110deg,#edf6ff,#fff)}
+.site-detail-top h1{color:#0b2d50;font-size:clamp(27px,3.5vw,40px);line-height:1.4}
+.site-detail-top p{color:#5b7183}
+.site-case-content{max-width:960px}
+.site-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.site-gallery figure{margin:0}
+.site-gallery img{width:100%;height:auto;border-radius:12px}
+.site-gallery figcaption{font-size:13px;color:#5b7183}
+.site-contact-cards{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.site-contact-card{border-radius:16px;border:1px solid #dce8f2;background:white;padding:25px;box-shadow:0 7px 20px #102e4910}
+.site-contact-card h3{font-size:21px;color:#10395f}
+.site-contact-card p{color:#536c80}
+.site-contact-symbol{display:inline-flex;width:44px;height:44px;align-items:center;justify-content:center;border-radius:12px;background:#e6f3fc;color:#0b679f;font-size:22px}
+.site-contact-card strong{display:block;margin:14px 0;font-size:17px;color:#10395f}
+.site-inline-note{padding:18px 20px;border-radius:12px;background:#eaf5ff;color:#315774;font-size:14px}
+.site-section .case-grid{margin-top:20px}
+.site-section .case-card{border-radius:14px}
+.site-section .case-copy strong{color:#10395f}
+@media(max-width:700px){
+ .site-hero{padding:16px 0 36px}
+ .site-crumb{font-size:14px;margin-bottom:19px}
+ .site-hero-grid{grid-template-columns:1fr;gap:20px}
+ .site-hero h1{font-size:34px}
+ .site-hero p{font-size:16px}
+ .site-hero-image{height:230px;border-radius:13px 13px 13px 36px}
+ .site-section{padding:48px 0}
+ .site-heading p{font-size:16px}
+ .site-card-grid,.site-contact-cards,.site-gallery{grid-template-columns:1fr}
+ .site-card p,.site-checks{font-size:16px}
+ .site-card-body{padding:20px}
+ .site-callout-inner{display:block}
+ .site-actions{margin-top:22px}
+ .site-action{font-size:15px;min-height:44px}
+ .site-photo-pair{gap:8px}
+ .site-photo-pair img{height:185px}
+ .site-detail-top{padding:35px 0 24px}
+ .site-detail-copy{font-size:16px}
+}
