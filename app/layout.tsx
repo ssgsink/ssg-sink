@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
+import AnalyticsEvents from '@/components/AnalyticsEvents';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -17,5 +19,5 @@ export const metadata: Metadata = {
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const jsonLd = { '@context': 'https://schema.org', '@type': 'HomeAndConstructionBusiness', name: '신세계싱크', url: siteUrl, telephone: '+82-10-5504-3858', description: '부산·경남 싱크볼 교체 전문 업체', areaServed: ['부산광역시', '경상남도'], knowsAbout: ['싱크볼 교체', '씽크볼 교체', '사각싱크볼 교체', '사각씽크볼 교체', '언더싱크볼 교체', '싱크대볼 교체', '개수대 교체'] };
-  return <html lang="ko"><body><script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}/><Header/><main>{children}</main><Footer/><MobileContactBar/></body></html>;
+  return <html lang="ko"><body><script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}}/><Script src="https://www.googletagmanager.com/gtag/js?id=G-ETWF2EDXHX" strategy="afterInteractive"/><Script id="ga4-init" strategy="afterInteractive" dangerouslySetInnerHTML={{__html: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\u0027js\u0027,new Date());gtag(\u0027config\u0027,\u0027G-ETWF2EDXHX\u0027);"}}/><AnalyticsEvents/><Header/><main>{children}</main><Footer/><MobileContactBar/></body></html>;
 }
