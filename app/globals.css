@@ -1817,3 +1817,31 @@ textarea {
 .contact-ref-guide-info li small{font-size:12px;line-height:1.5}
 @media(max-width:900px){.contact-ref-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.contact-ref-guide-caption h3{font-size:16px}.contact-ref-guide-caption p{font-size:13px}}
 @media(max-width:560px){.contact-ref-guide-grid{grid-template-columns:1fr;gap:16px}.contact-ref-guide-image{aspect-ratio:1.65}.contact-ref-guide-caption{padding:14px 16px 20px}.contact-ref-guide-caption h3{font-size:17px}.contact-ref-guide-caption p{font-size:13px}.contact-ref-guide-info{padding:18px}.contact-ref-guide-info li strong{font-size:14px}.contact-ref-guide-info li small{font-size:12px}.contact-ref-guide-heading{align-items:flex-start}.contact-ref-guide-heading>span{font-size:30px}.contact-ref-guide-heading h2{font-size:23px}}
+
+
+/* Review fixes: readable navigation, image framing, clear Naver branding */
+.ref-site-header .header-inner{min-height:82px;gap:28px}
+.ref-site-header .brand{font-size:clamp(22px,2vw,28px);line-height:1.25}
+.ref-site-header .brand small{font-size:10px;letter-spacing:1.7px}
+.ref-site-header .nav{gap:clamp(18px,2.6vw,36px)}
+.ref-site-header .nav a{font-size:clamp(15px,1.25vw,18px);font-weight:750;line-height:1.5;white-space:nowrap;padding:12px 0}
+.ref-site-header .nav a:hover,.ref-site-header .nav a:focus-visible{text-decoration:underline;text-decoration-color:#c5a471;text-underline-offset:7px}
+@media(max-width:750px){.ref-site-header .header-inner{gap:9px;padding-top:10px;padding-bottom:10px}.ref-site-header .brand{font-size:21px}.ref-site-header .nav{gap:8px;justify-content:space-around;width:100%}.ref-site-header .nav a{font-size:clamp(13px,3.4vw,16px);padding:8px 3px}}
+/* Keep the entire two-sink reference visible instead of cropping at either edge */
+.about-ref-service-grid{grid-template-columns:minmax(270px,1.15fr) minmax(170px,.65fr) minmax(280px,1.2fr);align-items:center;gap:clamp(20px,3vw,44px)}
+.about-ref-service-photo{height:clamp(235px,24vw,335px);background-color:#f5f2ed;background-image:url('/images/shinsegae-sink-types.jpg');background-size:contain;background-position:center;background-repeat:no-repeat;border:1px solid #e8e0d6;border-radius:16px}
+.about-ref-service-grid h2{font-size:clamp(23px,2.5vw,34px);word-break:keep-all}
+.about-ref-service-grid li{font-size:clamp(13px,1.25vw,16px);line-height:1.6}
+@media(max-width:920px){.about-ref-service-grid{grid-template-columns:1fr 1fr}.about-ref-service-photo{grid-column:1/-1;height:260px}.about-ref-service-grid h2{border-right:0}}
+@media(max-width:620px){.about-ref-service-grid{grid-template-columns:1fr;gap:14px}.about-ref-service-photo{height:235px}.about-ref-service-grid h2{border-bottom:2px solid #b99a65;padding-bottom:12px}.about-ref-service-grid ul{grid-column:auto}}
+.cases-ref-naver{display:inline-grid;place-items:center;vertical-align:middle;background:#03c75a;color:#fff;border-radius:5px;width:30px;height:30px;font-family:Arial,sans-serif;font-size:23px;font-weight:900;letter-spacing:-2px;line-height:1}
+.cases-ref-tabs button{display:flex;justify-content:center;align-items:center;gap:5px;font-size:clamp(17px,2vw,22px)}
+/* SMS photos: avoid blurred upscaling, keep measurement labels within frame */
+.contact-ref-guide-grid{gap:18px}
+.contact-ref-guide-image{aspect-ratio:1.16;background:#f7f5f1;overflow:hidden}
+.contact-ref-guide-image img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;image-rendering:auto}
+.contact-ref-guide-card{border-radius:17px}
+.contact-ref-guide-caption{padding:16px 12px 20px}
+.contact-ref-guide-caption h3{font-size:clamp(14px,1.3vw,18px)}
+@media(max-width:900px){.contact-ref-guide-grid{gap:14px}}
+@media(max-width:560px){.contact-ref-guide-image{aspect-ratio:1.5}.contact-ref-guide-grid{gap:15px}}
