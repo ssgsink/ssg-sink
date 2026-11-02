@@ -27,20 +27,33 @@ export default function CaseAdmin(){
  async function upload(file:File){
   if(!client||!user)throw Error('로그인이 필요합니다.');
   const originalExt=(file.name.split('.').pop()||'').toLowerCase();
-  const isHeic=['heic','heif'].includes(originalExt)||/^image\/hei[cf]$/i.test(file.type);
-  const allowed=['jpg','jpeg','png','webp','gif','heic','heif'].includes(originalExt)||['image/jpeg','image/png','image/webp','image/gif','image/heic','image/heif'].includes(file.type.toLowerCase());
+  const mime=file.type.toLowerCase();
+  const isHeic=['heic','heif'].includes(originalExt)||/^image\/hei[cf]$/.test(mime);
+  const allowed=['jpg','jpeg','png','webp','gif','heic','heif'].includes(originalExt)||['image/jpeg','image/png','image/webp','image/gif','image/heic','image/heif'].includes(mime);
   if(!allowed)throw Error('지원하지 않는 사진 형식입니다: '+file.name+'. JPG, PNG, WEBP, HEIC 사진을 선택해 주세요.');
   if(file.size>10*1024*1024)throw Error('사진 한 장의 크기는 10MB 이하여야 합니다: '+file.name+' ('+(file.size/1024/1024).toFixed(1)+'MB)');
   let target=file;
-  if(isHeic){
-   setSaveStage('아이폰 HEIC 사진 변환 중: '+file.name);
+  // Detect actual file content: a JPEG renamed to .heic must not be decoded as HEIC.
+  const header=new Uint8Array(await file.slice(0,16).arrayBuffer());
+  const jpegSignature=header[0]===0xff&&header[1]===0xd8&&header[2]===0xff;
+  const pngSignature=header[0]===0x89&&header[1]===0x50&&header[2]===0x4e&&header[3]===0x47;
+  const webpSignature=String.fromCharCode(...header.slice(0,4))==='RIFF'&&String.fromCharCode(...header.slice(8,12))==='WEBP';
+  if(jpegSignature&&isHeic){
+   target=new File([file],file.name.replace(/\.hei[cf]$/i,'.jpg'),{type:'image/jpeg'});
+  }else if(pngSignature&&isHeic){
+   target=new File([file],file.name.replace(/\.hei[cf]$/i,'.png'),{type:'image/png'});
+  }else if(webpSignature&&isHeic){
+   target=new File([file],file.name.replace(/\.hei[cf]$/i,'.webp'),{type:'image/webp'});
+  }else if(isHeic){
+   setSaveStage('HEIC 사진 변환 중: '+file.name);
    try{
     const {heicTo}=await import('heic-to');
     const jpeg=await heicTo({blob:file,type:'image/jpeg',quality:0.85});
     if(!jpeg||jpeg.size===0)throw Error('변환 결과가 비어 있습니다.');
     target=new File([jpeg],file.name.replace(/\.hei[cf]$/i,'.jpg'),{type:'image/jpeg'});
    }catch(error){
-    throw Error('HEIC 사진 변환에 실패했습니다: '+file.name+'. 해당 HEIC 형식을 변환하지 못했습니다. 문제가 계속되면 원본 사진을 JPG로 내보낸 후 다시 시도해 주세요. ('+(error instanceof Error?error.message:'변환 오류')+')');
+    const reason=error instanceof Error?error.message:String(error);
+    throw Error('HEIC 사진 변환 실패: '+file.name+' ('+reason+'). 원본 사진을 JPG로 내보내 다시 시도해 주세요.');
    }
   }
   const ext=(target.name.split('.').pop()||'jpg').toLowerCase();
