@@ -35,12 +35,12 @@ export default function CaseAdmin(){
   if(isHeic){
    setSaveStage('아이폰 HEIC 사진 변환 중: '+file.name);
    try{
-    const {default:heic2any}=await import('heic2any');
-    const result=await heic2any({blob:file,toType:'image/jpeg',quality:0.85});
-    const jpeg=Array.isArray(result)?result[0]:result;
+    const {heicTo}=await import('heic-to');
+    const jpeg=await heicTo({blob:file,type:'image/jpeg',quality:0.85});
+    if(!jpeg||jpeg.size===0)throw Error('변환 결과가 비어 있습니다.');
     target=new File([jpeg],file.name.replace(/\.hei[cf]$/i,'.jpg'),{type:'image/jpeg'});
    }catch(error){
-    throw Error('HEIC 사진 변환에 실패했습니다: '+file.name+'. 사진을 JPG로 변환하여 다시 시도해 주세요. ('+(error instanceof Error?error.message:'변환 오류')+')');
+    throw Error('HEIC 사진 변환에 실패했습니다: '+file.name+'. 해당 HEIC 형식을 변환하지 못했습니다. 문제가 계속되면 원본 사진을 JPG로 내보낸 후 다시 시도해 주세요. ('+(error instanceof Error?error.message:'변환 오류')+')');
    }
   }
   const ext=(target.name.split('.').pop()||'jpg').toLowerCase();
