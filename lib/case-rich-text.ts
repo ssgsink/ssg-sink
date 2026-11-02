@@ -3,10 +3,11 @@
 const escapeHtml=(value:string)=>value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 const colors=new Set(['#252722','#a17a36','#b42318','#146b46','#2257a5','#ffffff','#fff3b0']);
 const sizes=new Set(['14px','16px','18px','22px','28px']);
+function normalizedColor(value:string){const rgb=value.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/);return rgb?'#'+rgb.slice(1).map(n=>Number(n).toString(16).padStart(2,'0')).join(''):value}
 function safeStyle(input:string){
  const rules:string[]=[];
  for(const declaration of input.split(';')){
-  const [key,...rest]=declaration.split(':');const name=key?.trim().toLowerCase(),value=rest.join(':').trim().toLowerCase();
+  const [key,...rest]=declaration.split(':');const name=key?.trim().toLowerCase(),value=normalizedColor(rest.join(':').trim().toLowerCase());
   if(name==='color'&&colors.has(value))rules.push('color:'+value);
   if(name==='background-color'&&colors.has(value))rules.push('background-color:'+value);
   if(name==='font-size'&&sizes.has(value))rules.push('font-size:'+value);
