@@ -1850,3 +1850,18 @@ textarea {
 .cases-ref .cases-ref-blog-photo{height:auto;aspect-ratio:1 / 1;overflow:hidden}
 .cases-ref .cases-ref-blog-photo img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;object-position:center;display:block}
 .cases-ref .cases-ref-blog-photo .cases-ref-photo-empty{height:100%;min-height:100%;position:absolute;inset:0}
+
+/* Lightweight rich text editor for installation case descriptions */
+.case-rich-editor{border:1px solid #d8d0c4;border-radius:12px;overflow:hidden;margin-top:9px;background:white}
+.case-rich-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:10px;background:#f5f1ea;border-bottom:1px solid #e1d9ce}
+.case-rich-toolbar button,.case-rich-toolbar select{border:1px solid #d8cfc1;border-radius:6px;background:white;color:#282b27;font:inherit;font-size:13px;min-height:36px;padding:7px 10px;cursor:pointer}
+.case-rich-toolbar button:hover,.case-rich-toolbar select:hover{border-color:#a17a36;background:#fffaf0}
+.case-rich-input{min-height:240px;max-height:650px;overflow:auto;outline:0;padding:19px 20px;line-height:1.8;font-size:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+.case-rich-input:focus{box-shadow:inset 0 0 0 2px #b99a65}
+.case-rich-input:empty:before{content:attr(data-placeholder);color:#9b958b;pointer-events:none}
+.case-rich-input p,.case-rich-output p{margin:0 0 12px}
+.case-rich-input ul,.case-rich-output ul{list-style:disc;padding-left:24px}
+.case-rich-input ol,.case-rich-output ol{list-style:decimal;padding-left:24px}
+.case-rich-help{font-size:12px;color:#746c60;padding:8px 14px 12px;margin:0!important;background:#fcfaf7}
+.case-rich-output{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.9}
+.case-rich-output h2{font-size:26px}.case-rich-output h3{font-size:21px}
