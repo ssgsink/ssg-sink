@@ -9,8 +9,8 @@ export default async function Home(){
  return <main className="ref-home">
   <section className="ref-hero"><div className="ref-hero-shade"><div className="wrap ref-hero-content">
    <span className="ref-eyebrow">SHINSEGAE SINK</span>
-   <h1>싱크볼 교체<br/>전문 <em>신세계싱크</em></h1>
-   <p className="ref-hero-description">부산·경남 전지역, 싱크볼 교체를<br/>대표가 직접 시공합니다.</p>
+   <h1>싱크볼 교체 전문<br/><em>신세계싱크</em></h1>
+   <p className="ref-hero-description">부산·경남 전 지역<br/>대표가 직접 상담부터 시공까지 합니다.</p>
    <div className="ref-hero-actions"><a href="tel:01055043858" className="ref-hero-phone">☎ 전화 상담</a><a href={smsHref} className="ref-hero-sms">✉ 문자 상담</a><a href="/cases/" className="ref-hero-cases">▣ 시공 사례</a></div>
   </div></div></section>
   <section className="ref-benefits"><div className="wrap"><h2>“싱크볼 하나로 <em>새로워지는 주방</em>”</h2><p>낡고 불편한 싱크볼, 이제 새롭게 교체하고 더 깨끗하고 편리한 주방을 만나보세요.</p><div className="ref-benefit-grid">
