@@ -1467,3 +1467,67 @@ textarea {
 .home-blue-contact .home-contact-actions .home-sms-button:hover{background:#078e57;border-color:#078e57;color:#fff}
 @media(max-width:850px){.home-blue-contact .home-contact-row{flex-direction:column;align-items:stretch;gap:22px}.home-blue-contact .home-contact-actions{justify-content:flex-start}}
 @media(max-width:470px){.home-blue-contact .home-contact-actions{gap:8px}.home-blue-contact .home-contact-actions a{min-width:0;flex:1;padding:12px 9px;font-size:12px}}
+
+
+/* Reference homepage v1 — scoped so the original site remains recoverable */
+.ref-home{font-family:'Noto Sans KR',sans-serif;color:#191e22;background:#fff}
+.ref-home em{font-style:normal;color:#0750b9}
+.ref-home h2{font-size:clamp(25px,3vw,37px);font-weight:800;letter-spacing:-1.4px;line-height:1.3;margin:0}
+.ref-home section>.wrap>p{margin:10px 0 0;font-size:15px}
+.ref-hero{background:#f7f4f0 url('/images/shinsegae-sink-kitchen.jpg') center right/cover no-repeat;min-height:405px}
+.ref-hero-shade{min-height:405px;background:linear-gradient(90deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.85) 30%,rgba(255,255,255,.12) 62%,transparent 100%)}
+.ref-hero-content{padding-top:42px;padding-bottom:38px}
+.ref-eyebrow{font-size:13px;font-weight:800;letter-spacing:3px}
+.ref-hero h1{font-size:clamp(38px,5.5vw,70px);font-weight:900;line-height:1.15;letter-spacing:-3px;margin:14px 0 20px}
+.ref-hero h1 em{font-size:1.24em;letter-spacing:-4px}
+.ref-hero-description{font-size:19px;font-weight:700;line-height:1.5;border-left:3px solid #0750b9;padding-left:16px;margin:0 0 20px}
+.ref-hero-trust{display:flex;gap:0;max-width:370px}
+.ref-hero-trust>div{flex:1;text-align:center;border-right:1px solid #d6d6d6}
+.ref-hero-trust>div:last-child{border:0}
+.ref-hero-trust span{display:grid;place-items:center;width:44px;height:44px;margin:0 auto 7px;border-radius:50%;background:#064bb5;color:white;font-size:26px}
+.ref-hero-trust strong{display:block;font-size:13px}
+.ref-benefits{text-align:center;padding:27px 0 25px;background:#fff}
+.ref-benefit-grid{display:grid;grid-template-columns:repeat(4,1fr);margin-top:22px}
+.ref-benefit-grid>div{display:flex;align-items:center;flex-direction:column;gap:6px;border-right:1px solid #ddd}
+.ref-benefit-grid>div:last-child{border:0}
+.ref-benefit-grid span{font-size:39px;line-height:1.1}
+.ref-benefit-grid strong{font-size:16px}
+.ref-process{padding:27px 0 25px;background:#f3ece5;text-align:center}
+.ref-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;margin-top:22px}
+.ref-process-grid article{background:#fff;border-radius:14px;padding:14px 10px 12px;min-height:130px;box-shadow:0 2px 10px #00000006;position:relative}
+.ref-process-grid article:not(:last-child):after{content:'›';position:absolute;right:-24px;top:39%;font-size:38px;color:#16191c;font-weight:800}
+.ref-process-grid article>span{display:block;font-size:32px;line-height:1.2}
+.ref-process-grid article strong{display:block;font-size:18px;margin:3px 0}
+.ref-process-grid article p{font-size:13px;line-height:1.4;margin:4px 0}
+.ref-cases{padding:25px 0 20px;text-align:center;background:#fff}
+.ref-case-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0 16px}
+.ref-case{height:136px;position:relative;overflow:hidden;border-radius:9px;text-align:left;background:#e6e6e6}
+.ref-case img,.ref-case-placeholder-photo{width:100%;height:100%;object-fit:cover;display:block}
+.ref-case-placeholder-photo{background:url('/images/shinsegae-sink-kitchen.jpg') center/cover}
+.ref-case>span{position:absolute;top:9px;left:8px;border-radius:24px;background:#0759c6;color:white;padding:5px 12px;font-size:13px;font-weight:700}
+.ref-case-all{height:136px;background:linear-gradient(135deg,#4277af,#0b3577);color:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px}
+.ref-case-all span{font-size:32px}
+.ref-case-all strong{font-size:18px;line-height:1.35}
+.ref-more-button{display:inline-block;background:#242b2c;color:white;border-radius:40px;padding:8px 35px;font-weight:700;font-size:15px}
+.ref-areas{padding:23px 0;background:#f5f0eb}
+.ref-areas-grid{display:grid;grid-template-columns:160px minmax(250px,1fr) minmax(340px,1.3fr);gap:20px;align-items:center}
+.ref-map{height:130px;background:#d8e7f8;border-radius:45% 60% 55% 35%;display:grid;place-items:center;color:#0750b9;transform:rotate(-9deg)}
+.ref-map span{font-size:60px;transform:rotate(9deg)}
+.ref-areas-copy{border-left:2px solid #0750b9;padding-left:23px}
+.ref-areas-copy h2{font-size:clamp(23px,2.5vw,31px)}
+.ref-areas-copy p{font-size:14px;margin:8px 0}
+.ref-areas-copy small{font-size:12px;color:#1454b4;background:#e2eafb;border-radius:20px;padding:6px 8px;display:inline-block}
+.ref-region-buttons{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.ref-region-buttons a{border:1px solid #d4d7db;border-radius:30px;background:white;color:#16191b;padding:7px 4px;font-size:12px;text-align:center;font-weight:700;white-space:nowrap}
+.ref-region-buttons a:hover{border-color:#0759c6;background:#edf5ff}
+.ref-contact{background:#222b2c;color:white;padding:22px 0}
+.ref-contact-grid{display:flex;justify-content:space-between;align-items:center;gap:22px}
+.ref-contact-title{display:flex;gap:20px;align-items:center}
+.ref-contact-title>span{font-size:48px}
+.ref-contact-title h2{font-size:27px;color:#fff}
+.ref-contact-title p{font-size:12px;margin:6px 0 0;color:#e3e8ea}
+.ref-contact-actions{display:flex;gap:12px}
+.ref-contact-actions a{border-radius:50px;color:#fff;font-size:16px;font-weight:800;padding:13px 23px;white-space:nowrap;text-align:center}
+.ref-call{background:#0767ef}.ref-sms{background:#00b956}
+@media(max-width:950px){.ref-areas-grid{grid-template-columns:120px 1fr}.ref-region-buttons{grid-column:1/-1}.ref-process-grid{gap:18px}.ref-process-grid article:not(:last-child):after{right:-16px}.ref-contact-grid{flex-direction:column;align-items:stretch}.ref-contact-actions a{flex:1}}
+@media(max-width:620px){.ref-hero,.ref-hero-shade{min-height:390px}.ref-hero{background-position:58% center}.ref-hero-shade{background:linear-gradient(90deg,rgba(255,255,255,.97),rgba(255,255,255,.88) 54%,rgba(255,255,255,.38))}.ref-hero-content{padding-top:40px}.ref-hero h1{font-size:39px;letter-spacing:-2px}.ref-hero h1 em{letter-spacing:-2px}.ref-hero-description{font-size:15px}.ref-home h2{font-size:24px}.ref-benefits,.ref-process,.ref-cases{padding:30px 0}.ref-home section>.wrap>p{font-size:13px}.ref-benefit-grid{grid-template-columns:repeat(2,1fr);gap:20px}.ref-benefit-grid>div:nth-child(2){border:0}.ref-process-grid{grid-template-columns:repeat(2,1fr);gap:12px}.ref-process-grid article:not(:last-child):after{display:none}.ref-case-grid{grid-template-columns:repeat(2,1fr);gap:10px}.ref-case,.ref-case-all{height:135px}.ref-areas-grid{grid-template-columns:1fr;gap:15px}.ref-map{display:none}.ref-areas-copy{padding-left:15px}.ref-region-buttons{grid-column:auto;grid-template-columns:repeat(3,1fr)}.ref-contact-title h2{font-size:22px}.ref-contact-title>span{font-size:32px}.ref-contact-actions{gap:8px}.ref-contact-actions a{font-size:12px;padding:12px 5px}}
