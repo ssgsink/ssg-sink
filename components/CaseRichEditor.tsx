@@ -43,7 +43,7 @@ export default function CaseRichEditor({value,onChange}:{value:string;onChange:(
    const safe=document.createElement('div');safe.innerHTML=sanitizeCaseDetails('<!-- rich-case -->'+staging.innerHTML);
    while(safe.firstChild)fragment.appendChild(safe.firstChild);
   }else if(plain){
-   const lines=plain.replace(/\r\n?/g,'\n').split('\\n');
+   const lines=plain.replace(/\r\n?/g,'\n').split('\n');
    lines.forEach((line,index)=>{
     if(index)fragment.appendChild(document.createElement('br'));
     const heading=line.match(/^#{1,3}\s+(.+)$/);
