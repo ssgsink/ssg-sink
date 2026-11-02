@@ -27,7 +27,7 @@ export default function CaseAdmin(){
  async function upload(file:File){
   if(!client||!user)throw Error('로그인이 필요합니다.');
   const originalExt=(file.name.split('.').pop()||'').toLowerCase();
-  const isHeic=['heic','heif'].includes(originalExt)||/image\\/hei[cf]/i.test(file.type);
+  const isHeic=['heic','heif'].includes(originalExt)||/^image\/hei[cf]$/i.test(file.type);
   const allowed=['jpg','jpeg','png','webp','gif','heic','heif'].includes(originalExt)||['image/jpeg','image/png','image/webp','image/gif','image/heic','image/heif'].includes(file.type.toLowerCase());
   if(!allowed)throw Error('지원하지 않는 사진 형식입니다: '+file.name+'. JPG, PNG, WEBP, HEIC 사진을 선택해 주세요.');
   if(file.size>10*1024*1024)throw Error('사진 한 장의 크기는 10MB 이하여야 합니다: '+file.name+' ('+(file.size/1024/1024).toFixed(1)+'MB)');
@@ -38,7 +38,7 @@ export default function CaseAdmin(){
     const {default:heic2any}=await import('heic2any');
     const result=await heic2any({blob:file,toType:'image/jpeg',quality:0.85});
     const jpeg=Array.isArray(result)?result[0]:result;
-    target=new File([jpeg],file.name.replace(/\\.hei[cf]$/i,'.jpg'),{type:'image/jpeg'});
+    target=new File([jpeg],file.name.replace(/\.hei[cf]$/i,'.jpg'),{type:'image/jpeg'});
    }catch(error){
     throw Error('HEIC 사진 변환에 실패했습니다: '+file.name+'. 사진을 JPG로 변환하여 다시 시도해 주세요. ('+(error instanceof Error?error.message:'변환 오류')+')');
    }
