@@ -1792,3 +1792,28 @@ textarea {
 .contact-ref-guide-info li small{font-size:11px;display:block;color:#555}
 @media(max-width:850px){.contact-ref-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.contact-ref-guide{padding-bottom:26px}.contact-ref-guide-heading{gap:9px}.contact-ref-guide-heading>span{font-size:30px}.contact-ref-guide-heading h2{font-size:21px}.contact-ref-guide-heading p{font-size:12px}.contact-ref-guide-grid{gap:9px}.contact-ref-guide-image{height:135px}.contact-ref-guide-caption{padding:8px 6px;gap:5px}.contact-ref-guide-caption>span,.contact-ref-guide-info-title>span{width:23px;height:23px;font-size:13px}.contact-ref-guide-caption h3,.contact-ref-guide-info h3{font-size:12px}.contact-ref-guide-caption p,.contact-ref-guide-info p{font-size:10px}.contact-ref-guide-info{padding:9px}.contact-ref-guide-info li{padding:7px 0 7px 23px}.contact-ref-guide-info li strong{font-size:11px}.contact-ref-guide-info li small{font-size:10px}.contact-ref-measure-horizontal span{font-size:9px;top:-24px}.contact-ref-measure-vertical span{font-size:9px}}
+
+
+/* SMS consultation guide: clean four-column approved layout, never crop the photo annotations */
+.contact-ref-guide{padding:35px 0 48px}
+.contact-ref-guide-heading{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.contact-ref-guide-heading>span{font-size:42px;color:#997331}
+.contact-ref-guide-heading h2{font-size:clamp(24px,3vw,34px);font-weight:900;letter-spacing:-1px}
+.contact-ref-guide-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:stretch}
+.contact-ref-guide-card{border:1px solid #e7e0d6;background:#fffdfa;border-radius:19px;overflow:hidden;box-shadow:0 5px 14px rgba(40,30,18,.11);display:flex;flex-direction:column}
+.contact-ref-guide-image{height:auto;aspect-ratio:1.18;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#f6f2eb}
+.contact-ref-guide-image img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+.contact-ref-guide-caption{flex:1;display:flex;align-items:flex-start;gap:10px;padding:17px 12px 22px}
+.contact-ref-guide-caption>span,.contact-ref-guide-info-title>span{background:#a17a36;color:white;border-radius:50%;width:33px;height:33px;display:grid;place-items:center;flex-shrink:0;font-size:17px;font-weight:900}
+.contact-ref-guide-caption h3,.contact-ref-guide-info h3{font-size:clamp(13px,1.35vw,18px);font-weight:900;letter-spacing:-.6px;margin:3px 0 10px;line-height:1.35;word-break:keep-all}
+.contact-ref-guide-caption p{font-size:clamp(11px,1.05vw,14px);line-height:1.65;word-break:keep-all}
+.contact-ref-guide-caption mark{background:#ffeb9e;color:#302819;font-weight:800;box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:3px 5px;border-radius:7px}
+.contact-ref-guide-info{background:#faf7f2;padding:16px 13px}
+.contact-ref-guide-info-title{margin-bottom:14px;gap:9px}
+.contact-ref-guide-info-title p{font-size:12px;line-height:1.5}
+.contact-ref-guide-info li{padding:13px 0 13px 28px}
+.contact-ref-guide-info li:before{background:#a17a36}
+.contact-ref-guide-info li strong{font-size:14px}
+.contact-ref-guide-info li small{font-size:12px;line-height:1.5}
+@media(max-width:900px){.contact-ref-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.contact-ref-guide-caption h3{font-size:16px}.contact-ref-guide-caption p{font-size:13px}}
+@media(max-width:560px){.contact-ref-guide-grid{grid-template-columns:1fr;gap:16px}.contact-ref-guide-image{aspect-ratio:1.65}.contact-ref-guide-caption{padding:14px 16px 20px}.contact-ref-guide-caption h3{font-size:17px}.contact-ref-guide-caption p{font-size:13px}.contact-ref-guide-info{padding:18px}.contact-ref-guide-info li strong{font-size:14px}.contact-ref-guide-info li small{font-size:12px}.contact-ref-guide-heading{align-items:flex-start}.contact-ref-guide-heading>span{font-size:30px}.contact-ref-guide-heading h2{font-size:23px}}
