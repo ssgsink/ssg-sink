@@ -4,9 +4,13 @@ import {sanitizeCaseDetails} from '@/lib/case-rich-text';
 export default function CaseRichEditor({value,onChange}:{value:string;onChange:(value:string)=>void}){
  const ref=useRef<HTMLDivElement|null>(null);
  const initial=useRef(sanitizeCaseDetails(value));
+ const selection=useRef<Range|null>(null);
+ const rememberSelection=()=>{const sel=window.getSelection();if(sel&&sel.rangeCount&&ref.current?.contains(sel.anchorNode))selection.current=sel.getRangeAt(0).cloneRange()};
  const apply=(command:string,argument?:string)=>{
   ref.current?.focus();
+  if(selection.current){const sel=window.getSelection();sel?.removeAllRanges();sel?.addRange(selection.current)}
   document.execCommand(command,false,argument);
+  rememberSelection();
   if(ref.current)onChange('<!-- rich-case -->'+ref.current.innerHTML);
  };
  return <div className="case-rich-editor">
@@ -25,7 +29,7 @@ export default function CaseRichEditor({value,onChange}:{value:string;onChange:(
    <button type="button" onClick={()=>apply('justifyCenter')}>가운데</button>
    <button type="button" onClick={()=>apply('insertUnorderedList')}>목록</button>
   </div>
-  <div ref={ref} className="case-rich-input" contentEditable suppressContentEditableWarning role="textbox" aria-multiline="true" aria-label="상세 시공 설명 작성" data-placeholder="시공 전 상태, 교체 작업 과정, 설치 후 달라진 점 등을 작성해 주세요." dangerouslySetInnerHTML={{__html:initial.current}} onInput={e=>onChange('<!-- rich-case -->'+e.currentTarget.innerHTML)}/>
+  <div ref={ref} className="case-rich-input" contentEditable suppressContentEditableWarning role="textbox" aria-multiline="true" aria-label="상세 시공 설명 작성" data-placeholder="시공 전 상태, 교체 작업 과정, 설치 후 달라진 점 등을 작성해 주세요." dangerouslySetInnerHTML={{__html:initial.current}} onMouseUp={rememberSelection} onKeyUp={rememberSelection} onInput={e=>onChange('<!-- rich-case -->'+e.currentTarget.innerHTML)}/>
   <p className="case-rich-help">꾸밀 글자를 드래그한 뒤 위 도구를 누르세요. 작성한 모양이 고객용 상세 페이지에도 표시됩니다.</p>
  </div>
 }
