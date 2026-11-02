@@ -1845,3 +1845,8 @@ textarea {
 .contact-ref-guide-caption h3{font-size:clamp(14px,1.3vw,18px)}
 @media(max-width:900px){.contact-ref-guide-grid{gap:14px}}
 @media(max-width:560px){.contact-ref-guide-image{aspect-ratio:1.5}.contact-ref-guide-grid{gap:15px}}
+
+/* Blog review representative thumbnails are published as square images. */
+.cases-ref .cases-ref-blog-photo{height:auto;aspect-ratio:1 / 1;overflow:hidden}
+.cases-ref .cases-ref-blog-photo img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;object-position:center;display:block}
+.cases-ref .cases-ref-blog-photo .cases-ref-photo-empty{height:100%;min-height:100%;position:absolute;inset:0}
