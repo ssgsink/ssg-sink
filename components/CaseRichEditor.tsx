@@ -10,18 +10,55 @@ export default function CaseRichEditor({value,onChange}:{value:string;onChange:(
  };
  const emit=()=>{if(ref.current)onChange('<!-- rich-case -->'+ref.current.innerHTML)};
  const paste=(event:ClipboardEvent<HTMLDivElement>)=>{
-  // Insert plain text once, without external HTML or a React DOM reset.
   event.preventDefault();
+  const html=event.clipboardData.getData('text/html');
   const plain=event.clipboardData.getData('text/plain');
-  if(!plain)return;
   const selection=window.getSelection();
-  if(!selection?.rangeCount)return;
+  if(!selection?.rangeCount||!ref.current)return;
   const range=selection.getRangeAt(0);
-  if(!ref.current?.contains(range.commonAncestorContainer))return;
-  range.deleteContents();
+  if(!ref.current.contains(range.commonAncestorContainer))return;
   const fragment=document.createDocumentFragment();
-  const lines=plain.replace(/\r\n?/g,'\n').split('\n');
-  lines.forEach((line,index)=>{if(index)fragment.appendChild(document.createElement('br'));fragment.appendChild(document.createTextNode(line))});
+  if(html){
+   // Keep common rich-text formatting but strip scripts, event handlers and unsafe attributes.
+   const source=new DOMParser().parseFromString(html,'text/html');
+   const allowed=new Set(['P','DIV','BR','STRONG','B','EM','I','U','UL','OL','LI','SPAN','FONT','H2','H3','H1']);
+   const walk=(node:Node,parent:Node)=>{
+    if(node.nodeType===Node.TEXT_NODE){parent.appendChild(document.createTextNode(node.textContent||''));return}
+    if(node.nodeType!==Node.ELEMENT_NODE)return;
+    const el=node as HTMLElement;
+    if(['SCRIPT','STYLE','IFRAME','OBJECT','SVG','IMG','VIDEO','AUDIO'].includes(el.tagName))return;
+    const name=allowed.has(el.tagName)?el.tagName.toLowerCase():null;
+    const dest=name?document.createElement(name==='h1'?'h2':name):parent;
+    if(name){
+     const styles=['color','background-color','font-size','text-align'];
+     for(const prop of styles){const value=el.style.getPropertyValue(prop);if(value)(dest as HTMLElement).style.setProperty(prop,value)}
+     if(name==='font'){const font=dest as HTMLElement;const color=el.getAttribute('color');if(color)font.style.color=color;const size=el.getAttribute('size');if(size)font.setAttribute('size',size)}
+     parent.appendChild(dest);
+    }
+    for(const child of Array.from(node.childNodes))walk(child,dest);
+   };
+   for(const node of Array.from(source.body.childNodes))walk(node,fragment);
+   // Re-parse through the same server-side allowlist used for public display.
+   const staging=document.createElement('div');staging.appendChild(fragment);
+   const safe=document.createElement('div');safe.innerHTML=sanitizeCaseDetails('<!-- rich-case -->'+staging.innerHTML);
+   while(safe.firstChild)fragment.appendChild(safe.firstChild);
+  }else if(plain){
+   const lines=plain.replace(/\\r\\n?/g,'\\n').split('\\n');
+   lines.forEach((line,index)=>{
+    if(index)fragment.appendChild(document.createElement('br'));
+    const heading=line.match(/^#{1,3}\\s+(.+)$/);
+    if(heading){const el=document.createElement('strong');el.textContent=heading[1];el.style.fontSize='22px';fragment.appendChild(el)}
+    else{
+     const pieces=line.split(/(\\*\\*[^*]+\\*\\*)/g);
+     for(const piece of pieces){
+      if(piece.startsWith('**')&&piece.endsWith('**')){const strong=document.createElement('strong');strong.textContent=piece.slice(2,-2);fragment.appendChild(strong)}
+      else fragment.appendChild(document.createTextNode(piece));
+     }
+    }
+   });
+  }
+  if(!fragment.hasChildNodes())return;
+  range.deleteContents();
   const tail=fragment.lastChild;
   range.insertNode(fragment);
   if(tail){range.setStartAfter(tail);range.collapse(true);selection.removeAllRanges();selection.addRange(range)}
