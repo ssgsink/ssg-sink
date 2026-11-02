@@ -2,7 +2,6 @@ import type {Metadata} from 'next';
 export const metadata:Metadata={title:'싱크볼 교체 상담 문의 | 신세계싱크',description:'부산·경남 싱크볼 교체 상담. 전화 또는 문자로 싱크볼 사진과 크기, 지역을 알려주시면 상담해 드립니다.',alternates:{canonical:'/contact/'}};
 const smsHref='sms:01055043858?body='+encodeURIComponent('[싱크볼 교체 상담]\n시공 지역(시·구·동):\n타공 사이즈 가로×세로(mm):\n주소(아파트명·동·호수):\n연락처:\n상담 내용:\n\n싱크볼 전체, 가로·세로 측정, 하부장 내부 사진을 첨부해 주세요.');
 const benefits=[['☎','빠른 상담 응대'],['▣','시공 일정 조율'],['⚒','맞춤 시공 상담'],['♢','대표가 직접 시공']];
-const benefits=[['☎','빠른 상담 응대'],['▣','시공 일정 조율'],['⚒','맞춤 시공 상담'],['♢','대표가 직접 시공']];
 export default function Contact(){return <main className="contact-ref">
  <section className="contact-ref-hero"><div className="contact-ref-hero-shade"><div className="wrap contact-ref-hero-inner"><span>CONTACT</span><h1>상담 <em>문의</em></h1><p>싱크볼 교체, 제품 상담, 시공 일정 등<br/>궁금한 점이 있으시면<br/>언제든지 편하게 문의해 주세요.</p></div></div></section>
  <section className="contact-ref-benefits"><div className="wrap">{benefits.map(([symbol,title])=><div key={title}><span>{symbol}</span><strong>{title}</strong></div>)}</div></section>
