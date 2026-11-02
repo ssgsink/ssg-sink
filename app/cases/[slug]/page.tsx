@@ -1,4 +1,4 @@
-import {getManualCases} from '@/lib/supabase';import {notFound} from 'next/navigation';import type {Metadata} from 'next';export const revalidate=3600;type Props={params:Promise<{slug:string}>};export async function generateMetadata({params}:Props):Promise<Metadata>{const {slug}=await params;const item=(await getManualCases()).find(x=>x.slug===slug);return item?{title:item.title,description:(item.description+' '+(item.details||'')).slice(0,155),alternates:{canonical:'/cases/'+slug+'/'}}:{title:'시공 사례를 찾을 수 없습니다',robots:{index:false}}}export default async function CaseDetail({params}:Props){
+import {getManualCases} from '@/lib/supabase';import {sanitizeCaseDetails} from '@/lib/case-rich-text';import {notFound} from 'next/navigation';import type {Metadata} from 'next';export const revalidate=3600;type Props={params:Promise<{slug:string}>};export async function generateMetadata({params}:Props):Promise<Metadata>{const {slug}=await params;const item=(await getManualCases()).find(x=>x.slug===slug);return item?{title:item.title,description:(item.description+' '+(item.details||'')).slice(0,155),alternates:{canonical:'/cases/'+slug+'/'}}:{title:'시공 사례를 찾을 수 없습니다',robots:{index:false}}}export default async function CaseDetail({params}:Props){
  const {slug}=await params;
  const item=(await getManualCases()).find(x=>x.slug===slug);
  if(!item)notFound();
@@ -7,7 +7,7 @@ import {getManualCases} from '@/lib/supabase';import {notFound} from 'next/navig
  <div className="site-section"><div className="wrap site-case-content">
  {item.after_url&&<figure className="case-detail-cover"><img src={item.after_url} alt={item.title+' 대표 시공 사진'}/><figcaption>대표 시공 사진</figcaption></figure>}
  <p className="site-detail-copy" style={{marginTop:30}}>{item.description}</p>
- {item.details&&<section style={{marginTop:35}}><div className="site-heading"><span className="site-kicker">INSTALLATION DETAILS</span><h2>시공 과정과 상세 설명</h2></div><p className="site-detail-copy">{item.details}</p></section>}
+ {item.details&&<section style={{marginTop:35}}><div className="site-heading"><span className="site-kicker">INSTALLATION DETAILS</span><h2>시공 과정과 상세 설명</h2></div><div className="site-detail-copy case-rich-output" dangerouslySetInnerHTML={{__html:sanitizeCaseDetails(item.details)}}/></section>}
  {(item.gallery||[]).length>0&&<section style={{marginTop:35}}><div className="site-heading"><h2>상세 시공 사진</h2></div><div className="site-gallery">{(item.gallery||[]).map((url,i)=><figure key={url+i}><img src={url} alt={item.region+' '+item.title+' 시공 사진 '+(i+1)} loading="lazy"/><figcaption>시공 사진 {i+1}</figcaption></figure>)}</div></section>}
  <div style={{marginTop:35}}><a className="site-action secondary" href="/cases/">← 시공 사례 목록으로</a></div>
  </div></div>
