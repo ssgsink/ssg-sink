@@ -2,16 +2,16 @@ import {getManualCases} from '@/lib/supabase';
 import type {Metadata} from 'next';
 export const metadata:Metadata={alternates:{canonical:'/'}};
 export const revalidate=60;
-const areas=[['부산','busan'],['창원·마산·진해','changwon'],['김해','gimhae'],['양산','yangsan'],['진주','jinju'],['사천','sacheon'],['거제','geoje'],['통영','tongyeong'],['고성','goseong'],['창녕','changnyeong'],['함안','haman'],['밀양','miryang']];
+const areas=[['부산','busan'],['창원','changwon'],['마산','masan'],['진해','jinhae'],['김해','gimhae'],['양산','yangsan'],['진주','jinju'],['사천','sacheon'],['거제','geoje'],['통영','tongyeong'],['고성','goseong'],['창녕','changnyeong'],['함안','haman'],['밀양','miryang'],['기타 지역','gyeongnam']];
 const smsHref='sms:01055043858?body='+encodeURIComponent('[싱크볼 교체 상담]\n거주 지역(시·동):\n싱크볼 가로·세로 크기(mm):\n상담 내용:');
 export default async function Home(){
  const cases=(await getManualCases()).filter(item=>Boolean(item.after_url)).slice(0,3);
  return <main className="ref-home">
   <section className="ref-hero"><div className="ref-hero-shade"><div className="wrap ref-hero-content">
    <span className="ref-eyebrow">SHINSEGAE SINK</span>
-   <h1>싱크볼 교체 전문<br/><em>신세계싱크</em></h1>
+   <h1>싱크볼 교체<br/>전문 <em>신세계싱크</em></h1>
    <p className="ref-hero-description">부산·경남 전지역, 싱크볼 교체를<br/>대표가 직접 시공합니다.</p>
-   <div className="ref-hero-trust"><div><span>⚒</span><strong>대표 직접 시공</strong></div><div><span>◇</span><strong>꼼꼼한 시공</strong></div><div><span>♧</span><strong>깔끔한 마무리</strong></div></div>
+   <div className="ref-hero-actions"><a href="tel:01055043858" className="ref-hero-phone">☎ 전화 상담</a><a href={smsHref} className="ref-hero-sms">✉ 문자 상담</a><a href="/cases/" className="ref-hero-cases">▣ 시공 사례</a></div>
   </div></div></section>
   <section className="ref-benefits"><div className="wrap"><h2>“싱크볼 하나로 <em>새로워지는 주방</em>”</h2><p>낡고 불편한 싱크볼, 이제 새롭게 교체하고 더 깨끗하고 편리한 주방을 만나보세요.</p><div className="ref-benefit-grid">
    <div><span>✧</span><strong>깔끔한 주방</strong></div><div><span>♢</span><strong>위생적인 관리</strong></div><div><span>◇</span><strong>세련된 인테리어</strong></div><div><span>⬡</span><strong>편리한 사용</strong></div>
@@ -27,7 +27,7 @@ export default async function Home(){
    {Array.from({length:Math.max(0,3-cases.length)},(_,i)=><a href="/cases/" className="ref-case ref-case-placeholder" key={`placeholder-${i}`}><div className="ref-case-placeholder-photo"/><span>시공 사례</span></a>)}
    <a className="ref-case-all" href="/cases/"><span>⌂</span><strong>더 많은<br/>시공사례 보기 ›</strong></a>
   </div><a href="/cases/" className="ref-more-button">더 많은 시공사례 보기 ❯</a></div></section>
-  <section className="ref-areas"><div className="wrap ref-areas-grid"><div className="ref-map" aria-hidden="true"><span>⌖</span></div><div className="ref-areas-copy"><h2>부산·경남 <em>전지역 시공 가능</em></h2><p>부산을 비롯한 경남 전지역에서 싱크볼 교체 시공이 가능합니다.</p><small>☞ 지역 버튼을 클릭하시면 상담 안내 페이지로 이동합니다.</small></div><div className="ref-region-buttons">{areas.map(([name,slug])=><a key={slug} href={`/areas/${slug}/`}>📍 {name}</a>)}</div></div></section>
+  <section className="ref-areas"><div className="wrap ref-areas-grid"><div className="ref-areas-copy"><h2>부산·경남 <em>전지역 시공 가능</em></h2><p>부산을 비롯한 경남 전지역에서 싱크볼 교체 시공이 가능합니다.</p><small>☞ 지역 버튼을 클릭하시면 해당 지역 안내 페이지로 이동합니다.</small></div><div className="ref-region-buttons">{areas.map(([name,slug])=><a key={slug} href={`/areas/${slug}/`}><span aria-hidden="true">●</span>{name}</a>)}</div></div></section>
   <section className="ref-contact"><div className="wrap ref-contact-grid"><div className="ref-contact-title"><span>☎</span><div><h2>지금, 편하게 상담하세요!</h2><p>싱크볼 교체 상담부터 견적, 시공 일정까지 친절하게 안내해 드립니다.</p></div></div><div className="ref-contact-actions"><a className="ref-call" href="tel:01055043858">☎ &nbsp; 전화 상담하기 ❯</a><a className="ref-sms" href={smsHref}>● &nbsp; 문자 상담하기 ❯</a></div></div></section>
  </main>;
 }
