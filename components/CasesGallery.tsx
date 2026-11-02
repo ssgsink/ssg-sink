@@ -29,7 +29,7 @@ export default function CasesGallery({cases,blogs}:{cases:CasePost[];blogs:BlogP
   <section className="cases-ref-content"><div className="wrap">
    <div className="cases-ref-tabs" role="tablist" aria-label="시공 사례 및 블로그 후기">
     <button type="button" role="tab" aria-selected={tab==='cases'} className={tab==='cases'?'active':''} onClick={()=>{setTab('cases');reset()}}>⚒ &nbsp; 시공 사례</button>
-    <button type="button" role="tab" aria-selected={tab==='blog'} className={tab==='blog'?'active':''} onClick={()=>{setTab('blog');reset()}}><span className="cases-ref-naver">N</span> &nbsp; 블로그 후기</button>
+    <button type="button" role="tab" aria-selected={tab==='blog'} className={tab==='blog'?'active':''} onClick={()=>{setTab('blog');reset()}}><span className="cases-ref-naver" aria-label="네이버">N</span> &nbsp; 블로그 후기</button>
    </div>
    <form className="cases-ref-search" onSubmit={e=>{e.preventDefault();setSearch(query);setPage(1)}}>
     <strong>⌕ &nbsp; {tab==='cases'?'시공 사례 검색':'블로그 후기 검색'}</strong>
