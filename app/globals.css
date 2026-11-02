@@ -1876,3 +1876,14 @@ textarea {
 .case-photo-dropzone button{border:1px solid #a17a36;background:#fff;color:#76572a;padding:6px 12px;border-radius:7px;cursor:pointer;font-weight:700}
 .case-photo-dropzone button:hover{background:#f4ecde}
 .case-photo-file-input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+
+/* Stacked case studies and blog reviews (no tabs) */
+.cases-ref-section{padding:12px 0 34px}
+.cases-ref-blog-section{border-top:1px solid #e4ddd2;margin-top:36px;padding-top:52px}
+.cases-ref-section-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:23px}
+.cases-ref-section-eyebrow{display:block;font-size:12px;letter-spacing:2px;font-weight:800;color:#aa8952;margin-bottom:8px}
+.cases-ref-section-heading h2{display:flex;align-items:center;gap:10px;margin:0;color:#292b27;font-size:clamp(24px,2.7vw,33px);font-weight:800}
+.cases-ref-section-heading p{color:#766f65;margin:8px 0 0;font-size:14px}
+.cases-ref-section-heading .cases-ref-naver{width:31px;height:31px;font-size:23px;letter-spacing:-2px}
+.cases-ref-section-heading .cases-ref-actions{margin:0}
+@media(max-width:620px){.cases-ref-blog-section{margin-top:24px;padding-top:34px}.cases-ref-section-heading{align-items:flex-start;gap:12px}.cases-ref-section-heading p{font-size:12px}}
