@@ -2,149 +2,32 @@ import {getManualCases} from '@/lib/supabase';
 import type {Metadata} from 'next';
 export const metadata:Metadata={alternates:{canonical:'/'}};
 export const revalidate=60;
-const areas = [
-  ['부산', 'busan'],
-  ['양산', 'yangsan'],
-  ['김해', 'gimhae'],
-  ['창원', 'changwon'],
-  ['마산', 'masan'],
-  ['진해', 'jinhae'],
-  ['진주', 'jinju'],
-  ['사천', 'sacheon'],
-  ['밀양', 'miryang'],
-  ['거제', 'geoje'],
-  ['통영', 'tongyeong'],
-  ['고성', 'goseong'],
-  ['함안', 'haman'],
-  ['기타 지역', 'gyeongnam'],
-];
-
-const smsHref = 'sms:01055043858?body=' + encodeURIComponent('[싱크볼 교체 상담]\n*싱크볼 전체 사진과 하부장 내부 사진과 아래 정보를 보내주시면 감사하겠습니다.\n\n거주 지역(시 · 동):\n싱크볼 가로 · 세로 크기(mm):\n상담 내용:');
-
-export default async function Home() {
-  const cases = (await getManualCases()).filter(item=>Boolean(item.after_url)).slice(0,4);
-  return (
-    <>
-      <section className="premium-hero home-blue-hero">
-        <div className="wrap premium-hero-inner">
-          <div className="premium-hero-copy">
-            <div className="premium-kicker">SINK BOWL SPECIALIST</div>
-            <h1>
-              주방의 품격을 바꾸는
-              <br />
-              <span>싱크볼 교체</span>
-            </h1>
-            <p>
-              매일 사용하는 싱크볼,
-              <br />
-              완성도 높은 시공으로 주방의 분위기를 새롭게 바꿔드립니다.
-            </p>
-            <div className="premium-actions premium-actions-three">
-              <a href="tel:01055043858" className="gold-button home-blue-button">☎ 전화 상담</a>
-              <a href={smsHref} className="outline-button">✉ 문자 상담</a>
-              <a href="/cases/" className="outline-button">▣ 시공 사례</a>
-            </div>
-          </div>
-          <div className="premium-hero-visual">
-            <div className="hero-visual-label">
-              <span>SHINSEGAE SINK</span>
-              <strong>DETAIL MAKES THE DIFFERENCE</strong>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="premium-intro premium-intro-refined home-tone-ivory home-blue-intro" >
-        <div className="wrap">
-          <div className="premium-intro-story">
-            <div className="premium-intro-story-copy">
-              <div className="premium-eyebrow">WHY SHINSEGAE SINK</div>
-              <h2>싱크볼 하나로<br/>새로워지는 주방</h2>
-              <p>오래된 싱크볼을 교체하고 주방의 분위기를 새롭게 바꿔보세요.<br/>상담부터 시공, 마무리까지 신세계싱크가 꼼꼼하게 함께합니다.</p>
-            </div>
-            <div className="premium-intro-story-photo" role="img" aria-label="실제 주방의 싱크볼 사진">
-              <span>SMALL CHANGE, BETTER KITCHEN</span>
-            </div>
-          </div>
-          <div className="premium-values">
-            <div>
-              <span>01</span>
-              <strong>전문 시공</strong>
-              <p>싱크볼 교체에 집중한 전문 작업</p>
-            </div>
-            <div>
-              <span>02</span>
-              <strong>꼼꼼한 마감</strong>
-              <p>설치부터 마무리까지 세심하게</p>
-            </div>
-            <div>
-              <span>03</span>
-              <strong>부산·경남 출장</strong>
-              <p>지역에 맞춰 편리하게 상담</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="premium-process home-tone-gray home-blue-process" >
-        <div className="wrap">
-          <div className="premium-section-heading">
-            <div className="premium-eyebrow">OUR PROCESS</div>
-            <h2>상담부터 시공까지 꼼꼼하게</h2>
-          </div>
-          <div className="premium-steps">
-            <div><span>01</span><strong>상담 문의</strong><p>지역과 교체 희망 사항 확인</p></div>
-            <div><span>02</span><strong>사진 확인</strong><p>싱크볼과 하부장 상태 확인</p></div>
-            <div><span>03</span><strong>제품 및 일정 안내</strong><p>시공 가능 여부와 비용 안내</p></div>
-            <div><span>04</span><strong>교체 시공</strong><p>설치와 마무리 상태 점검</p></div>
-          </div>
-        </div>
-      </section>
-
-      <section className="premium-cases home-tone-ivory home-case-light home-blue-cases" >
-        <div className="wrap premium-case-inner">
-          <div>
-            <div className="premium-eyebrow">INSTALLATION STORIES</div>
-            <h2>실제 시공 사례로 확인하세요</h2>
-            <p>
-              부산과 경남 곳곳에서 진행한
-              다양한 싱크볼 교체 사례를 확인하실 수 있습니다.
-            </p>
-            {cases.length===0&&<p className="home-case-empty">등록된 교체 후 사진을 준비 중입니다.</p>}
-          </div>
-          <div className="home-case-gallery">{cases.map(item=><a className="home-case-card" href={`/cases/${item.slug}/`} key={item.id}><img src={item.after_url!} alt={`${item.title} 교체 후 사진`} loading="lazy"/><div className="home-case-card-info"><strong>{item.title}</strong><span>{item.region}</span></div></a>)}</div>
-          <div className="home-case-more"><a href="/cases/" className="dark-button">더 많은 시공 사례 보기</a></div>
-        </div>
-      </section>
-
-      <section className="premium-areas premium-areas-refined home-tone-gray home-blue-areas" style={{backgroundColor:"#eae8e1"}}>
-        <div className="wrap">
-          <div className="premium-section-heading">
-            <div className="premium-eyebrow">SERVICE AREA</div>
-            <h2>부산·경남 싱크볼 교체 상담 지역</h2>
-            <p>아래 지역 버튼을 누르면 상담 안내 페이지로 이동합니다.</p>
-          </div>
-
-          <div className="premium-area-links premium-area-compact premium-area-city-links">
-            {areas.map(([name, slug]) => (
-              <a key={slug} href={`/contact/?region=${encodeURIComponent(name)}`}>{name}</a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="premium-contact premium-contact-refined home-blue-contact">
-        <div className="wrap home-contact-row">
-          <div className="home-contact-copy">
-            <div className="premium-eyebrow">CONTACT US</div>
-            <h2>지금, 편하게 상담하세요!</h2>
-            <p>싱크볼 사진과 지역을 알려주시면 상담에 도움이 됩니다.</p>
-          </div>
-          <div className="premium-actions premium-contact-buttons home-contact-actions"><a href="tel:01055043858" className="gold-button">☎ 전화 상담하기</a><a href={smsHref} className="outline-button home-sms-button">✉ 문자 상담하기</a></div>
-          
-        </div>
-      </section>
-    </>
-  );
+const areas=[['부산','busan'],['창원·마산·진해','changwon'],['김해','gimhae'],['양산','yangsan'],['진주','jinju'],['사천','sacheon'],['거제','geoje'],['통영','tongyeong'],['고성','goseong'],['창녕','changnyeong'],['함안','haman'],['밀양','miryang']];
+const smsHref='sms:01055043858?body='+encodeURIComponent('[싱크볼 교체 상담]\n거주 지역(시·동):\n싱크볼 가로·세로 크기(mm):\n상담 내용:');
+export default async function Home(){
+ const cases=(await getManualCases()).filter(item=>Boolean(item.after_url)).slice(0,3);
+ return <main className="ref-home">
+  <section className="ref-hero"><div className="ref-hero-shade"><div className="wrap ref-hero-content">
+   <span className="ref-eyebrow">SHINSEGAE SINK</span>
+   <h1>싱크볼 교체 전문<br/><em>신세계싱크</em></h1>
+   <p className="ref-hero-description">부산·경남 전지역, 싱크볼 교체를<br/>대표가 직접 시공합니다.</p>
+   <div className="ref-hero-trust"><div><span>⚒</span><strong>대표 직접 시공</strong></div><div><span>◇</span><strong>꼼꼼한 시공</strong></div><div><span>♧</span><strong>깔끔한 마무리</strong></div></div>
+  </div></div></section>
+  <section className="ref-benefits"><div className="wrap"><h2>“싱크볼 하나로 <em>새로워지는 주방</em>”</h2><p>낡고 불편한 싱크볼, 이제 새롭게 교체하고 더 깨끗하고 편리한 주방을 만나보세요.</p><div className="ref-benefit-grid">
+   <div><span>✧</span><strong>깔끔한 주방</strong></div><div><span>♢</span><strong>위생적인 관리</strong></div><div><span>◇</span><strong>세련된 인테리어</strong></div><div><span>⬡</span><strong>편리한 사용</strong></div>
+  </div></div></section>
+  <section className="ref-process"><div className="wrap"><h2>상담부터 시공까지 <em>꼼꼼하게</em></h2><p>처음 상담부터 시공 후 마무리까지, 대표가 직접 확인하며 책임감 있게 진행합니다.</p><div className="ref-process-grid">
+   <article><span>▤</span><strong>상담 및 문의</strong><p>싱크볼 상태 확인 및<br/>교체 상담</p></article>
+   <article><span>▱</span><strong>현장 확인</strong><p>실측 및 최적의<br/>제품 제안</p></article>
+   <article><span>⚒</span><strong>교체 시공</strong><p>대표 직접 시공으로<br/>꼼꼼하고 안전하게</p></article>
+   <article><span>✓</span><strong>시공 완료</strong><p>마무리 점검 및<br/>사용 안내</p></article>
+  </div></div></section>
+  <section className="ref-cases"><div className="wrap"><h2>실제 <em>시공 사례</em></h2><p>부산·경남 곳곳에서 진행한 신세계싱크의 실제 시공 사례를 확인해 보세요.</p><div className="ref-case-grid">
+   {cases.map(item=><a href={`/cases/${item.slug}/`} className="ref-case" key={item.id}><img src={item.after_url!} alt={item.title} loading="lazy"/><span>{item.region}</span></a>)}
+   {Array.from({length:Math.max(0,3-cases.length)},(_,i)=><a href="/cases/" className="ref-case ref-case-placeholder" key={`placeholder-${i}`}><div className="ref-case-placeholder-photo"/><span>시공 사례</span></a>)}
+   <a className="ref-case-all" href="/cases/"><span>⌂</span><strong>더 많은<br/>시공사례 보기 ›</strong></a>
+  </div><a href="/cases/" className="ref-more-button">더 많은 시공사례 보기 ❯</a></div></section>
+  <section className="ref-areas"><div className="wrap ref-areas-grid"><div className="ref-map" aria-hidden="true"><span>⌖</span></div><div className="ref-areas-copy"><h2>부산·경남 <em>전지역 시공 가능</em></h2><p>부산을 비롯한 경남 전지역에서 싱크볼 교체 시공이 가능합니다.</p><small>☞ 지역 버튼을 클릭하시면 상담 안내 페이지로 이동합니다.</small></div><div className="ref-region-buttons">{areas.map(([name,slug])=><a key={slug} href={`/areas/${slug}/`}>📍 {name}</a>)}</div></div></section>
+  <section className="ref-contact"><div className="wrap ref-contact-grid"><div className="ref-contact-title"><span>☎</span><div><h2>지금, 편하게 상담하세요!</h2><p>싱크볼 교체 상담부터 견적, 시공 일정까지 친절하게 안내해 드립니다.</p></div></div><div className="ref-contact-actions"><a className="ref-call" href="tel:01055043858">☎ &nbsp; 전화 상담하기 ❯</a><a className="ref-sms" href={smsHref}>● &nbsp; 문자 상담하기 ❯</a></div></div></section>
+ </main>;
 }
-// Deployment quota reset test — 2026-11-02 (no UI changes)
