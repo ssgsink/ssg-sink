@@ -36,12 +36,12 @@ export async function GET(request:NextRequest){
    if(!response.ok)throw Error(result.error?.message||'GA4 데이터 조회 실패');
    return result;
   }
-  const [summary,channels,pages,trend]=await Promise.all([
-   report({dateRanges:[{startDate:'today',endDate:'today'},{startDate:'yesterday',endDate:'yesterday'},{startDate:'7daysAgo',endDate:'today'},{startDate:'30daysAgo',endDate:'today'}],metrics:[{name:'totalUsers'},{name:'sessions'}],keepEmptyRows:true}),
+  const [today,yesterday,week,month,channels,pages,trend]=await Promise.all([
+   ...['today','yesterday','7daysAgo','30daysAgo'].map((startDate,i)=>report({dateRanges:[{startDate,endDate:i===1?'yesterday':'today'}],metrics:[{name:'totalUsers'}]})),
    report({dateRanges:[{startDate:'30daysAgo',endDate:'today'}],dimensions:[{name:'sessionDefaultChannelGroup'},{name:'sessionSource'}],metrics:[{name:'sessions'}],limit:30,orderBys:[{metric:{metricName:'sessions'},desc:true}]}),
    report({dateRanges:[{startDate:'30daysAgo',endDate:'today'}],dimensions:[{name:'pagePath'}],metrics:[{name:'screenPageViews'}],limit:10,orderBys:[{metric:{metricName:'screenPageViews'},desc:true}]}),
    report({dateRanges:[{startDate:'13daysAgo',endDate:'today'}],dimensions:[{name:'date'}],metrics:[{name:'totalUsers'}],orderBys:[{dimension:{dimensionName:'date'}}]})
   ]);
-  return NextResponse.json({configured:true,summary:summary.rows||[],channels:channels.rows||[],pages:pages.rows||[],trend:trend.rows||[]},{headers:{'Cache-Control':'private, no-store'}});
+  return NextResponse.json({configured:true,summary:[today,yesterday,week,month].map(r=>({metricValues:r.totals?.[0]?.metricValues||r.rows?.[0]?.metricValues||[{value:'0'}]})),channels:channels.rows||[],pages:pages.rows||[],trend:trend.rows||[]},{headers:{'Cache-Control':'private, no-store'}});
  }catch(e){return NextResponse.json({configured:true,error:e instanceof Error?e.message:'통계 조회에 실패했습니다.'},{status:502})}
 }
