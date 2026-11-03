@@ -1887,3 +1887,28 @@ textarea {
 .cases-ref-section-heading .cases-ref-naver{width:31px;height:31px;font-size:23px;letter-spacing:-2px}
 .cases-ref-section-heading .cases-ref-actions{margin:0}
 @media(max-width:620px){.cases-ref-blog-section{margin-top:24px;padding-top:34px}.cases-ref-section-heading{align-items:flex-start;gap:12px}.cases-ref-section-heading p{font-size:12px}}
+
+/* Authenticated GA4 visitor dashboard */
+.admin-analytics{max-width:1080px}
+.admin-analytics-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:30px}
+.admin-analytics-head h1{margin:6px 0;font-size:clamp(28px,4vw,38px)}
+.admin-analytics-head p,.admin-analytics-note{font-size:13px;color:#777}
+.admin-analytics-head a,.admin-analytics-head button{display:inline-block;border:1px solid #d6c6ac;border-radius:8px;background:#fff;color:#6d5129;padding:10px 13px;text-decoration:none;cursor:pointer}
+.admin-analytics-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:24px 0}
+.admin-analytics-metrics>div,.admin-analytics section,.admin-analytics-notice{background:#fff;border:1px solid #e5dfd6;border-radius:13px;padding:20px}
+.admin-analytics-metrics span{display:block;font-size:13px;color:#716c62;margin-bottom:12px}
+.admin-analytics-metrics strong{font-size:30px;color:#292b27}
+.admin-analytics-metrics small{font-size:13px;margin-left:5px;color:#777}
+.admin-analytics section{margin:20px 0}
+.admin-analytics section h2{font-size:21px;margin:0 0 18px}
+.admin-analytics section h2 small{font-size:12px;color:#888;font-weight:400}
+.admin-analytics-chart{height:190px;display:flex;align-items:stretch;gap:8px;border-bottom:1px solid #e5dfd6}
+.admin-analytics-chart>div{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;min-width:0}
+.admin-analytics-chart>div>span{background:#a17a36;width:70%;min-height:3px;border-radius:4px 4px 0 0}
+.admin-analytics-chart small{font-size:10px;color:#777;white-space:nowrap}
+.admin-analytics-list{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #eee;padding:12px 0;font-size:14px}
+.admin-analytics-list span small{color:#888}
+.admin-analytics-list a{color:#584b38;overflow-wrap:anywhere}
+.admin-analytics-list strong{white-space:nowrap}
+.admin-analytics-notice{background:#fcf8f1}
+@media(max-width:650px){.admin-analytics-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-analytics-metrics>div{padding:14px}.admin-analytics-metrics strong{font-size:25px}}
