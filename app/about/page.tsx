@@ -1,6 +1,6 @@
+import {smsHref} from '@/lib/contact';
 import type {Metadata} from 'next';
-export const metadata:Metadata={title:'업체 소개 | 신세계싱크',description:'부산·경남 싱크볼 교체 전문 신세계싱크. 대표가 직접 상담부터 시공, 마무리까지 책임집니다.',alternates:{canonical:'/about/'}};
-const smsHref='sms:01055043858?body='+encodeURIComponent('[싱크볼 교체 상담]\\n거주 지역(시·동):\\n싱크볼 크기(mm):\\n상담 내용:');
+export const metadata:Metadata={title:'업체 소개',description:'부산·경남 싱크볼 교체 전문 신세계싱크. 대표가 직접 상담부터 시공, 마무리까지 책임집니다.',alternates:{canonical:'/about/'}};
 const strengths=[['♙','대표가 직접 시공','상담부터 시공, 마무리까지 대표가 직접 진행합니다.'],['◇','꼼꼼하고 깔끔한 시공','보이지 않는 부분까지 세심하게 마무리합니다.'],['▣','풍부한 시공 경험','다양한 현장 경험을 바탕으로 안전하고 정확하게 시공합니다.'],['♧','믿고 맡길 수 있는 서비스','시공 후에도 사용 방법과 관리 요령까지 안내해 드립니다.']];
 const services=['싱크볼(싱크대 개수대) 교체 및 설치','사각 싱크볼(인셋) 교체','언더 싱크볼 교체','싱크대 배수구 및 부속 교체','수전(싱크대 수도꼭지) 교체 및 점검'];
 export default function About(){return <main className="about-ref">

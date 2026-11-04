@@ -1,3 +1,4 @@
+import {smsHref} from '@/lib/contact';
 import {getManualCases} from '@/lib/supabase';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -46,7 +47,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const area = areas[slug];
   if (!area) return {};
 
-  const title = `${area.name} 싱크볼 교체 | 사각싱크볼·언더싱크볼 시공 | 신세계싱크`;
+  const title = `${area.name} 싱크볼 교체 | 사각싱크볼·언더싱크볼 시공`;
   const description = `신세계싱크는 ${area.fullName} 싱크볼·씽크볼·싱크대볼·개수대 교체 상담 업체입니다. ${area.localNote} 사각싱크볼과 언더싱크볼 교체 상담을 제공합니다.`;
 
   return {
@@ -57,7 +58,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: 'website',
       locale: 'ko_KR',
       siteName: '신세계싱크',
-      title,
+      title: `${title} | 신세계싱크`,
       description,
       images: ['/og-image.png'],
     },
@@ -96,7 +97,6 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
     }
     return has(area.name);
   }).slice(0,6);
-  const smsHref = 'sms:01055043858?body=' + encodeURIComponent("[싱크볼 교체 상담]\n*싱크볼 전체 사진과 하부장 내부 사진과 아래 정보를 보내주시면 감사하겠습니다.\n\n거주 지역(시 · 동):\n싱크볼 가로 · 세로 크기(mm):\n상담 내용:");
   return <main className="local-page">
     <section className="local-hero">
       <div className="wrap">

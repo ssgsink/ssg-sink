@@ -1,4 +1,5 @@
 'use client';
+import {smsHref} from '@/lib/contact';
 import {useState} from 'react';
 import type {CasePost} from '@/lib/supabase';
 import type {BlogPost} from '@/lib/blog';
@@ -18,7 +19,6 @@ export default function CasesGallery({cases,blogs}:{cases:CasePost[];blogs:BlogP
  const [blogPage,setBlogPage]=useState(1);
  const shownCases=cases.slice((casePage-1)*PAGE_SIZE,casePage*PAGE_SIZE);
  const shownBlogs=blogs.slice((blogPage-1)*PAGE_SIZE,blogPage*PAGE_SIZE);
- const smsHref='sms:01055043858?body='+encodeURIComponent('[싱크볼 교체 상담]\n지역:\n상담 내용:');
  return <div className="cases-ref">
   <section className="cases-ref-hero"><div className="cases-ref-hero-shade"><div className="wrap cases-ref-hero-inner"><span>PROJECT CASE</span><h1>시공<em>사례</em></h1><p>신세계싱크가 부산·경남 곳곳에서<br/>진행한 실제 싱크볼 교체 시공 사례입니다.</p></div></div></section>
   <section className="cases-ref-benefits"><div className="wrap">{[['▣','실제 시공 사진'],['⚒','다양한 시공 사례'],['⌖','부산·경남 전지역 시공'],['✓','꼼꼼한 시공 품질']].map(([icon,title])=><div key={title}><span>{icon}</span><strong>{title}</strong></div>)}</div></section>

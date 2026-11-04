@@ -45,3 +45,22 @@ export function sanitizeCaseDetails(input:string){
  output+=escapeHtml(decodeEntities(html.slice(index)));
  return output;
 }
+
+// Convert editor markup to readable metadata before applying the length limit.
+export function caseMetaDescription(description:string,details=''){
+ const text=(description+' '+details)
+  .replace(/<!--[\s\S]*?-->/g,' ')
+  .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi,' ')
+  .replace(/<[^>]*>/g,' ')
+  .replace(/&(?:amp|lt|gt|quot|apos|nbsp|#39|#\d+|#x[0-9a-f]+);/gi,entity=>{
+   const named:Record<string,string>={'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&apos;':"'",'&nbsp;':' '};
+   const key=entity.toLowerCase();
+   if(named[key])return named[key];
+   const hex=key.startsWith('&#x');
+   const code=Number.parseInt(entity.slice(hex?3:2,-1),hex?16:10);
+   return code>0&&code<=0x10ffff?String.fromCodePoint(code):' ';
+  })
+  .replace(/<[^>]*>/g,' ')
+  .replace(/\s+/g,' ').trim();
+ return Array.from(text).slice(0,155).join('');
+}

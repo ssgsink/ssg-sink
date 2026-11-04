@@ -1,9 +1,9 @@
+import {smsHref} from '@/lib/contact';
 import {getManualCases} from '@/lib/supabase';
 import type {Metadata} from 'next';
 export const metadata:Metadata={alternates:{canonical:'/'}};
 export const revalidate=60;
 const areas=[['부산','busan'],['창원','changwon'],['마산','masan'],['진해','jinhae'],['김해','gimhae'],['양산','yangsan'],['진주','jinju'],['사천','sacheon'],['거제','geoje'],['통영','tongyeong'],['고성','goseong'],['창녕','changnyeong'],['함안','haman'],['밀양','miryang'],['기타 지역','gyeongnam']];
-const smsHref='sms:01055043858?body='+encodeURIComponent('[싱크볼 교체 상담]\n거주 지역(시·동):\n싱크볼 가로·세로 크기(mm):\n상담 내용:');
 export default async function Home(){
  const cases=(await getManualCases()).filter(item=>Boolean(item.after_url)).slice(0,3);
  return <main className="ref-home">
