@@ -14,5 +14,10 @@ function scanResults(site, blog) {
  if(!links.length)return {error:'결과 제목 링크를 인식하지 못했습니다. 미발견으로 판정하지 않았습니다.'};
  const host=new URL(site).hostname.toLowerCase();
  const match=(r,type)=>{const u=new URL(r.url);return type==='홈페이지'?u.hostname.toLowerCase()===host:(['blog.naver.com','m.blog.naver.com'].includes(u.hostname)&&((u.pathname.split('/')[1]||'').toLowerCase()===blog.toLowerCase()||u.searchParams.get('blogId')?.toLowerCase()===blog.toLowerCase()));};
+ let blogPosition=0;
+ for(const link of links){
+  const url=new URL(link.url);
+  if(url.hostname==='blog.naver.com' && /^\/[^/]+\/\d+\/?$/.test(url.pathname))link.blogRank=++blogPosition;
+ }
  return {count:links.length,targets:['홈페이지','블로그'].map(type=>({type,hits:links.map((r,i)=>({...r,rank:i+1})).filter(r=>match(r,type))}))};
 }
