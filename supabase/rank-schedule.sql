@@ -53,7 +53,7 @@ begin
  cross join lateral jsonb_array_elements_text(case when jsonb_typeof(cfg->'words')='array' then cfg->'words' else '[]'::jsonb end) with ordinality words(w,i)
  cross join (values ('블로그'),('홈페이지')) targets(t)
  where u.email='ssg-sink@naver.com' and u.email_confirmed_at is not null and cfg->>'enabled'='true'
- and cfg->>'time'=to_char(kst,'HH24:MI') and i<=50 and length(w) between 1 and 150
+ and cfg->>'time'=to_char(kst,'HH24:MI') and i<=200 and length(w) between 1 and 150
  on conflict do nothing;
  -- Dispatch a pair each minute to keep batches small.
  for job in select o.* from public.rank_observations o join auth.users u on u.id=o.owner
@@ -67,5 +67,7 @@ begin
  end loop;
 end;$$;
 revoke all on function public.ssg_rank_tick() from public,anon,authenticated;
+create or replace function public.rank_keyword_limit() returns integer language sql immutable as $ select 200 $;
+grant execute on function public.rank_keyword_limit() to authenticated;
 select cron.schedule('ssg-rank-minute','* * * * *','select public.ssg_rank_tick()');
 commit;

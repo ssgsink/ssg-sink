@@ -6,6 +6,7 @@ import type {SupabaseClient,User} from '@supabase/supabase-js';
 type Setting={time:string;enabled:boolean;words:string[];saved:string};
 type Entry={id:number;day:string;keyword:string;target:string;status:string;position:number|null;link:string|null};
 export default function RankSchedule({client,user,keywords,target}:{client:SupabaseClient;user:User;keywords:string;target:string}){
+ const [limit,setLimit]=useState(50);
  const initial=user.user_metadata.rank_schedule as Setting|undefined;
  const [time,setTime]=useState(initial?.time||'09:00');
  const [enabled,setEnabled]=useState(initial?.enabled||false);
@@ -19,7 +20,10 @@ export default function RankSchedule({client,user,keywords,target}:{client:Supab
    if(!active)return;
    setReady(!error&&data===true);
    if(error)return;
-   const history=await client.from('rank_observations').select('id,day,keyword,target,status,position,link').eq('owner',user.id).eq('target',target).order('id',{ascending:false}).limit(100);
+   const cap=await client.rpc('rank_keyword_limit');
+   if(!active)return;
+   setLimit(cap.data===200?200:50);
+   const history=await client.from('rank_observations').select('id,day,keyword,target,status,position,link').eq('owner',user.id).eq('target',target).order('id',{ascending:false}).limit(200);
    if(active)setEntries(history.data||[]);
   }
   setEntries([]);void refresh();
@@ -29,7 +33,7 @@ export default function RankSchedule({client,user,keywords,target}:{client:Supab
  async function save(){
   const words=Array.from(new Set(keywords.split('\n').map(x=>x.trim()).filter(Boolean)));
   if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)){setMessage('예약 시간을 선택하세요.');return}
-  if(enabled&&(!words.length||words.length>50||words.some(w=>w.length>150))){setMessage('예약 검색어는 1~50개, 한 줄당 150자 이내로 입력하세요.');return}
+  if(enabled&&(!words.length||words.length>limit||words.some(w=>w.length>150))){setMessage('현재 서버의 예약 한도는 '+limit+'개입니다. 각 검색어는 150자 이내로 입력하세요.');return}
   setBusy(true);
   try{
    const config={time,enabled,words:enabled?words:(saved?.words||[]),saved:new Date().toISOString()};
@@ -48,10 +52,10 @@ export default function RankSchedule({client,user,keywords,target}:{client:Supab
    <button disabled={busy} onClick={save}>{busy?'저장 중…':'예약 설정 저장'}</button>
   </div>
   <p>{saved?.enabled?'저장된 예약 · 매일 '+saved.time+' · 검색어 '+saved.words.length+'개':'저장된 예약 · 꺼짐'}</p>
-  <p>{ready?'자동 검색 서버 연결됨':'자동 실행 준비 전 · 서버에 예약 작업과 네이버 검색 API 키 연결이 필요합니다.'}</p>
+  <p>예약 가능 검색어 {limit}개</p><p>{ready?'자동 검색 서버 연결됨':'자동 실행 준비 전 · 서버에 예약 작업과 네이버 검색 API 키 연결이 필요합니다.'}</p>
   <p role="status">{message}</p>
   <h3>{target} 예약 검색 기록</h3>
-  <p>네이버 {target==='블로그'?'블로그':'웹문서'} 검색 API 상위 100건 기준 · 최근 100개 기록</p>
+  <p>네이버 {target==='블로그'?'블로그':'웹문서'} 검색 API 상위 100건 기준 · 최근 200개 기록</p>
   {entries.length?<ul>{entries.map(e=><li key={e.id}>{e.day} · {e.keyword} · {e.position?<a className={rankColor(e.position)} href={e.link||undefined} target="_blank" rel="noopener noreferrer">{e.position}번째</a>:e.status==='done'?<span className={rankColor(null)}>상위 100건 내 미발견</span>:e.status==='error'?'조회 실패':'확인 대기'}</li>)}</ul>:<p>저장된 예약 검색 기록이 없습니다.</p>}
  </section>;
 }
