@@ -30,6 +30,13 @@ declare
  cid text; secret text; job record; num int; dest text; payload jsonb;
 begin
  if not pg_try_advisory_xact_lock(82193471) then return; end if;
+ -- Skip HTTP response processing and Vault access when nothing is due.
+ if not exists (select 1 from public.rank_observations where status in ('sent','queued'))
+ and not exists (select 1 from auth.users where email='ssg-sink@naver.com'
+   and raw_user_meta_data->'rank_schedule'->>'enabled'='true'
+   and raw_user_meta_data->'rank_schedule'->>'time'=to_char(kst,'HH24:MI')) then
+  return;
+ end if;
  for job in select o.*,r.status_code,r.content from public.rank_observations o
  join net._http_response r on r.id=o.req where o.status='sent' loop
   begin
@@ -55,7 +62,7 @@ begin
  where u.email='ssg-sink@naver.com' and u.email_confirmed_at is not null and cfg->>'enabled'='true'
  and cfg->>'time'=to_char(kst,'HH24:MI') and i<=200 and length(w) between 1 and 150
  on conflict do nothing;
- -- Dispatch a pair each minute to keep batches small.
+ -- Small batches every five seconds while there is work.
  for job in select o.* from public.rank_observations o join auth.users u on u.id=o.owner
  where o.status='queued' and u.raw_user_meta_data->'rank_schedule'->>'enabled'='true' and u.email='ssg-sink@naver.com'
  order by o.id limit 2 loop
@@ -69,5 +76,5 @@ end;$$;
 revoke all on function public.ssg_rank_tick() from public,anon,authenticated;
 create or replace function public.rank_keyword_limit() returns integer language sql immutable as 'select 200';
 grant execute on function public.rank_keyword_limit() to authenticated;
-select cron.schedule('ssg-rank-minute','* * * * *','select public.ssg_rank_tick()');
+select cron.schedule('ssg-rank-minute','5 seconds','select public.ssg_rank_tick()');
 commit;
