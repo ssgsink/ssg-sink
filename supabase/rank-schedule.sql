@@ -67,7 +67,7 @@ begin
  end loop;
 end;$$;
 revoke all on function public.ssg_rank_tick() from public,anon,authenticated;
-create or replace function public.rank_keyword_limit() returns integer language sql immutable as $ select 200 $;
+create or replace function public.rank_keyword_limit() returns integer language sql immutable as 'select 200';
 grant execute on function public.rank_keyword_limit() to authenticated;
 select cron.schedule('ssg-rank-minute','* * * * *','select public.ssg_rank_tick()');
 commit;
