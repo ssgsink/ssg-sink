@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "신세계싱크 검색 확인 연결",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "permissions": [
     "scripting",
     "storage",
@@ -24,6 +24,6 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "신세계싱크 검색 확인 v1.1.0"
+    "default_title": "신세계싱크 검색 확인 v1.1.1"
   }
 }
