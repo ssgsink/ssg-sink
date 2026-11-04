@@ -1,4 +1,5 @@
 'use client';
+import {rankColor} from './rankColor';
 import {useState,useEffect} from 'react';
 import type {SupabaseClient,User} from '@supabase/supabase-js';
 
@@ -51,6 +52,6 @@ export default function RankSchedule({client,user,keywords,target}:{client:Supab
   <p role="status">{message}</p>
   <h3>{target} 예약 검색 기록</h3>
   <p>네이버 {target==='블로그'?'블로그':'웹문서'} 검색 API 상위 100건 기준 · 최근 100개 기록</p>
-  {entries.length?<ul>{entries.map(e=><li key={e.id}>{e.day} · {e.keyword} · {e.position?<a href={e.link||undefined} target="_blank" rel="noopener noreferrer">{e.position}번째</a>:e.status==='done'?'상위 100건 내 미발견':e.status==='error'?'조회 실패':'확인 대기'}</li>)}</ul>:<p>저장된 예약 검색 기록이 없습니다.</p>}
+  {entries.length?<ul>{entries.map(e=><li key={e.id}>{e.day} · {e.keyword} · {e.position?<a className={rankColor(e.position)} href={e.link||undefined} target="_blank" rel="noopener noreferrer">{e.position}번째</a>:e.status==='done'?<span className={rankColor(null)}>상위 100건 내 미발견</span>:e.status==='error'?'조회 실패':'확인 대기'}</li>)}</ul>:<p>저장된 예약 검색 기록이 없습니다.</p>}
  </section>;
 }

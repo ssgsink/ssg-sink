@@ -2,6 +2,7 @@
 import {useEffect,useRef,useState} from 'react';
 import {supabaseClient} from '@/lib/supabase';
 import './rank.css';
+import {rankColor} from './rankColor';
 import RankSchedule from './RankSchedule';
 import type {User} from '@supabase/supabase-js';
 type Hit={blogRank?:number;rank:number;title:string;url:string};
@@ -24,10 +25,10 @@ export default function SearchRankAdmin(){
 <div className="rank-grid">{Array.from(new Set([...visibleRows].reverse().map(row=>row.keyword))).map(keyword=>{
  const latest=(area:string)=>{const matches=visibleRows.filter(row=>row.keyword===keyword&&row.mode===area);const last=matches[matches.length-1];return last&&matches.find(row=>row.time===last.time)||last;};
  const web=latest('web'),blog=latest('blog');
- const metric=(label:string,row:Row|undefined,subset=false)=><div><small>{label}</small><strong>{!row?'미확인':row.rank===null?'범위 내 미발견':subset&&row.blogRank==null?'재확인 필요':(subset?row.blogRank:row.rank)+'번째'}</strong>{row&&<time>{new Date(row.time).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Seoul'})}</time>}{row?.rank&&<a href={row.url} target="_blank" rel="noopener noreferrer">{row.title}</a>}</div>;
+ const metric=(label:string,row:Row|undefined,subset=false)=><div><small>{label}</small><strong className={rankColor(subset ? row?.blogRank : row?.rank)}>{!row?'미확인':row.rank===null?'범위 내 미발견':subset&&row.blogRank==null?'재확인 필요':(subset?row.blogRank:row.rank)+'번째'}</strong>{row&&<time>{new Date(row.time).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Seoul'})}</time>}{row?.rank&&<a href={row.url} target="_blank" rel="noopener noreferrer">{row.title}</a>}</div>;
  return <article key={keyword}><h3>{keyword}</h3><div className="rank-metrics">{metric('통합검색 전체',web)}{targetTab==='블로그'&&<>{metric('통합검색 내 블로그 글끼리',web,true)}{metric('블로그 검색 탭',blog)}</>}</div></article>;
 })}</div>{!visibleRows.length&&<p>확인 시작을 누르면 검색어별 순위가 표시됩니다.</p>}</section>
 <RankSchedule client={client!} user={user} keywords={keywords} target={targetTab}/>
-<details className="rank-panel"><summary>수동 검색 전체 기록</summary><div style={{overflowX:'auto'}}><table style={{width:'100%',minWidth:750}}><thead><tr>{['확인 시간','검색어','영역','대상','관측 순서','확인 범위','결과'].map(t=><th key={t}>{t}</th>)}</tr></thead><tbody>{[...visibleRows].reverse().map((r,i)=><tr key={i}><td>{new Date(r.time).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}</td><td>{r.keyword}</td><td>{r.mode==='blog'?'블로그':'통합'}</td><td>{r.type}</td><td>{r.rank??'범위 내 미발견'}</td><td>제목 {r.scope}개</td><td><a href={r.url} target="_blank" rel="noopener noreferrer">{r.title||'검색 결과 확인'}</a></td></tr>)}</tbody></table>{!visibleRows.length&&<p>아직 {targetTab} 확인 결과가 없습니다.</p>}</div></details></div>;
+<details className="rank-panel"><summary>수동 검색 전체 기록</summary><div style={{overflowX:'auto'}}><table style={{width:'100%',minWidth:750}}><thead><tr>{['확인 시간','검색어','영역','대상','관측 순서','확인 범위','결과'].map(t=><th key={t}>{t}</th>)}</tr></thead><tbody>{[...visibleRows].reverse().map((r,i)=><tr key={i}><td>{new Date(r.time).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}</td><td>{r.keyword}</td><td>{r.mode==='blog'?'블로그':'통합'}</td><td>{r.type}</td><td className={rankColor(r.rank)}>{r.rank??'범위 내 미발견'}</td><td>제목 {r.scope}개</td><td><a href={r.url} target="_blank" rel="noopener noreferrer">{r.title||'검색 결과 확인'}</a></td></tr>)}</tbody></table>{!visibleRows.length&&<p>아직 {targetTab} 확인 결과가 없습니다.</p>}</div></details></div>;
 }
 
