@@ -1,0 +1,9 @@
+const fs=require('node:fs'),vm=require('node:vm'),ts=require('typescript'),assert=require('node:assert/strict');
+const effects=[],refs=[],states=[],writes=[];let si=0;const current={id:'admin-1',email:'admin@example.test'};let callback;
+const client={auth:{getUser:()=>new Promise(()=>{}),onAuthStateChange:cb=>{callback=cb;return {data:{subscription:{unsubscribe(){}}}};}}};
+const react={useEffect:fn=>effects.push(fn),useState:init=>{const i=si++;if(i===0)states[i]=client;else if(i===1)states[i]=current;else states[i]=typeof init==='function'?init():init;return [states[i],next=>{writes.push(i);states[i]=typeof next==='function'?next(states[i]):next;}];},useRef:init=>{const ref={current:refs.length===1?current.id:init};refs.push(ref);return ref;}};
+const context={exports:{},require:n=>n==='react'?react:n==='@/lib/supabase'?{supabaseClient:()=>client}:n==='react/jsx-runtime'?{jsx:()=>null,jsxs:()=>null}:{},setTimeout,clearTimeout};vm.createContext(context);
+const source=fs.readFileSync('app/admin/search-rank/page.tsx','utf8');vm.runInContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX}}).outputText,context);
+context.exports.default();effects[0]();refs[0].current=false;
+for(let i=0;i<3;i++){callback(i?'TOKEN_REFRESHED':'SIGNED_IN',{user:{...current}});assert.equal(refs[0].current,false,'same account must not stop keyword queue');assert.equal(states[1],current,'preserve user identity to avoid effect cleanup');}
+assert.ok(!writes.includes(8),'same account must not clear results');assert.ok(!writes.includes(3),'same account must not revoke permission');callback('SIGNED_OUT',null);assert.equal(refs[0].current,true,'signout must stop queue');assert.equal(refs[1].current,null);assert.equal(states[1],null);console.log('PASS: repeated sign-in/token refresh preserves queue; sign-out cancels');
