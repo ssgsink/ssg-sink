@@ -23,7 +23,7 @@ export default function AnalyticsAdmin(){
  const channels=data?.channels||[],pages=data?.pages||[],trend=data?.trend||[];
  const max=Math.max(1,...trend.map(x=>value(x)));
  return <div className="wrap section admin-analytics">
-  <div className="admin-analytics-head"><div><span className="site-kicker">SHINSEGAE SINK · ADMIN</span><h1>방문자 분석</h1><p>Google Analytics 4 기준 · 한국 시간 기준은 GA4 속성 시간대 설정을 따릅니다.</p></div><div><a href="/admin/cases/">시공 사례 관리</a> <button type="button" onClick={()=>client.auth.signOut()}>로그아웃</button></div></div>
+  <div className="admin-analytics-head"><div><span className="site-kicker">SHINSEGAE SINK · ADMIN</span><h1>방문자 분석</h1><p>Google Analytics 4 기준 · 한국 시간 기준은 GA4 속성 시간대 설정을 따릅니다.</p></div><div><a href="/admin/cases/">시공 사례 관리</a> <a href="/admin/search-rank/">검색 노출 확인</a> <button type="button" onClick={()=>client.auth.signOut()}>로그아웃</button></div></div>
   {loading?<p>방문자 데이터를 불러오는 중...</p>:data?.error?<div className="admin-analytics-notice"><strong>{data.configured?'통계 조회 오류':'분석 연결 설정 필요'}</strong><p>{data.error}</p><p>설정이 완료되면 실제 방문자 수와 유입 경로가 표시됩니다. 임의의 수치는 표시하지 않습니다.</p></div>:<>
    <div className="admin-analytics-metrics">{metrics.map(([label,n])=><div key={label}><span>{label}</span><strong>{Number(n).toLocaleString('ko-KR')}<small>명</small></strong></div>)}</div>
    <section><h2>최근 14일 방문 추이</h2><div className="admin-analytics-chart">{trend.map((r,i)=><div key={i} title={dim(r)+': '+value(r)+'명'}><span style={{height:Math.max(3,value(r)/max*100)+'%'}}/><small>{dim(r).slice(4,6)}/{dim(r).slice(6,8)}</small></div>)}</div></section>

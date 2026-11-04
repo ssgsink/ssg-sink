@@ -13,5 +13,5 @@ export default function Header(){
   const {data:{subscription}}=client.auth.onAuthStateChange((_event,session)=>{if(active)setIsAdmin(Boolean(session?.user))});
   return()=>{active=false;subscription.unsubscribe()};
  },[]);
- return <header className="site-header ref-site-header"><div className="wrap header-inner"><a className="brand" href="/">⌂ 신세계싱크<small>SHINSEGAE SINK</small></a><span className="ref-header-tag">부산·경남 싱크볼 교체 전문</span><nav className="nav">{links.map(([t,u])=><a key={u} href={u}>{t}</a>)}{isAdmin&&<><a href="/admin/cases/" style={{fontWeight:700}}>시공 사례 관리</a><a href="/admin/analytics/" style={{fontWeight:700}}>방문자 분석</a></>}</nav></div></header>;
+ return <header className="site-header ref-site-header"><div className="wrap header-inner"><a className="brand" href="/">⌂ 신세계싱크<small>SHINSEGAE SINK</small></a><span className="ref-header-tag">부산·경남 싱크볼 교체 전문</span><nav className="nav">{links.map(([t,u])=><a key={u} href={u}>{t}</a>)}{isAdmin&&<><a href="/admin/cases/" style={{fontWeight:700}}>시공 사례 관리</a><a href="/admin/analytics/" style={{fontWeight:700}}>방문자 분석</a> <a href="/admin/search-rank/">검색 노출 확인</a></>}</nav></div></header>;
 }
