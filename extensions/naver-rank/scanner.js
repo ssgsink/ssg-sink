@@ -9,7 +9,7 @@ function scanResults(site, blog) {
  for(const a of nodes){let u;try{u=new URL(a.href);for(const key of ['url','u']){const v=u.searchParams.get(key);if(v&&/^https?:/.test(v)){u=new URL(v);break;}}}catch{continue;}
  if(!/^https?:$/.test(u.protocol)||u.hostname==='search.naver.com')continue;
  u.hash='';let key=u.href;if(u.hostname==='m.blog.naver.com')u.hostname='blog.naver.com';
- if(u.hostname==='blog.naver.com'){const b=u.searchParams.get('blogId'),n=u.searchParams.get('logNo');if(b&&n)u=new URL('https://blog.naver.com/'+b+'/'+n);key=u.href;}
+ if(u.hostname==='blog.naver.com'){const b=u.searchParams.get('blogId'),n=u.searchParams.get('logNo');if(b&&n)u=new URL('https://blog.naver.com/'+b+'/'+n);key=/^\/[^/]+\/\d+\/?$/.test(u.pathname)?u.origin+u.pathname.replace(/\/$/,''):u.href;}
  if(seen.has(key))continue;seen.add(key);links.push({url:u.href,title:a.innerText.replace(/새 창 열림/g,'').trim()});}
  if(!links.length)return {error:'결과 제목 링크를 인식하지 못했습니다. 미발견으로 판정하지 않았습니다.'};
  const host=new URL(site).hostname.toLowerCase();

@@ -3,3 +3,6 @@
 .rank-page .rank-top-five{color:#111}.rank-page .rank-beyond-five{color:#1658ab}.rank-page .rank-muted{color:#656b73}
 
 .rank-list{overflow:auto;max-height:65vh}.rank-list table{width:100%;border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}.rank-list thead th{position:sticky;top:0;background:#173952;color:white;z-index:1}.rank-list tbody th,.rank-list td{border-bottom:1px solid #dde4eb;padding:8px}.rank-list tbody tr:nth-child(even){background:#f5f8fb}.rank-list td{text-align:center;white-space:nowrap}.rank-list thead th:not(:first-child){text-align:center}.rank-list a{font-weight:700;text-decoration:underline}.rank-list th[scope=row]{min-width:8em}
+
+
+.rank-list .rank-excerpt{max-width:clamp(120px,32vw,480px);text-align:left}.rank-excerpt a{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:400}.rank-list th[scope=row] a{color:inherit}
