@@ -60,9 +60,9 @@ begin
  where o.status='queued' and u.raw_user_meta_data->'rank_schedule'->>'enabled'='true' and u.email='ssg-sink@naver.com'
  order by o.id limit 2 loop
   update public.rank_observations set req=net.http_get(
-   url=>'https://openapi.naver.com/v1/search/'||(case when job.target='블로그' then 'blog' else 'webkr' end)||'.json',
+   url=>'https://naverapihub.apigw.ntruss.com/search/v1/'||(case when job.target='블로그' then 'blog' else 'webkr' end),
    params=>jsonb_build_object('query',job.keyword,'display','100'),
-   headers=>jsonb_build_object('X-Naver-Client-Id',cid,'X-Naver-Client-Secret',secret),timeout_milliseconds=>10000),
+   headers=>jsonb_build_object('X-NCP-APIGW-API-KEY-ID',cid,'X-NCP-APIGW-API-KEY',secret),timeout_milliseconds=>10000),
    status='sent',sent=now() where id=job.id;
  end loop;
 end;$$;
