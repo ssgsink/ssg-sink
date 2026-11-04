@@ -1,5 +1,7 @@
 import type { MetadataRoute } from 'next';
 import {getManualCases} from '@/lib/supabase';
+// Read the latest case posts on every sitemap request, not only at build time.
+export const dynamic = 'force-dynamic';
 const domain = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'https://ssg-sink.vercel.app');
 const base = domain.replace(/\/$/, '');
 
