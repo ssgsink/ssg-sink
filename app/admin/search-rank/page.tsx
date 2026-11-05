@@ -126,8 +126,13 @@ export default function SearchRankAdmin(){
   <div className="rank-heading"><h1>검색 노출 확인</h1><a href="/admin/cases/">관리자 홈</a></div>
   <section className="rank-panel">
    <div className="rank-heading"><h2>검색 설정</h2><span>{words.length}개 검색어</span></div>
+   <details style={{margin:'12px 0'}}>
+    <summary>검색어 편집 · {words.length}개</summary>
+    <div style={{paddingTop:12}}>
    <label htmlFor="keywords">검색어 · 한 줄에 하나씩</label>
    <textarea id="keywords" disabled={running||saving} value={keywords} rows={5} onChange={e=>{setKeywords(e.target.value);setRows([]);}} style={{width:'100%',padding:12,margin:'8px 0 12px'}}/>
+    </div>
+   </details>
    <div className="rank-settings-row">
     <button className="btn-primary" disabled={running||saving} onClick={run}>{saving?'저장 중…':running?'검색 중…':'지금 검색'}</button>
     {running&&<button onClick={()=>{stop.current=true;setMessage('현재 검색 후 중지합니다.');}}>중지</button>}
