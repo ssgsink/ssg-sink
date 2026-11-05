@@ -1,62 +1,165 @@
- 'use client';
+'use client';
 import {useEffect,useRef,useState} from 'react';
-import {supabaseClient} from '@/lib/supabase';
-import './rank.css';
-import {rankColor} from './rankColor';
-import RankSchedule from './RankSchedule';
-import ApiUsage from './ApiUsage';
 import type {User} from '@supabase/supabase-js';
-type Hit={blogRank?:number;rank:number;title:string;url:string};
-type Result={error?:string;count?:number;targets?:{type:string;hits:Hit[]}[]};
-type Row={error?:string;blogRank?:number;time:string;keyword:string;mode:string;type:string;rank:number|null;scope:number;title:string;url:string};
-function bridge(type:string,payload:object={}):Promise<Result>{return new Promise((resolve,reject)=>{const id=crypto.randomUUID();const listener=(e:MessageEvent)=>{if(e.source!==window||e.origin!==location.origin||e.data?.source!=='ssg-rank-extension'||e.data.id!==id)return;clearTimeout(timer);window.removeEventListener('message',listener);resolve(e.data.result||{});};const timer=setTimeout(()=>{window.removeEventListener('message',listener);reject(Error(type==='ping'?'크롬 연결 프로그램을 설치한 뒤 이 페이지를 새로고침하세요.':'검색 확인 시간 초과. 검색 탭을 확인하세요.'));},type==='ping'?1500:50000);window.addEventListener('message',listener);window.postMessage({source:'ssg-rank-page',id,type,...payload},location.origin);});}
-export default function SearchRankAdmin(){
- const [client]=useState(()=>supabaseClient());const [user,setUser]=useState<User|null>(null),[loading,setLoading]=useState(true),[allowed,setAllowed]=useState(false),[message,setMessage]=useState(''),[keywords,setKeywords]=useState('부산 싱크볼 교체\n김해 사각싱크볼 교체\n양산 개수대 교체'),[mode,setMode]=useState('both'),[rows,setRows]=useState<Row[]>([]),[running,setRunning]=useState(false);const stop=useRef(false);const liveUser=useRef<string|null>(null);
- useEffect(()=>{if(!client){setLoading(false);return;}const applyUser=(next:User|null)=>{const nextId=next?.id||null;if(liveUser.current!==nextId){stop.current=true;setRows([]);setAllowed(false);}liveUser.current=nextId;setUser(previous=>previous?.id===next?.id?previous:next);};client.auth.getUser().then(({data})=>{applyUser(data.user);setLoading(false);}).catch(()=>{setMessage('로그인 상태를 확인하지 못했습니다. 새로고침해 주세요.');setLoading(false);});const {data:{subscription}}=client.auth.onAuthStateChange((_e,s)=>{applyUser(s?.user||null);});return()=>{stop.current=true;subscription.unsubscribe();};},[client]);
- useEffect(()=>{if(!user||!client)return;liveUser.current=user.id;let cancelled=false;client.auth.getSession().then(async({data:{session}})=>{const r=await fetch('/api/admin/search-rank/',{headers:{Authorization:'Bearer '+session?.access_token},cache:'no-store'});if(!r.ok)throw Error('관리자 권한을 확인할 수 없습니다.');if(cancelled)return;setAllowed(true);const saved=localStorage.getItem('ssg-rank-'+user.id);if(saved){const d=JSON.parse(saved);setKeywords(d.keywords||'');setRows(d.rows||[]);}}).catch(e=>{if(!cancelled)setMessage(e.message);});return()=>{cancelled=true;stop.current=true;};},[user,client]);
- const [targetTab,setTargetTab]=useState('블로그');
- const [delay,setDelay]=useState(1000),[startedAt,setStartedAt]=useState<number|null>(null),[elapsed,setElapsed]=useState(0);
- useEffect(()=>{if(!running||startedAt===null)return;const timer=setInterval(()=>setElapsed(Math.floor((Date.now()-startedAt)/1000)),1000);return()=>clearInterval(timer);},[running,startedAt]);
- const words=new Set(keywords.split('\n').map(s=>s.trim()).filter(Boolean));
- const lastSearch=rows.filter(r=>words.has(r.keyword)).reduce((last,r)=>r.time>last?r.time:last,'');
-
- const visibleRows=rows.filter(row=>row.type===targetTab&&words.has(row.keyword));
- const [filter,setFilter]=useState('');
- const summary=new Map<string, Record<string,Row[]>>();
- for(const word of words)summary.set(word,{});
- for(const row of visibleRows){
-  const areas=summary.get(row.keyword)!;
-  const previous=areas[row.mode];
-  if(!previous||row.time>previous[0].time)areas[row.mode]=[row];
-  else if(row.time===previous[0].time&&!previous.some(r=>r.url===row.url))previous.push(row);
- }
- for(const areas of summary.values())for(const batch of Object.values(areas))batch.sort((a,b)=>(a.rank??Infinity)-(b.rank??Infinity));
- const shown=Array.from(summary).filter(([word])=>word.includes(filter.trim()));
- function position(batch?:Row[]){
-  const row=batch?.[0];
-  if(row?.error)return <span title={row.error}>조회 실패</span>;
-  if(!row||row.rank==null)return <span>{!row?'미확인':'미발견'}</span>;
-  return <div className="rank-positions">{batch!.filter(r=>r.rank!=null).map(r=><a key={r.url} href={r.url} target="_blank" rel="noopener noreferrer" title={r.title}>{r.rank}위</a>)}</div>;
- }
- function persist(next=rows,nextKeywords=keywords){if(!user||!allowed)return;localStorage.setItem('ssg-rank-'+user.id,JSON.stringify({keywords:nextKeywords,compareMode:mode,rows:next}));}
- async function run(){if(!user||!allowed||running)return;const list=[...new Set(keywords.split('\n').map(s=>s.trim()).filter(Boolean))];if(!list.length||list.some(s=>s.length>150)){setMessage('검색어는 한 줄에 하나씩, 150자 이내로 입력하세요.');return;}setRunning(true);setStartedAt(Date.now());setElapsed(0);stop.current=false;let next:Row[]=[];setRows([]);persist([]);try{await bridge('ping');const scans=list.flatMap(keyword=>(mode==='both'?['web','blog']:[mode]).map(area=>({keyword,area})));for(let i=0;i<scans.length;i++){const {keyword,area}=scans[i];if(stop.current||liveUser.current!==user.id)break;setMessage(`${i+1}/${scans.length} · ${keyword} · ${area==='web'?'통합검색':'블로그 탭'}`);const r=await bridge('scan',{keyword,mode:area});if(r.error){
- if(/보안/.test(r.error))throw Error(r.error);
- if(stop.current||liveUser.current!==user.id)break;
- for(const type of ['홈페이지','블로그'])next.push({time:new Date().toISOString(),keyword,mode:area,type,rank:null,scope:0,title:'검색 결과 확인',url:'https://search.naver.com/search.naver?'+new URLSearchParams({where:area==='blog'?'blog':'nexearch',query:keyword}),error:r.error});
- persist(next);setRows([...next]);await new Promise(r=>setTimeout(r,delay));continue;
-}if(stop.current||liveUser.current!==user.id)break;if(!r.targets||!r.count)throw Error('검색 결과를 인식하지 못했습니다.');const time=new Date().toISOString();for(const t of r.targets){for(const h of t.hits.length?t.hits:[null])next.push({time,keyword,mode:area,blogRank:h?.blogRank,type:t.type,rank:h?.rank??null,scope:r.count,title:h?.title||'',url:h?.url||'https://search.naver.com/search.naver?'+new URLSearchParams({where:area==='blog'?'blog':'nexearch',query:keyword})});}persist(next);setRows([...next]);if(i<scans.length-1)await new Promise(r=>setTimeout(r,delay));}setMessage(stop.current?'중지했습니다.':'확인 완료');}catch(e){setMessage(e instanceof Error?e.message:'확인 실패');}finally{setRunning(false);}}
- function csv(){const cell=(v:unknown)=>{let s=String(v??'');if(/^[\s]*[=+@-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';};const data=[['확인시간(한국)','검색어','영역','대상','관측 순서','확인한 제목 수','제목','링크'],...rows.map(r=>[new Date(r.time).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}),r.keyword,r.mode==='blog'?'블로그':'통합',r.type,r.error?'조회 실패':r.rank??'범위 내 미발견',r.scope,r.title,r.url])];const url=URL.createObjectURL(new Blob(['\uFEFF'+data.map(r=>r.map(cell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='신세계싱크_검색노출_'+new Date().toISOString().slice(0,10)+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),3000);}
- if(loading)return <div className="wrap section">로그인 확인 중...</div>;
- if(!user)return <div className="wrap section"><h1>검색 노출 확인</h1><p>관리자 로그인이 필요합니다.</p><a href="/admin/cases/">관리자 로그인</a></div>;
- if(!allowed)return <div className="wrap section"><h1>검색 노출 확인</h1><p>{message||'관리자 권한 확인 중...'}</p></div>;
- return <div className="wrap section rank-page" style={{maxWidth:1100}}><small>신세계싱크 · 관리자</small><h1>검색 노출 확인</h1><p><a href="/admin/cases/">시공 사례 관리</a>　|　<a href="/admin/analytics/">방문자 분석</a></p><p>홈페이지: ssg-sink.vercel.app · 블로그: ssg-sink</p><p><a className="btn-primary" href="/downloads/naver-rank-v1.2.2.zip" download>크롬 연결 프로그램 다운로드 v1.2.2</a></p><details><summary>처음 설치하는 방법</summary><p>압축 풀기 → chrome://extensions → 개발자 모드 → 압축해제된 확장 프로그램을 로드합니다 → manifest.json이 있는 폴더 선택 → 이 페이지 새로고침</p></details><section className="rank-panel"><h2>수동 검색</h2><label htmlFor="rank-keywords">검색어 (한 줄에 하나씩, 삭제하거나 수정 가능)</label><textarea id="rank-keywords" disabled={running} rows={7} style={{display:'block',width:'100%',padding:12,margin:'12px 0'}} value={keywords} onChange={e=>{setKeywords(e.target.value);setRows([]);setFilter('');persist([],e.target.value);}}/><label>확인 영역 <select disabled={running} value={mode} onChange={e=>setMode(e.target.value)}><option value="both">통합검색 + 블로그 탭 함께 확인</option><option value="web">통합검색</option><option value="blog">블로그 검색</option></select></label><div style={{display:'flex',gap:12,flexWrap:'wrap',margin:'20px 0'}}><button disabled={running} onClick={()=>{try{persist();setMessage('설정을 저장했습니다.');}catch{setMessage('저장 공간이 부족합니다. CSV를 다운로드하세요.');}}}>검색어 저장</button><button className="btn-primary" disabled={running} onClick={run}>확인 시작</button><button disabled={!running} onClick={()=>{stop.current=true;setMessage('현재 검색이 끝나면 중지합니다.');}}>중지</button><button disabled={!rows.length} onClick={csv}>전체 결과 CSV 다운로드</button></div><label>검색 사이 대기 <select disabled={running} value={delay} onChange={e=>setDelay(Number(e.target.value))}><option value={500}>빠르게 · 0.5초</option><option value={1000}>기본 · 1초</option><option value={3000}>여유 있게 · 3초</option></select></label><p role="status">{message}{startedAt!==null&&(' · 경과 '+Math.floor(elapsed/60)+'분 '+elapsed%60+'초')}</p><p>페이지 로딩과 결과 확인 시간은 별도로 필요합니다. 수동 검색 실행은 PC 크롬 연결 프로그램을 사용하세요.</p></section><div role="group" aria-label="결과 대상" style={{display:'flex',gap:8,margin:'20px 0'}}>{['블로그','홈페이지'].map(target=><button key={target} type="button" aria-pressed={targetTab===target} className={targetTab===target?'btn-primary':''} onClick={()=>setTargetTab(target)}>{target}</button>)}</div><section className="rank-panel"><div className="rank-heading"><h2>{targetTab} 노출 순위</h2><span>마지막 조회: {lastSearch?<time dateTime={lastSearch}>{new Date(lastSearch).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}</time>:'아직 없음'}</span></div><p>현재 검색어의 최신 수동 조회 결과입니다. 색상은 통합검색의 가장 높은 순위 기준입니다. PC에서 읽은 제목 링크 기준입니다. 미확인은 해당 화면의 수동 검색 기록이 없는 경우입니다. 두 열을 채우려면 ‘통합검색 + 블로그 탭 함께 확인’을 선택하세요.</p>
-<label>검색어 찾기 <input type="search" value={filter} placeholder="예: 부산" onChange={event=>setFilter(event.target.value)}/></label>
-<p>{shown.length}개 표시 · 전체 {summary.size}개</p>
-<div className="rank-list"><table><thead><tr><th>검색어</th><th>PC 통합</th>{targetTab==='블로그'&&<th>PC 블로그 탭</th>}<th>노출된 글</th></tr></thead>
-<tbody>{shown.map(([keyword,areas])=><tr key={keyword} className={rankColor(areas.web?.[0]?.rank)}><th scope="row"><a href={'https://search.naver.com/search.naver?'+new URLSearchParams({where:'nexearch',query:keyword})} target="_blank" rel="noopener noreferrer">{keyword}</a></th><td>{position(areas.web)}</td>{targetTab==='블로그'&&<td>{position(areas.blog)}</td>}<td className="rank-excerpt">{[...(areas.web||[]),...(targetTab==='블로그'?(areas.blog||[]):[])].filter(r=>r.rank!=null).map(r=><a key={r.mode+r.url} title={r.title} href={r.url} target="_blank" rel="noopener noreferrer">{r.mode==='blog'?'블로그 탭':'통합'} {r.rank}위 · {r.title}</a>)}</td></tr>)}</tbody></table></div>{!visibleRows.length&&<p>확인 시작을 누르면 검색어별 순위가 표시됩니다.</p>}</section>
-<ApiUsage client={client!} owner={user.id}/><RankSchedule client={client!} user={user} keywords={keywords} target={targetTab}/>
-<details className="rank-panel"><summary>수동 검색 전체 기록</summary><div style={{overflowX:'auto'}}><table style={{width:'100%',minWidth:750}}><thead><tr>{['확인 시간','검색어','영역','대상','관측 순서','확인 범위','결과'].map(t=><th key={t}>{t}</th>)}</tr></thead><tbody>{[...visibleRows].reverse().map((r,i)=><tr key={i} className={rankColor(summary.get(r.keyword)?.web?.[0]?.rank)}><td>{new Date(r.time).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}</td><td>{r.keyword}</td><td>{r.mode==='blog'?'블로그':'통합'}</td><td>{r.type}</td><td>{r.error?'조회 실패':r.rank??'범위 내 미발견'}</td><td>제목 {r.scope}개</td><td><a href={r.url} target="_blank" rel="noopener noreferrer">{r.title||'검색 결과 확인'}</a></td></tr>)}</tbody></table>{!visibleRows.length&&<p>아직 {targetTab} 확인 결과가 없습니다.</p>}</div></details></div>;
+import {supabaseClient} from '@/lib/supabase';
+import ApiUsage from './ApiUsage';
+import {latestResults,type Row,type Scheduled} from './results';
+import {rankColor} from './rankColor';
+import './rank.css';
+type Config={words:string[];target:string;time:string;enabled:boolean;saved:string};
+type Result={error?:string;count?:number;targets?:{type:string;hits:{rank:number;title:string;url:string}[]}[]};
+const wordsOf=(text:string)=>Array.from(new Set(text.split('\n').map(w=>w.trim()).filter(Boolean)));
+const searchUrl=(word:string)=>'https://search.naver.com/search.naver?'+new URLSearchParams({where:'nexearch',query:word});
+const korea=(time:string)=>new Date(time).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'});
+function bridge(type:string,payload:object={}):Promise<Result>{
+ return new Promise((resolve,reject)=>{
+  const id=crypto.randomUUID();
+  const listener=(e:MessageEvent)=>{if(e.source!==window||e.origin!==location.origin||e.data?.source!=='ssg-rank-extension'||e.data.id!==id)return;clearTimeout(timer);window.removeEventListener('message',listener);resolve(e.data.result||{});};
+  const timer=setTimeout(()=>{window.removeEventListener('message',listener);reject(Error(type==='ping'?'PC에 연결 프로그램을 설치하고 페이지를 새로고침하세요.':'검색 시간 초과. 검색 탭을 확인하세요.'));},type==='ping'?1500:50000);
+  window.addEventListener('message',listener);window.postMessage({source:'ssg-rank-page',id,type,...payload},location.origin);
+ });
 }
-
-
-
+export default function SearchRankAdmin(){
+ const [client]=useState(()=>supabaseClient()),[user,setUser]=useState<User|null>(null),[allowed,setAllowed]=useState(false),[loading,setLoading]=useState(true);
+ const [keywords,setKeywords]=useState(''),[target,setTarget]=useState('both'),[tab,setTab]=useState('블로그'),[time,setTime]=useState('09:00'),[enabled,setEnabled]=useState(false),[saved,setSaved]=useState<Config|null>(null);
+ const [rows,setRows]=useState<Row[]>([]),[jobs,setJobs]=useState<Scheduled[]>([]),[message,setMessage]=useState(''),[jobError,setJobError]=useState(''),[ready,setReady]=useState(false),[sharedReady,setSharedReady]=useState(false),[limit,setLimit]=useState(50);
+ const [running,setRunning]=useState(false),[saving,setSaving]=useState(false),[filter,setFilter]=useState(''),[delay,setDelay]=useState(1000),[elapsed,setElapsed]=useState(0);
+ const stop=useRef(false),started=useRef(0),liveUser=useRef<string|null>(null);
+ useEffect(()=>{
+  if(!client){setLoading(false);return;}
+  const apply=(u:User|null)=>{if(liveUser.current!==(u?.id||null)){stop.current=true;setAllowed(false);setRows([]);setJobs([]);}liveUser.current=u?.id||null;setUser(prev=>prev?.id===u?.id?prev:u);};
+  client.auth.getUser().then(({data})=>apply(data.user)).finally(()=>setLoading(false));
+  const {data:{subscription}}=client.auth.onAuthStateChange((_e,s)=>apply(s?.user||null));
+  return()=>{stop.current=true;subscription.unsubscribe();};
+ },[client]);
+ useEffect(()=>{
+  if(!client||!user)return;let active=true;
+  (async()=>{
+   try{
+    const {data:{session}}=await client.auth.getSession();
+    const response=await fetch('/api/admin/search-rank/',{headers:{Authorization:'Bearer '+session?.access_token},cache:'no-store'});
+    if(!response.ok)throw Error('관리자 권한 확인 실패');
+    const {data:{user:fresh}}=await client.auth.getUser();
+    const config=fresh?.user_metadata.rank_schedule as Config|undefined;
+    const raw=localStorage.getItem('ssg-rank-'+user.id);let local:{keywords?:string;rows?:Row[]}={};
+    try{local=raw?JSON.parse(raw):{};}catch{}
+    if(!active)return;
+    setAllowed(true);setRows(local.rows||[]);
+    setKeywords(config?.words?.join('\n')??local.keywords??'부산 싱크볼 교체');
+    setTarget(config?.target||'both');setTime(config?.time||'09:00');setEnabled(config?.enabled||false);setSaved(config||null);
+   }catch(e){if(active)setMessage(e instanceof Error?e.message:'불러오기 실패');}
+  })();return()=>{active=false;};
+ },[client,user]);
+ useEffect(()=>{
+  if(!client||!user||!allowed)return;let active=true,busy=false;
+  async function refresh(){
+   if(busy)return;busy=true;
+   try{
+    const [state,version,cap]=await Promise.all([client!.rpc('rank_schedule_ready'),client!.rpc('rank_shared_config_version'),client!.rpc('rank_keyword_limit')]);
+    if(!active)return;setReady(!state.error&&state.data===true);setSharedReady(!version.error&&version.data===1);setLimit(cap.data===200?200:50);
+    const result=await client!.from('rank_observations').select('id,day,keyword,target,status,position,link,sent').eq('owner',user!.id).order('day',{ascending:false}).order('id',{ascending:false}).limit(1000);
+    if(result.error)throw Error('예약 결과를 불러오지 못했습니다. 잠시 후 새로고침하세요.');
+    if(active){setJobs(result.data||[]);setJobError('');}
+   }catch(e){if(active)setJobError(e instanceof Error?e.message:'예약 결과 조회 실패');}
+   finally{busy=false;}
+  }
+  void refresh();const timer=setInterval(refresh,15000);return()=>{active=false;clearInterval(timer);};
+ },[client,user,allowed]);
+ useEffect(()=>{if(!running)return;const timer=setInterval(()=>setElapsed(Math.floor((Date.now()-started.current)/1000)),1000);return()=>clearInterval(timer);},[running]);
+ const words=wordsOf(keywords),targets=target==='both'?['블로그','홈페이지']:[target];
+ const activeTab=targets.includes(tab)?tab:targets[0];
+ const results=latestResults(words,activeTab,rows,jobs);
+ const last=results.filter(r=>r.time).sort((a,b)=>b.time.localeCompare(a.time))[0];
+ const shown=results.filter(r=>r.keyword.includes(filter.trim()));
+ const dirty=!saved||JSON.stringify(words)!==JSON.stringify(saved.words)||target!==(saved.target||'both')||time!==saved.time||enabled!==saved.enabled;
+ function persist(next:Row[]){if(user)localStorage.setItem('ssg-rank-'+user.id,JSON.stringify({keywords,rows:next}));}
+ async function save(){
+  if(!client||!user||!allowed)return false;
+  if(!words.length||words.length>limit||words.some(w=>w.length>150)){setMessage('검색어는 1~'+limit+'개, 각 150자 이내로 입력하세요.');return false;}
+  if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)){setMessage('예약 시간을 확인하세요.');return false;}
+  if(enabled&&!sharedReady){setMessage('예약에 공통 확인 대상을 적용하려면 아래 서버 업데이트 SQL을 먼저 실행해 주세요.');return false;}
+  setSaving(true);
+  try{
+   const config={words,target,time,enabled,saved:new Date().toISOString()};
+   const {error}=await client.auth.updateUser({data:{rank_schedule:config}});if(error)throw error;
+   setSaved(config);persist(rows);setMessage('수동·예약 공통 설정을 저장했습니다.');return true;
+  }catch{setMessage('설정 저장 실패. 다시 시도해 주세요.');return false;}finally{setSaving(false);}
+ }
+ async function run(){
+  if(running||saving||!user)return;
+  if(dirty&&!await save())return;
+  setRunning(true);stop.current=false;started.current=Date.now();setElapsed(0);
+  let next:Row[]=[];
+  try{
+   await bridge('ping');setRows([]);persist([]);
+   const modes=targets.includes('블로그')?['web','blog']:['web'];
+   const scans=words.flatMap(keyword=>modes.map(mode=>({keyword,mode})));
+   for(let i=0;i<scans.length;i++){
+    if(stop.current||liveUser.current!==user.id)break;
+    const {keyword,mode}=scans[i];setMessage((i+1)+'/'+scans.length+' · '+keyword+' · '+(mode==='web'?'PC 통합':'PC 블로그 탭'));
+    let r:Result;try{r=await bridge('scan',{keyword,mode});}catch(e){r={error:e instanceof Error?e.message:'조회 실패'};}
+    if(stop.current||liveUser.current!==user.id)break;
+    if(r.error?.includes('보안'))throw Error(r.error);
+    const stamp=new Date().toISOString();
+    for(const type of targets){
+     if(mode==='blog'&&type==='홈페이지')continue;
+     const hits=r.targets?.find(t=>t.type===type)?.hits||[];
+     for(const hit of hits.length?hits:[null])next.push({keyword,mode,type,time:stamp,rank:hit?.rank??null,scope:r.count||0,title:hit?.title||'',url:hit?.url||searchUrl(keyword),error:r.error||(!r.count?'검색 결과 인식 실패':undefined)});
+    }
+    setRows([...next]);persist(next);
+    if(i<scans.length-1)await new Promise(r=>setTimeout(r,delay));
+   }
+   setMessage(stop.current?'중지했습니다.':'조회 완료');
+  }catch(e){setMessage(e instanceof Error?e.message:'조회 실패');}finally{setElapsed(Math.floor((Date.now()-started.current)/1000));setRunning(false);}
+ }
+ function csv(){
+  const cell=(v:unknown)=>{let s=String(v??'');if(/^[\s]*[=+@-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';};
+  const data=[['검색어','방식','조회 시간(한국)','기준','순위','글 제목','링크'],...results.flatMap(r=>r.rows.map(x=>[r.keyword,r.source==='manual'?'수동':'예약',korea(x.time),x.mode==='api'?'검색 API':x.mode==='web'?'PC 통합':'PC 블로그 탭',x.error?'조회 실패':x.rank??'미발견',x.title,x.url]))];
+  const url=URL.createObjectURL(new Blob(['\uFEFF'+data.map(r=>r.map(cell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));
+  const a=document.createElement('a');a.href=url;a.download='신세계싱크_최신검색결과.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ }
+ if(loading)return <div className="wrap section">로그인 확인 중…</div>;
+ if(!user)return <div className="wrap section"><a href="/admin/cases/">관리자 로그인</a></div>;
+ if(!allowed)return <div className="wrap section">{message||'관리자 권한 확인 중…'}</div>;
+ return <div className="wrap section rank-page" style={{maxWidth:1100}}>
+  <div className="rank-heading"><h1>검색 노출 확인</h1><a href="/admin/cases/">관리자 홈</a></div>
+  <section className="rank-panel">
+   <div className="rank-heading"><h2>검색 설정</h2><span>{words.length}개 검색어 · {dirty?'저장하지 않은 변경 있음':'저장됨'}</span></div>
+   <p>한 번 저장한 검색어와 확인 대상을 수동·예약 검색에 함께 사용합니다.</p>
+   <label htmlFor="keywords">검색어 · 한 줄에 하나씩</label>
+   <textarea id="keywords" disabled={running||saving} value={keywords} rows={5} onChange={e=>{setKeywords(e.target.value);setRows([]);}} style={{width:'100%',padding:12,margin:'8px 0 16px'}}/>
+   <div className="rank-settings-row">
+    <label>확인 대상 <select disabled={running||saving} value={target} onChange={e=>setTarget(e.target.value)}><option value="both">블로그 + 홈페이지</option><option value="블로그">블로그</option><option value="홈페이지">홈페이지</option></select></label>
+    <label><input type="checkbox" disabled={running||saving} checked={enabled} onChange={e=>setEnabled(e.target.checked)}/> 매일 예약 검색</label>
+    <label>예약 시간 (한국) <input type="time" disabled={running||saving} value={time} onChange={e=>setTime(e.target.value)}/></label>
+   </div>
+   <div className="rank-settings-row" style={{marginTop:18}}>
+    <button disabled={running||saving||!dirty} onClick={save}>{saving?'저장 중…':'설정 저장'}</button>
+    <button className="btn-primary" disabled={running||saving} onClick={run}>지금 검색</button>
+    {running&&<button onClick={()=>{stop.current=true;setMessage('현재 검색 후 중지합니다.');}}>중지</button>}
+    <span>{saved?.enabled?'매일 '+saved.time+' 예약됨':'예약 꺼짐'} · {ready?'서버 연결됨':'예약 서버 준비 필요'}</span>
+   </div>
+   <p role="status">{message}{running&&' · '+Math.floor(elapsed/60)+'분 '+elapsed%60+'초'}</p>
+   {!sharedReady&&<p className="rank-setup-note">예약 확인 대상 통합을 위한 서버 업데이트가 필요합니다. <a href="/downloads/rank-shared-settings.sql" download>업데이트 SQL 다운로드</a> → Supabase SQL Editor에서 한 번 실행해 주세요. 기존 예약은 업데이트 전까지 기존 대상대로 실행됩니다.</p>}
+   <details><summary>PC 연결 프로그램 및 검색 속도</summary><p><a href="/downloads/naver-rank-v1.2.2.zip" download>연결 프로그램 v1.2.2 다운로드</a> · 압축 해제 후 chrome://extensions에서 개발자 모드 → 압축해제된 확장 프로그램 로드 → 이 페이지 새로고침</p><label>검색 사이 대기 <select disabled={running} value={delay} onChange={e=>setDelay(Number(e.target.value))}><option value={500}>0.5초</option><option value={1000}>1초</option><option value={3000}>3초</option></select></label><p>수동 검색은 PC 연결 프로그램이 필요합니다. 예약 검색은 컴퓨터를 꺼도 서버에서 실행됩니다.</p></details>
+  </section>
+  <section className="rank-panel">
+   <div className="rank-heading"><h2>{activeTab} 노출 순위</h2><span>{last?<>{last.source==='manual'?'수동 검색':'예약 검색'} · {korea(last.time)}</>:'아직 조회 기록 없음'}</span></div>
+   <div className="rank-settings-row"><div role="group" aria-label="확인 대상">{targets.map(t=><button key={t} aria-pressed={activeTab===t} onClick={()=>setTab(t)}>{t}</button>)}</div><input aria-label="검색어 찾기" placeholder="검색어 찾기" value={filter} onChange={e=>setFilter(e.target.value)}/><button disabled={!results.some(r=>r.rows.length)} onClick={csv}>CSV 다운로드</button></div>
+   <p>검색어마다 수동·예약 중 더 최근 결과를 표시합니다. 수동은 PC 화면, 예약은 검색 API 기준으로 서로 다른 순위입니다. 색상은 수동 PC 통합 순위 기준이며 예약 결과는 회색입니다.</p>
+   {jobError&&<p role="alert">{jobError}</p>}
+   <div className="rank-list"><table><thead><tr><th>검색어</th><th>노출 순위</th><th>노출된 글</th><th>조회 기록</th></tr></thead><tbody>{shown.map(r=>{
+    const integrated=r.rows.filter(x=>x.mode==='web'&&!x.error&&x.rank!=null).map(x=>x.rank!);
+    const color=rankColor(integrated.length?Math.min(...integrated):null);
+    const modes=r.source==='scheduled'?['api']:Array.from(new Set(r.rows.map(x=>x.mode)));
+    return <tr key={r.keyword} className={color}><th scope="row"><a href={searchUrl(r.keyword)} target="_blank" rel="noopener noreferrer">{r.keyword}</a></th><td>{!r.rows.length?'미확인':modes.map(mode=>{
+     const batch=r.rows.filter(x=>x.mode===mode),hits=batch.filter(x=>x.rank!=null&&!x.error);
+     return <div key={mode} className="rank-result-line"><span>{mode==='api'?(activeTab==='블로그'?'블로그 API':'웹문서 API'):mode==='web'?'PC 통합':'PC 블로그 탭'}</span><div className="rank-positions">{hits.length?hits.map(x=><a key={x.url+x.rank} href={x.url} title={x.title} target="_blank" rel="noopener noreferrer">{x.rank}위</a>):batch.some(x=>x.error)?'조회 실패':'미발견'}</div></div>;
+    })}</td><td className="rank-excerpt">{r.rows.filter(x=>x.rank!=null&&!x.error&&x.url).map(x=><a key={x.mode+x.url+x.rank} href={x.url} target="_blank" rel="noopener noreferrer" title={x.title}>{x.mode==='api'?'예약':x.mode==='web'?'통합':'블로그 탭'} {x.rank}위 · {x.title||'글 보기'}</a>)}</td><td>{r.time?<><span>{r.source==='manual'?'수동 검색':'예약 검색'}</span><br/><time dateTime={r.time}>{korea(r.time)}</time></>:'—'}</td></tr>;
+   })}</tbody></table></div>
+   {!shown.length&&<p>표시할 검색어가 없습니다.</p>}
+   <small>예약 시간 표시는 서버 요청 시작 시각입니다. 예약 결과는 15초마다 갱신합니다. 수동 기록은 현재 기기에 저장됩니다.</small>
+  </section>
+  <details className="rank-panel"><summary>검색 API 사용량 보기</summary><ApiUsage client={client!} owner={user.id}/></details>
+ </div>;
+}

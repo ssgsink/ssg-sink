@@ -1,0 +1,14 @@
+const fs=require('node:fs'),vm=require('node:vm'),ts=require('typescript'),assert=require('node:assert/strict');
+const context={exports:{}};
+vm.runInNewContext(ts.transpile(fs.readFileSync('app/admin/search-rank/results.ts','utf8'),{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}),context);
+const latest=context.exports.latestResults;
+const row=(time,rank,mode='web')=>({keyword:'양산',type:'블로그',time,rank,mode,url:'https://example.com/'+rank});
+const manual=[row('2026-11-05T01:00:00Z',3),row('2026-11-05T02:00:00Z',14),row('2026-11-05T02:00:00Z',19)];
+const job={id:1,keyword:'양산',target:'블로그',day:'2026-11-05',status:'done',sent:'2026-11-05T03:00:00+00:00',position:5,link:'https://example.com/a'};
+assert.equal(latest(['양산'],'블로그',manual,[job])[0].source,'scheduled');
+assert.equal(latest(['양산'],'블로그',[row('2026-11-05T04:00:00Z',6)],[job])[0].source,'manual');
+assert.deepEqual(Array.from(latest(['양산'],'블로그',manual,[])[0].rows,r=>r.rank),[14,19]);
+assert.equal(latest(['양산'],'블로그',manual,[{...job,status:'sent'}])[0].source,'manual');
+assert.equal(latest(['부산'],'블로그',manual,[job])[0].rows.length,0);
+assert.equal(latest(['양산'],'홈페이지',manual,[job])[0].rows.length,0);
+console.log('PASS: latest manual/scheduled, multiple ranks, pending results, keyword and target isolation');

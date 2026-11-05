@@ -60,11 +60,14 @@ begin
  cross join lateral jsonb_array_elements_text(case when jsonb_typeof(cfg->'words')='array' then cfg->'words' else '[]'::jsonb end) with ordinality words(w,i)
  cross join (values ('블로그'),('홈페이지')) targets(t)
  where u.email='ssg-sink@naver.com' and u.email_confirmed_at is not null and cfg->>'enabled'='true'
+ and (coalesce(cfg->>'target','both')='both' or cfg->>'target'=t)
  and cfg->>'time'=to_char(kst,'HH24:MI') and i<=200 and length(w) between 1 and 150
  on conflict do nothing;
  -- Small batches every five seconds while there is work.
  for job in select o.* from public.rank_observations o join auth.users u on u.id=o.owner
- where o.status='queued' and u.raw_user_meta_data->'rank_schedule'->>'enabled'='true' and u.email='ssg-sink@naver.com'
+ where o.status='queued' and (coalesce(u.raw_user_meta_data->'rank_schedule'->>'target','both')='both' or u.raw_user_meta_data->'rank_schedule'->>'target'=o.target)
+ and (u.raw_user_meta_data->'rank_schedule'->'words') ? o.keyword
+ and u.raw_user_meta_data->'rank_schedule'->>'enabled'='true' and u.email='ssg-sink@naver.com'
  order by o.id limit 2 loop
   update public.rank_observations set req=net.http_get(
    url=>'https://naverapihub.apigw.ntruss.com/search/v1/'||(case when job.target='블로그' then 'blog' else 'webkr' end),
@@ -77,4 +80,7 @@ revoke all on function public.ssg_rank_tick() from public,anon,authenticated;
 create or replace function public.rank_keyword_limit() returns integer language sql immutable as 'select 200';
 grant execute on function public.rank_keyword_limit() to authenticated;
 select cron.schedule('ssg-rank-minute','5 seconds','select public.ssg_rank_tick()');
+create or replace function public.rank_shared_config_version() returns integer language sql immutable as 'select 1';
+revoke all on function public.rank_shared_config_version() from public,anon;
+grant execute on function public.rank_shared_config_version() to authenticated;
 commit;

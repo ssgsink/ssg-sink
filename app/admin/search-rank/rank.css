@@ -31,3 +31,14 @@
  .rank-list .rank-excerpt{max-width:260px}
  .rank-page button{min-height:42px;padding:8px 10px}
 }
+
+.rank-settings-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.rank-settings-row label{display:flex;align-items:center;gap:8px}
+.rank-settings-row input:not([type=checkbox]){padding:10px;border:1px solid #bbcbd8;border-radius:8px}
+.rank-settings-row [role=group]{display:flex;gap:6px}
+.rank-result-line{display:flex;flex-direction:column;gap:3px;margin:5px 0}
+.rank-result-line>span{font-size:11px}
+.rank-page .rank-list td:last-child{font-size:12px;white-space:normal;min-width:125px}
+.rank-page details.rank-panel>section{border:0;padding:10px 0;margin:0}
+.rank-setup-note{background:#fff8e6;padding:12px;border-radius:6px}
+@media(max-width:600px){.rank-settings-row{gap:10px}.rank-page .rank-list table{min-width:690px}}
