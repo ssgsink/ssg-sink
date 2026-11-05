@@ -6,7 +6,7 @@ import ApiUsage from './ApiUsage';
 import {latestResults,type Row,type Scheduled} from './results';
 import {rankColor} from './rankColor';
 import './rank.css';
-type Config={words:string[];target:string;time:string;enabled:boolean;saved:string};
+type Config={screenScope?:string;words:string[];target:string;time:string;enabled:boolean;saved:string};
 type Result={error?:string;count?:number;targets?:{type:string;hits:{rank:number;title:string;url:string}[]}[]};
 const wordsOf=(text:string)=>Array.from(new Set(text.split('\n').map(w=>w.trim()).filter(Boolean)));
 const searchUrl=(word:string)=>'https://search.naver.com/search.naver?'+new URLSearchParams({where:'nexearch',query:word});
@@ -23,6 +23,7 @@ export default function SearchRankAdmin(){
  const [client]=useState(()=>supabaseClient()),[user,setUser]=useState<User|null>(null),[allowed,setAllowed]=useState(false),[loading,setLoading]=useState(true);
  const [keywords,setKeywords]=useState(''),[target,setTarget]=useState('both'),[tab,setTab]=useState('블로그'),[time,setTime]=useState('09:00'),[enabled,setEnabled]=useState(false),[saved,setSaved]=useState<Config|null>(null);
  const [rows,setRows]=useState<Row[]>([]),[jobs,setJobs]=useState<Scheduled[]>([]),[message,setMessage]=useState(''),[jobError,setJobError]=useState(''),[ready,setReady]=useState(false),[sharedReady,setSharedReady]=useState(false),[limit,setLimit]=useState(50);
+ const [screenScope,setScreenScope]=useState('both');
  const [running,setRunning]=useState(false),[saving,setSaving]=useState(false),[filter,setFilter]=useState(''),[delay,setDelay]=useState(1000),[elapsed,setElapsed]=useState(0);
  const stop=useRef(false),started=useRef(0),liveUser=useRef<string|null>(null);
  useEffect(()=>{
@@ -46,7 +47,7 @@ export default function SearchRankAdmin(){
     if(!active)return;
     setAllowed(true);setRows(local.rows||[]);
     setKeywords(config?.words?.join('\n')??local.keywords??'부산 싱크볼 교체');
-    setTarget(config?.target||'both');setTime(config?.time||'09:00');setEnabled(config?.enabled||false);setSaved(config||null);
+    setScreenScope(config?.target==='홈페이지'&&config?.screenScope==='blog'?'web':config?.screenScope||'both');setTarget(config?.target||'both');setTime(config?.time||'09:00');setEnabled(config?.enabled||false);setSaved(config||null);
    }catch(e){if(active)setMessage(e instanceof Error?e.message:'불러오기 실패');}
   })();return()=>{active=false;};
  },[client,user]);
@@ -71,7 +72,7 @@ export default function SearchRankAdmin(){
  const results=latestResults(words,activeTab,rows,jobs);
  const last=results.filter(r=>r.time).sort((a,b)=>b.time.localeCompare(a.time))[0];
  const shown=results.filter(r=>r.keyword.includes(filter.trim()));
- const dirty=!saved||JSON.stringify(words)!==JSON.stringify(saved.words)||target!==(saved.target||'both')||time!==saved.time||enabled!==saved.enabled;
+ const dirty=!saved||screenScope!==(saved.screenScope||'both')||JSON.stringify(words)!==JSON.stringify(saved.words)||target!==(saved.target||'both')||time!==saved.time||enabled!==saved.enabled;
  function persist(next:Row[]){if(user)localStorage.setItem('ssg-rank-'+user.id,JSON.stringify({keywords,rows:next}));}
  async function save(){
   if(!client||!user||!allowed)return false;
@@ -80,7 +81,7 @@ export default function SearchRankAdmin(){
   if(enabled&&!sharedReady){setMessage('예약에 공통 확인 대상을 적용하려면 아래 서버 업데이트 SQL을 먼저 실행해 주세요.');return false;}
   setSaving(true);
   try{
-   const config={words,target,time,enabled,saved:new Date().toISOString()};
+   const config={words,target,screenScope,time,enabled,saved:new Date().toISOString()};
    const {error}=await client.auth.updateUser({data:{rank_schedule:config}});if(error)throw error;
    setSaved(config);persist(rows);setMessage('수동·예약 공통 설정을 저장했습니다.');return true;
   }catch{setMessage('설정 저장 실패. 다시 시도해 주세요.');return false;}finally{setSaving(false);}
@@ -92,7 +93,7 @@ export default function SearchRankAdmin(){
   let next:Row[]=[];
   try{
    await bridge('ping');setRows([]);persist([]);
-   const modes=targets.includes('블로그')?['web','blog']:['web'];
+   const modes=screenScope==='both'?(targets.includes('블로그')?['web','blog']:['web']):[screenScope];
    const scans=words.flatMap(keyword=>modes.map(mode=>({keyword,mode})));
    for(let i=0;i<scans.length;i++){
     if(stop.current||liveUser.current!==user.id)break;
@@ -125,11 +126,12 @@ export default function SearchRankAdmin(){
   <div className="rank-heading"><h1>검색 노출 확인</h1><a href="/admin/cases/">관리자 홈</a></div>
   <section className="rank-panel">
    <div className="rank-heading"><h2>검색 설정</h2><span>{words.length}개 검색어 · {dirty?'저장하지 않은 변경 있음':'저장됨'}</span></div>
-   <p>한 번 저장한 검색어와 확인 대상을 수동·예약 검색에 함께 사용합니다.</p>
+   <p>검색어와 대상을 저장하고, PC에서 확인할 영역을 선택하세요. 예약 API는 PC 통합검색·블로그 탭을 직접 조회하지 않습니다.</p>
    <label htmlFor="keywords">검색어 · 한 줄에 하나씩</label>
    <textarea id="keywords" disabled={running||saving} value={keywords} rows={5} onChange={e=>{setKeywords(e.target.value);setRows([]);}} style={{width:'100%',padding:12,margin:'8px 0 16px'}}/>
    <div className="rank-settings-row">
-    <label>확인 대상 <select disabled={running||saving} value={target} onChange={e=>setTarget(e.target.value)}><option value="both">블로그 + 홈페이지</option><option value="블로그">블로그</option><option value="홈페이지">홈페이지</option></select></label>
+    <label>대상 <select disabled={running||saving} value={target} onChange={e=>{setTarget(e.target.value);if(e.target.value==='홈페이지'&&screenScope==='blog')setScreenScope('web');}}><option value="both">블로그 + 홈페이지</option><option value="블로그">블로그</option><option value="홈페이지">홈페이지</option></select></label>
+    <label>PC 확인 영역 <select disabled={running||saving} value={screenScope} onChange={e=>setScreenScope(e.target.value)}><option value="both">통합검색 + 블로그 탭</option><option value="web">통합검색</option><option value="blog" disabled={target==='홈페이지'}>블로그 탭</option></select></label>
     <label><input type="checkbox" disabled={running||saving} checked={enabled} onChange={e=>setEnabled(e.target.checked)}/> 매일 예약 검색</label>
     <label>예약 시간 (한국) <input type="time" disabled={running||saving} value={time} onChange={e=>setTime(e.target.value)}/></label>
    </div>
@@ -146,16 +148,17 @@ export default function SearchRankAdmin(){
   <section className="rank-panel">
    <div className="rank-heading"><h2>{activeTab} 노출 순위</h2><span>{last?<>{last.source==='manual'?'수동 검색':'예약 검색'} · {korea(last.time)}</>:'아직 조회 기록 없음'}</span></div>
    <div className="rank-settings-row"><div role="group" aria-label="확인 대상">{targets.map(t=><button key={t} aria-pressed={activeTab===t} onClick={()=>setTab(t)}>{t}</button>)}</div><input aria-label="검색어 찾기" placeholder="검색어 찾기" value={filter} onChange={e=>setFilter(e.target.value)}/><button disabled={!results.some(r=>r.rows.length)} onClick={csv}>CSV 다운로드</button></div>
-   <p>검색어마다 수동·예약 중 더 최근 결과를 표시합니다. 수동은 PC 화면, 예약은 검색 API 기준으로 서로 다른 순위입니다. 색상은 수동 PC 통합 순위 기준이며 예약 결과는 회색입니다.</p>
+   <p>검색어별 최신 결과입니다. 색상은 PC 통합검색 순위 기준입니다. API 숫자는 실제 블로그 탭 순위와 다르며, API로 확인할 수 없는 통합검색은 —로 표시합니다.</p>
    {jobError&&<p role="alert">{jobError}</p>}
-   <div className="rank-list"><table><thead><tr><th>검색어</th><th>노출 순위</th><th>노출된 글</th><th>조회 기록</th></tr></thead><tbody>{shown.map(r=>{
+   <div className="rank-list"><table><thead><tr><th>검색어</th><th>통합검색</th><th>{activeTab==='블로그'?'블로그 탭':'웹문서 API'}</th><th>노출된 글</th></tr></thead><tbody>{shown.map(r=>{
     const integrated=r.rows.filter(x=>x.mode==='web'&&!x.error&&x.rank!=null).map(x=>x.rank!);
     const color=rankColor(integrated.length?Math.min(...integrated):null);
-    const modes=r.source==='scheduled'?['api']:Array.from(new Set(r.rows.map(x=>x.mode)));
-    return <tr key={r.keyword} className={color}><th scope="row"><a href={searchUrl(r.keyword)} target="_blank" rel="noopener noreferrer">{r.keyword}</a></th><td>{!r.rows.length?'미확인':modes.map(mode=>{
+    const position=(mode:string)=>{
      const batch=r.rows.filter(x=>x.mode===mode),hits=batch.filter(x=>x.rank!=null&&!x.error);
-     return <div key={mode} className="rank-result-line"><span>{mode==='api'?(activeTab==='블로그'?'블로그 API':'웹문서 API'):mode==='web'?'PC 통합':'PC 블로그 탭'}</span><div className="rank-positions">{hits.length?hits.map(x=><a key={x.url+x.rank} href={x.url} title={x.title} target="_blank" rel="noopener noreferrer">{x.rank}위</a>):batch.some(x=>x.error)?'조회 실패':'미발견'}</div></div>;
-    })}</td><td className="rank-excerpt">{r.rows.filter(x=>x.rank!=null&&!x.error&&x.url).map(x=><a key={x.mode+x.url+x.rank} href={x.url} target="_blank" rel="noopener noreferrer" title={x.title}>{x.mode==='api'?'예약':x.mode==='web'?'통합':'블로그 탭'} {x.rank}위 · {x.title||'글 보기'}</a>)}</td><td>{r.time?<><span>{r.source==='manual'?'수동 검색':'예약 검색'}</span><br/><time dateTime={r.time}>{korea(r.time)}</time></>:'—'}</td></tr>;
+     if(!batch.length)return <span>{r.source==='scheduled'&&mode==='web'?'—':'미확인'}</span>;
+     return <div className="rank-positions">{mode==='api'&&<span title="검색 API 기준이며 PC 화면 순위가 아닙니다">API</span>}{hits.length?hits.map(x=><a key={x.url+x.rank} href={x.url} title={x.title} target="_blank" rel="noopener noreferrer">{x.rank}위</a>):batch.some(x=>x.error)?'조회 실패':'미발견'}</div>;
+    };
+    return <tr key={r.keyword} className={color}><th scope="row"><a href={searchUrl(r.keyword)} target="_blank" rel="noopener noreferrer">{r.keyword}</a></th><td>{position('web')}</td><td>{position(r.source==='scheduled'||activeTab==='홈페이지'?'api':'blog')}</td><td className="rank-excerpt">{r.rows.filter(x=>x.rank!=null&&!x.error&&x.url).map(x=><a key={x.mode+x.url+x.rank} href={x.url} target="_blank" rel="noopener noreferrer" title={x.mode==='api'?'글 보기':x.title}>{x.mode==='api'?'API':x.mode==='web'?'통합':'블로그 탭'} {x.rank}위 · {x.mode==='api'?'글 보기':x.title||'글 보기'}</a>)}</td></tr>;
    })}</tbody></table></div>
    {!shown.length&&<p>표시할 검색어가 없습니다.</p>}
    <small>예약 시간 표시는 서버 요청 시작 시각입니다. 예약 결과는 15초마다 갱신합니다. 수동 기록은 현재 기기에 저장됩니다.</small>
