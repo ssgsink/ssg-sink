@@ -7,15 +7,15 @@ import {latestResults,type Row,type Scheduled} from './results';
 import {rankColor} from './rankColor';
 import './rank.css';
 type Config={screenScope?:string;words:string[];target:string;time:string;enabled:boolean;saved:string};
-type Result={error?:string;count?:number;targets?:{type:string;hits:{rank:number;title:string;url:string}[]}[]};
+type Result={version?:string;error?:string;count?:number;targets?:{type:string;hits:{rank:number;title:string;url:string}[]}[]};
 const wordsOf=(text:string)=>Array.from(new Set(text.split('\n').map(w=>w.trim()).filter(Boolean)));
 const searchUrl=(word:string)=>'https://search.naver.com/search.naver?'+new URLSearchParams({where:'nexearch',query:word});
 const korea=(time:string)=>new Date(time).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'});
 function bridge(type:string,payload:object={}):Promise<Result>{
  return new Promise((resolve,reject)=>{
   const id=crypto.randomUUID();
-  const listener=(e:MessageEvent)=>{if(e.source!==window||e.origin!==location.origin||e.data?.source!=='ssg-rank-extension'||e.data.id!==id)return;clearTimeout(timer);window.removeEventListener('message',listener);resolve(e.data.result||{});};
-  const timer=setTimeout(()=>{window.removeEventListener('message',listener);reject(Error(type==='ping'?'PC에 연결 프로그램을 설치하고 페이지를 새로고침하세요.':'검색 시간 초과. 검색 탭을 확인하세요.'));},type==='ping'?1500:50000);
+  const listener=(e:MessageEvent)=>{if(e.source!==window||e.origin!==location.origin||e.data?.source!=='ssg-rank-extension'||e.data.id!==id)return;clearTimeout(timer);window.removeEventListener('message',listener);const result=e.data.result||{};if(result.error&&type!=='scan')reject(Error(result.error));else resolve(result);};
+  const timer=setTimeout(()=>{window.removeEventListener('message',listener);reject(Error(type==='ping'?'PC에 연결 프로그램을 설치하고 페이지를 새로고침하세요.':'검색 시간 초과. 검색 탭을 확인하세요.'));},type==='scan'?55000:5000);
   window.addEventListener('message',listener);window.postMessage({source:'ssg-rank-page',id,type,...payload},location.origin);
  });
 }
@@ -92,7 +92,7 @@ export default function SearchRankAdmin(){
   setRunning(true);stop.current=false;started.current=Date.now();setElapsed(0);
   let next:Row[]=[];
   try{
-   await bridge('ping');setRows([]);persist([]);
+   const connection=await bridge('ping');if(connection.version!=='1.2.3')throw Error('연결 프로그램 v1.2.3으로 업데이트하고 이 페이지를 새로고침하세요.');setRows([]);persist([]);
    const modes=screenScope==='both'?(targets.includes('블로그')?['web','blog']:['web']):[screenScope];
    const scans=words.flatMap(keyword=>modes.map(mode=>({keyword,mode})));
    for(let i=0;i<scans.length;i++){
@@ -100,7 +100,7 @@ export default function SearchRankAdmin(){
     const {keyword,mode}=scans[i];setMessage((i+1)+'/'+scans.length+' · '+keyword+' · '+(mode==='web'?'PC 통합':'PC 블로그 탭'));
     let r:Result;try{r=await bridge('scan',{keyword,mode});}catch(e){r={error:e instanceof Error?e.message:'조회 실패'};}
     if(stop.current||liveUser.current!==user.id)break;
-    if(r.error?.includes('보안'))throw Error(r.error);
+    if(r.error&&/보안|연결 오류|시간 초과|다른 검색/.test(r.error))throw Error(r.error);
     const stamp=new Date().toISOString();
     for(const type of targets){
      if(mode==='blog'&&type==='홈페이지')continue;
@@ -110,8 +110,8 @@ export default function SearchRankAdmin(){
     setRows([...next]);persist(next);
     if(i<scans.length-1)await new Promise(r=>setTimeout(r,delay));
    }
-   setMessage(stop.current?'중지했습니다.':'조회 완료');
-  }catch(e){setMessage(e instanceof Error?e.message:'조회 실패');}finally{setElapsed(Math.floor((Date.now()-started.current)/1000));setRunning(false);}
+   const failures=next.filter(r=>r.error);setMessage(stop.current?'중지했습니다.':failures.length?'조회 종료 · 실패 '+failures.length+'건 · '+failures[0].error:'조회 완료');
+  }catch(e){setMessage(e instanceof Error?e.message:'조회 실패');}finally{try{await bridge('finish');}catch{}setElapsed(Math.floor((Date.now()-started.current)/1000));setRunning(false);document.getElementById('rank-results-heading')?.scrollIntoView({behavior:'smooth',block:'start'});}
  }
  function csv(){
   const cell=(v:unknown)=>{let s=String(v??'');if(/^[\s]*[=+@-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';};
@@ -143,10 +143,10 @@ export default function SearchRankAdmin(){
    </div>
    <p role="status">{message}{running&&' · '+Math.floor(elapsed/60)+'분 '+elapsed%60+'초'}</p>
    {!sharedReady&&<p className="rank-setup-note">예약 확인 대상 통합을 위한 서버 업데이트가 필요합니다. <a href="/downloads/rank-shared-settings.sql" download>업데이트 SQL 다운로드</a> → Supabase SQL Editor에서 한 번 실행해 주세요. 기존 예약은 업데이트 전까지 기존 대상대로 실행됩니다.</p>}
-   <details><summary>PC 연결 프로그램 및 검색 속도</summary><p><a href="/downloads/naver-rank-v1.2.2.zip" download>연결 프로그램 v1.2.2 다운로드</a> · 압축 해제 후 chrome://extensions에서 개발자 모드 → 압축해제된 확장 프로그램 로드 → 이 페이지 새로고침</p><label>검색 사이 대기 <select disabled={running} value={delay} onChange={e=>setDelay(Number(e.target.value))}><option value={500}>0.5초</option><option value={1000}>1초</option><option value={3000}>3초</option></select></label><p>수동 검색은 PC 연결 프로그램이 필요합니다. 예약 검색은 컴퓨터를 꺼도 서버에서 실행됩니다.</p></details>
+   <details><summary>PC 연결 프로그램 및 검색 속도</summary><p><a href="/downloads/naver-rank-v1.2.3.zip" download>연결 프로그램 v1.2.3 다운로드</a> · 압축 해제 후 chrome://extensions에서 개발자 모드 → 압축해제된 확장 프로그램 로드 → 이 페이지 새로고침</p><label>검색 사이 대기 <select disabled={running} value={delay} onChange={e=>setDelay(Number(e.target.value))}><option value={500}>0.5초</option><option value={1000}>1초</option><option value={3000}>3초</option></select></label><p>수동 검색은 PC 연결 프로그램이 필요합니다. 예약 검색은 컴퓨터를 꺼도 서버에서 실행됩니다.</p></details>
   </section>
   <section className="rank-panel">
-   <div className="rank-heading"><h2>{activeTab} 노출 순위</h2><span>{last?<>{last.source==='manual'?'수동 검색':'예약 검색'} · {korea(last.time)}</>:'아직 조회 기록 없음'}</span></div>
+   <div className="rank-heading"><h2 id="rank-results-heading">{activeTab} 노출 순위</h2><span>{last?<>{last.source==='manual'?'수동 검색':'예약 검색'} · {korea(last.time)}</>:'아직 조회 기록 없음'}</span></div>
    <div className="rank-settings-row"><div role="group" aria-label="확인 대상">{targets.map(t=><button key={t} aria-pressed={activeTab===t} onClick={()=>setTab(t)}>{t}</button>)}</div><input aria-label="검색어 찾기" placeholder="검색어 찾기" value={filter} onChange={e=>setFilter(e.target.value)}/><button disabled={!results.some(r=>r.rows.length)} onClick={csv}>CSV 다운로드</button></div>
    <p>검색어별 최신 결과입니다. 색상은 PC 통합검색 순위 기준입니다. API 숫자는 실제 블로그 탭 순위와 다르며, API로 확인할 수 없는 통합검색은 —로 표시합니다.</p>
    {jobError&&<p role="alert">{jobError}</p>}
@@ -156,13 +156,13 @@ export default function SearchRankAdmin(){
     const position=(mode:string)=>{
      const batch=r.rows.filter(x=>x.mode===mode),hits=batch.filter(x=>x.rank!=null&&!x.error);
      if(!batch.length)return <span>{r.source==='scheduled'&&mode==='web'?'—':'미확인'}</span>;
-     return <div className="rank-positions">{mode==='api'&&<span title="검색 API 기준이며 PC 화면 순위가 아닙니다">API</span>}{hits.length?hits.map(x=><a key={x.url+x.rank} href={x.url} title={x.title} target="_blank" rel="noopener noreferrer">{x.rank}위</a>):batch.some(x=>x.error)?'조회 실패':'미발견'}</div>;
+     return <div className="rank-positions">{mode==='api'&&<span title="검색 API 기준이며 PC 화면 순위가 아닙니다">API</span>}{hits.length?hits.map(x=><a key={x.url+x.rank} href={x.url} title={x.title} target="_blank" rel="noopener noreferrer">{x.rank}위</a>):batch.some(x=>x.error)?<span title={batch.find(x=>x.error)?.error}>조회 실패</span>:'미발견'}</div>;
     };
     return <tr key={r.keyword} className={color}><th scope="row"><a href={searchUrl(r.keyword)} target="_blank" rel="noopener noreferrer">{r.keyword}</a></th><td>{position('web')}</td><td>{position(r.source==='scheduled'||activeTab==='홈페이지'?'api':'blog')}</td><td className="rank-excerpt">{r.rows.filter(x=>x.rank!=null&&!x.error&&x.url).map(x=><a key={x.mode+x.url+x.rank} href={x.url} target="_blank" rel="noopener noreferrer" title={x.mode==='api'?'글 보기':x.title}>{x.mode==='api'?'API':x.mode==='web'?'통합':'블로그 탭'} {x.rank}위 · {x.mode==='api'?'글 보기':x.title||'글 보기'}</a>)}</td></tr>;
    })}</tbody></table></div>
    {!shown.length&&<p>표시할 검색어가 없습니다.</p>}
    <small>예약 시간 표시는 서버 요청 시작 시각입니다. 예약 결과는 15초마다 갱신합니다. 수동 기록은 현재 기기에 저장됩니다.</small>
   </section>
-  <details className="rank-panel"><summary>검색 API 사용량 보기</summary><ApiUsage client={client!} owner={user.id}/></details>
+  <ApiUsage client={client!} owner={user.id}/>
  </div>;
 }
