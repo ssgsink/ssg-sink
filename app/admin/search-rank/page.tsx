@@ -4,6 +4,7 @@ import {supabaseClient} from '@/lib/supabase';
 import './rank.css';
 import {rankColor} from './rankColor';
 import RankSchedule from './RankSchedule';
+import ApiUsage from './ApiUsage';
 import type {User} from '@supabase/supabase-js';
 type Hit={blogRank?:number;rank:number;title:string;url:string};
 type Result={error?:string;count?:number;targets?:{type:string;hits:Hit[]}[]};
@@ -53,7 +54,7 @@ export default function SearchRankAdmin(){
 <p>{shown.length}개 표시 · 전체 {summary.size}개</p>
 <div className="rank-list"><table><thead><tr><th>검색어</th><th>PC 통합</th>{targetTab==='블로그'&&<th>PC 블로그 탭</th>}<th>노출된 글</th></tr></thead>
 <tbody>{shown.map(([keyword,areas])=><tr key={keyword} className={rankColor(areas.web?.[0]?.rank)}><th scope="row"><a href={'https://search.naver.com/search.naver?'+new URLSearchParams({where:'nexearch',query:keyword})} target="_blank" rel="noopener noreferrer">{keyword}</a></th><td>{position(areas.web)}</td>{targetTab==='블로그'&&<td>{position(areas.blog)}</td>}<td className="rank-excerpt">{[...(areas.web||[]),...(targetTab==='블로그'?(areas.blog||[]):[])].filter(r=>r.rank!=null).map(r=><a key={r.mode+r.url} title={r.title} href={r.url} target="_blank" rel="noopener noreferrer">{r.mode==='blog'?'블로그 탭':'통합'} {r.rank}위 · {r.title}</a>)}</td></tr>)}</tbody></table></div>{!visibleRows.length&&<p>확인 시작을 누르면 검색어별 순위가 표시됩니다.</p>}</section>
-<RankSchedule client={client!} user={user} keywords={keywords} target={targetTab}/>
+<ApiUsage client={client!} owner={user.id}/><RankSchedule client={client!} user={user} keywords={keywords} target={targetTab}/>
 <details className="rank-panel"><summary>수동 검색 전체 기록</summary><div style={{overflowX:'auto'}}><table style={{width:'100%',minWidth:750}}><thead><tr>{['확인 시간','검색어','영역','대상','관측 순서','확인 범위','결과'].map(t=><th key={t}>{t}</th>)}</tr></thead><tbody>{[...visibleRows].reverse().map((r,i)=><tr key={i} className={rankColor(summary.get(r.keyword)?.web?.[0]?.rank)}><td>{new Date(r.time).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}</td><td>{r.keyword}</td><td>{r.mode==='blog'?'블로그':'통합'}</td><td>{r.type}</td><td>{r.error?'조회 실패':r.rank??'범위 내 미발견'}</td><td>제목 {r.scope}개</td><td><a href={r.url} target="_blank" rel="noopener noreferrer">{r.title||'검색 결과 확인'}</a></td></tr>)}</tbody></table>{!visibleRows.length&&<p>아직 {targetTab} 확인 결과가 없습니다.</p>}</div></details></div>;
 }
 
