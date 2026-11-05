@@ -43,6 +43,7 @@ export default function RankSchedule({client,user,keywords,target}:{client:Supab
   }catch{setMessage('저장하지 못했습니다. 로그인 상태를 확인하고 다시 시도하세요.')}
   finally{setBusy(false)}
  }
+ const currentEntries=entries.filter(e=>keywords.split('\n').some(w=>w.trim()===e.keyword));
  return <section style={{padding:20,margin:'24px 0',border:'1px solid #ddd',borderRadius:10}}>
   <h2>매일 자동 검색</h2>
   <p>한국 시간에 맞춰 서버에서 검색합니다. 위 입력란의 검색어를 변경한 뒤에는 예약 설정도 다시 저장하세요.</p>
@@ -56,6 +57,6 @@ export default function RankSchedule({client,user,keywords,target}:{client:Supab
   <p role="status">{message}</p>
   <h3>{target} 예약 검색 기록</h3>
   <p>네이버 {target==='블로그'?'블로그':'웹문서'} 검색 API 상위 100건 기준 · 최근 200개 기록</p>
-  {entries.length?<ul>{entries.map(e=><li key={e.id} className={rankColor(e.position)}>{e.day} · {e.keyword} · {e.position?<a className={rankColor(e.position)} href={e.link||undefined} target="_blank" rel="noopener noreferrer">{e.position}번째</a>:e.status==='done'?<span className={rankColor(null)}>상위 100건 내 미발견</span>:e.status==='error'?'조회 실패':'확인 대기'}</li>)}</ul>:<p>저장된 예약 검색 기록이 없습니다.</p>}
+  {currentEntries.length?<ul>{currentEntries.map(e=><li key={e.id} className={rankColor(e.position)}>{e.day} · {e.keyword} · {e.position?<a className={rankColor(e.position)} href={e.link||undefined} target="_blank" rel="noopener noreferrer">{e.position}번째</a>:e.status==='done'?<span className={rankColor(null)}>상위 100건 내 미발견</span>:e.status==='error'?'조회 실패':'확인 대기'}</li>)}</ul>:<p>저장된 예약 검색 기록이 없습니다.</p>}
  </section>;
 }
