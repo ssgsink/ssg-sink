@@ -125,25 +125,36 @@ export default function SearchRankAdmin(){
  return <div className="wrap section rank-page" style={{maxWidth:1100}}>
   <div className="rank-heading"><h1>검색 노출 확인</h1><a href="/admin/cases/">관리자 홈</a></div>
   <section className="rank-panel">
-   <div className="rank-heading"><h2>검색 설정</h2><span>{words.length}개 검색어 · {dirty?'저장하지 않은 변경 있음':'저장됨'}</span></div>
-   <p>검색어와 대상을 저장하고, PC에서 확인할 영역을 선택하세요. 예약 API는 PC 통합검색·블로그 탭을 직접 조회하지 않습니다.</p>
+   <div className="rank-heading"><h2>검색 설정</h2><span>{words.length}개 검색어</span></div>
    <label htmlFor="keywords">검색어 · 한 줄에 하나씩</label>
-   <textarea id="keywords" disabled={running||saving} value={keywords} rows={5} onChange={e=>{setKeywords(e.target.value);setRows([]);}} style={{width:'100%',padding:12,margin:'8px 0 16px'}}/>
+   <textarea id="keywords" disabled={running||saving} value={keywords} rows={5} onChange={e=>{setKeywords(e.target.value);setRows([]);}} style={{width:'100%',padding:12,margin:'8px 0 12px'}}/>
+   <div className="rank-settings-row">
+    <button className="btn-primary" disabled={running||saving} onClick={run}>{saving?'저장 중…':running?'검색 중…':'지금 검색'}</button>
+    {running&&<button onClick={()=>{stop.current=true;setMessage('현재 검색 후 중지합니다.');}}>중지</button>}
+    <span>{target==='both'?'블로그 + 홈페이지':target} · {screenScope==='both'?'통합검색 + 블로그 탭':screenScope==='web'?'통합검색':'블로그 탭'}</span>
+   </div>
+   <p style={{fontSize:13,margin:'10px 0'}}>{saved?.enabled?'매일 '+saved.time+' 예약됨':'예약 꺼짐'}{dirty?' · 변경한 설정은 지금 검색을 누르면 함께 저장됩니다.':''}</p>
+   <p role="status">{message}{running&&' · '+Math.floor(elapsed/60)+'분 '+elapsed%60+'초'}</p>
+   <details style={{borderTop:'1px solid #dde4eb',paddingTop:12,marginTop:12}}>
+    <summary>상세 설정</summary>
+    <div style={{paddingTop:16}}>
    <div className="rank-settings-row">
     <label>대상 <select disabled={running||saving} value={target} onChange={e=>{setTarget(e.target.value);if(e.target.value==='홈페이지'&&screenScope==='blog')setScreenScope('web');}}><option value="both">블로그 + 홈페이지</option><option value="블로그">블로그</option><option value="홈페이지">홈페이지</option></select></label>
     <label>PC 확인 영역 <select disabled={running||saving} value={screenScope} onChange={e=>setScreenScope(e.target.value)}><option value="both">통합검색 + 블로그 탭</option><option value="web">통합검색</option><option value="blog" disabled={target==='홈페이지'}>블로그 탭</option></select></label>
     <label><input type="checkbox" disabled={running||saving} checked={enabled} onChange={e=>setEnabled(e.target.checked)}/> 매일 예약 검색</label>
     <label>예약 시간 (한국) <input type="time" disabled={running||saving} value={time} onChange={e=>setTime(e.target.value)}/></label>
    </div>
-   <div className="rank-settings-row" style={{marginTop:18}}>
-    <button disabled={running||saving||!dirty} onClick={save}>{saving?'저장 중…':'설정 저장'}</button>
-    <button className="btn-primary" disabled={running||saving} onClick={run}>지금 검색</button>
-    {running&&<button onClick={()=>{stop.current=true;setMessage('현재 검색 후 중지합니다.');}}>중지</button>}
-    <span>{saved?.enabled?'매일 '+saved.time+' 예약됨':'예약 꺼짐'} · {ready?'서버 연결됨':'예약 서버 준비 필요'}</span>
-   </div>
-   <p role="status">{message}{running&&' · '+Math.floor(elapsed/60)+'분 '+elapsed%60+'초'}</p>
+
+     <div className="rank-settings-row" style={{margin:'16px 0'}}>
+      <button disabled={running||saving||!dirty} onClick={save}>{saving?'저장 중…':'설정 저장'}</button>
+      <span>{dirty?'저장하지 않은 변경 있음':'저장됨'} · {ready?'예약 서버 연결됨':'예약 서버 준비 필요'}</span>
+     </div>
+     <p>저장한 검색어와 대상을 수동·예약 검색에 함께 사용합니다. PC 확인 영역은 수동 검색에 적용됩니다.</p>
    {!sharedReady&&<p className="rank-setup-note">예약 확인 대상 통합을 위한 서버 업데이트가 필요합니다. <a href="/downloads/rank-shared-settings.sql" download>업데이트 SQL 다운로드</a> → Supabase SQL Editor에서 한 번 실행해 주세요. 기존 예약은 업데이트 전까지 기존 대상대로 실행됩니다.</p>}
    <details><summary>PC 연결 프로그램 및 검색 속도</summary><p><a href="/downloads/naver-rank-v1.2.3.zip" download>연결 프로그램 v1.2.3 다운로드</a> · 압축 해제 후 chrome://extensions에서 개발자 모드 → 압축해제된 확장 프로그램 로드 → 이 페이지 새로고침</p><label>검색 사이 대기 <select disabled={running} value={delay} onChange={e=>setDelay(Number(e.target.value))}><option value={500}>0.5초</option><option value={1000}>1초</option><option value={3000}>3초</option></select></label><p>수동 검색은 PC 연결 프로그램이 필요합니다. 예약 검색은 컴퓨터를 꺼도 서버에서 실행됩니다.</p></details>
+
+    </div>
+   </details>
   </section>
   <section className="rank-panel">
    <div className="rank-heading"><h2 id="rank-results-heading">{activeTab} 노출 순위</h2><span>{last?<>{last.source==='manual'?'수동 검색':'예약 검색'} · {korea(last.time)}</>:'아직 조회 기록 없음'}</span></div>
