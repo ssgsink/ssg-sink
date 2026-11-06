@@ -3,5 +3,5 @@ export function splitRegions(region:string):string[]{return Array.from(new Set((
 export default function CaseRegionLinks({region,overlay=false}:{region:string;overlay?:boolean}){
  const names=splitRegions(region);
  if(!names.length)return null;
- return <div className={overlay?"case-region-links case-region-overlay":"case-region-links"} aria-label="관련 지역 안내">{names.map(name=>{const slug=areaSlugs[name];return slug?<a key={name} href={'/areas/'+slug+'/'} title={name+' 싱크볼 교체 지역 안내'}>{name} <span aria-hidden="true">↗</span></a>:<span key={name}>{name}</span>})}</div>;
+ return <div className={overlay?"case-region-links case-region-overlay":"case-region-links"} aria-label="관련 지역 안내">{names.map(name=>{const slug=areaSlugs[name];return slug?<a key={name} href={'/areas/'+slug+'/'} title={name+' 싱크볼 교체 지역 안내'}>{name}</a>:<span key={name}>{name}</span>})}</div>;
 }
