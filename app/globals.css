@@ -1927,5 +1927,5 @@ textarea {
 .case-region-overlay a,.case-region-overlay>span{pointer-events:auto;display:inline-flex;align-items:center;gap:2px;max-width:100%;border:1px solid rgba(255,255,255,.72);background:#b28c52;color:#fff;border-radius:18px;padding:5px 9px;font-size:11px;font-weight:800;line-height:1.3;text-decoration:none;box-shadow:0 1px 5px rgba(0,0,0,.15)}
 .case-region-overlay a:hover,.case-region-overlay a:focus-visible{background:#765327;color:#fff;border-color:#fff}
 .ref-case>.case-region-overlay{top:9px;left:8px;right:8px}
-.ref-case>.case-region-overlay a,.ref-case>.case-region-overlay>span{background:#0759c6;border-color:rgba(255,255,255,.7);color:#fff}
-.ref-case>.case-region-overlay a:hover{background:#083b80}
+.ref-case>.case-region-overlay a,.ref-case>.case-region-overlay>span{background:#b28c52;border-color:rgba(255,255,255,.72);color:#fff}
+.ref-case>.case-region-overlay a:hover{background:#765327;color:#fff}
