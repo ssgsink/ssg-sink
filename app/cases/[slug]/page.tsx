@@ -1,9 +1,10 @@
+import CaseRegionLinks from '@/components/CaseRegionLinks';
 import {getManualCases} from '@/lib/supabase';import {sanitizeCaseDetails,caseMetaDescription} from '@/lib/case-rich-text';import {notFound} from 'next/navigation';import type {Metadata} from 'next';export const revalidate=3600;type Props={params:Promise<{slug:string}>};export async function generateMetadata({params}:Props):Promise<Metadata>{const {slug}=await params;const item=(await getManualCases()).find(x=>x.slug===slug);return item?{title:item.title,description:caseMetaDescription(item.description,item.details),alternates:{canonical:'/cases/'+slug+'/'},openGraph:{type:'article',locale:'ko_KR',siteName:'신세계싱크',title:item.title,description:caseMetaDescription(item.description,item.details),url:'/cases/'+slug+'/',images:Array.from(new Set([item.after_url,...(item.gallery||[])].filter((url):url is string=>Boolean(url)))).map(url=>({url,alt:item.title}))}}:{title:'시공 사례를 찾을 수 없습니다',robots:{index:false}}}export default async function CaseDetail({params}:Props){
  const {slug}=await params;
  const item=(await getManualCases()).find(x=>x.slug===slug);
  if(!item)notFound();
  return <article>
- <header className="site-detail-top"><div className="wrap site-case-content"><nav className="site-crumb"><a href="/">홈</a><span>›</span><a href="/cases/">시공 사례</a><span>›</span><span>상세 보기</span></nav><span className="site-kicker">REAL INSTALLATION</span><h1>{item.title}</h1><p>{item.region}</p></div></header>
+ <header className="site-detail-top"><div className="wrap site-case-content"><nav className="site-crumb"><a href="/">홈</a><span>›</span><a href="/cases/">시공 사례</a><span>›</span><span>상세 보기</span></nav><span className="site-kicker">REAL INSTALLATION</span><h1>{item.title}</h1><CaseRegionLinks region={item.region}/></div></header>
  <div className="site-section"><div className="wrap site-case-content">
  {item.after_url&&<figure className="case-detail-cover"><img src={item.after_url} alt={item.title+' 대표 시공 사진'}/><figcaption>대표 시공 사진</figcaption></figure>}
  <p className="site-detail-copy" style={{marginTop:30}}>{item.description}</p>
