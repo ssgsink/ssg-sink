@@ -1,3 +1,4 @@
+import CaseRegionLinks from '@/components/CaseRegionLinks';
 import {smsHref} from '@/lib/contact';
 import {getManualCases} from '@/lib/supabase';
 import type {Metadata} from 'next';
@@ -28,7 +29,7 @@ export default async function Home(){
    <article><span>✓</span><strong>시공 완료</strong><p>마무리 점검 및<br/>사용 안내</p></article>
   </div></div></section>
   <section className="ref-cases"><div className="wrap"><h2>실제 <em>시공 사례</em></h2><p>부산·경남 곳곳에서 진행한 신세계싱크의 실제 시공 사례를 확인해 보세요.</p><div className="ref-case-grid">
-   {cases.map(item=><a href={`/cases/${item.slug}/`} className="ref-case" key={item.id}><img src={item.after_url!} alt={item.title} loading="lazy"/><span>{item.region}</span></a>)}
+   {cases.map(item=><div className="ref-case" key={item.id}><a href={`/cases/${item.slug}/`} className="ref-case-photo-link" aria-label={item.title+" 시공 사례 보기"}><img src={item.after_url!} alt={item.title} loading="lazy"/></a><CaseRegionLinks region={item.region} overlay/></div>)}
    {Array.from({length:Math.max(0,3-cases.length)},(_,i)=><a href="/cases/" className="ref-case ref-case-placeholder" key={`placeholder-${i}`}><div className="ref-case-placeholder-photo"/><span>시공 사례</span></a>)}
    <a className="ref-case-all" href="/cases/"><span>⌂</span><strong>더 많은<br/>시공사례 보기 ›</strong></a>
   </div><a href="/cases/" className="ref-more-button">더 많은 시공사례 보기 ❯</a></div></section>
