@@ -1912,3 +1912,11 @@ textarea {
 .admin-analytics-list strong{white-space:nowrap}
 .admin-analytics-notice{background:#fcf8f1}
 @media(max-width:650px){.admin-analytics-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-analytics-metrics>div{padding:14px}.admin-analytics-metrics strong{font-size:25px}}
+
+/* Case regions: visible badges with direct links to service-area pages */
+.case-region-links{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px}
+.case-region-links a,.case-region-links>span{display:inline-flex;align-items:center;gap:3px;max-width:100%;border:1px solid #d9c9aa;background:#f8f3e9;color:#6d5129;border-radius:20px;padding:5px 10px;font-size:12px;font-weight:750;line-height:1.4;text-decoration:none}
+.case-region-links a:hover,.case-region-links a:focus-visible{background:#e9d8b8;border-color:#a17a36;text-decoration:underline}
+.cases-ref-card-body>.case-region-links{margin-bottom:10px}
+.site-detail-top .case-region-links{margin-top:12px}
+.site-detail-top .case-region-links a{color:#6d5129}
