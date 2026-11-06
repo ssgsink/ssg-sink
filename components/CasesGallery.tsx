@@ -4,6 +4,7 @@ import {useState} from 'react';
 import type {CasePost} from '@/lib/supabase';
 import type {BlogPost} from '@/lib/blog';
 import CaseActions from '@/components/CaseActions';
+import CaseRegionLinks from '@/components/CaseRegionLinks';
 const PAGE_SIZE=8;
 function Pagination({count,page,onChange,label}:{count:number;page:number;onChange:(page:number)=>void;label:string}){
  const total=Math.ceil(count/PAGE_SIZE);
@@ -26,8 +27,8 @@ export default function CasesGallery({cases,blogs}:{cases:CasePost[];blogs:BlogP
    <section className="cases-ref-section" aria-labelledby="case-list-heading">
     <header className="cases-ref-section-heading"><div><span className="cases-ref-section-eyebrow">INSTALLATION CASES</span><h2 id="case-list-heading">⚒ 시공 사례</h2><p>신세계싱크가 직접 시공한 싱크볼 교체 사례를 확인하세요.</p></div><CaseActions/></header>
     <div className="cases-ref-grid">{shownCases.map(item=><article className="cases-ref-card" key={item.id}>
-     <a href={'/cases/'+item.slug+'/'} className="cases-ref-photo">{item.after_url?<img src={item.after_url} alt={item.title+' 시공 후 사진'} loading="lazy"/>:<div className="cases-ref-photo-empty">시공 사진 준비 중</div>}<span>{item.region}</span></a>
-     <div className="cases-ref-card-body"><h3>{item.title}</h3><p>{item.description}</p><a className="cases-ref-detail" href={'/cases/'+item.slug+'/'}>자세히 보기 ›</a><CaseActions caseId={item.id}/></div>
+     <a href={'/cases/'+item.slug+'/'} className="cases-ref-photo">{item.after_url?<img src={item.after_url} alt={item.title+' 시공 후 사진'} loading="lazy"/>:<div className="cases-ref-photo-empty">시공 사진 준비 중</div>}</a>
+     <div className="cases-ref-card-body"><CaseRegionLinks region={item.region}/><h3>{item.title}</h3><p>{item.description}</p><a className="cases-ref-detail" href={'/cases/'+item.slug+'/'}>자세히 보기 ›</a><CaseActions caseId={item.id}/></div>
     </article>)}</div>
     {cases.length===0&&<div className="cases-ref-empty">등록된 시공 사례가 아직 없습니다.</div>}
     <Pagination count={cases.length} page={casePage} onChange={setCasePage} label="시공 사례"/>
