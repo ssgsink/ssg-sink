@@ -2,16 +2,19 @@ import CaseRegionLinks from '@/components/CaseRegionLinks';
 import {smsHref} from '@/lib/contact';
 import {getManualCases} from '@/lib/supabase';
 import type {Metadata} from 'next';
-export async function generateMetadata():Promise<Metadata>{
- const photos=(await getManualCases()).filter(item=>Boolean(item.after_url)).slice(0,3);
- return {alternates:{canonical:'/'},openGraph:{type:'website',locale:'ko_KR',siteName:'신세계싱크',title:'신세계싱크 | 부산·경남 싱크볼 교체 전문',description:'부산·경남 전 지역, 대표가 직접 상담부터 시공까지 진행하는 싱크볼 교체 전문 업체.',url:'/',images:photos.length?photos.map(item=>({url:item.after_url!,alt:item.title})):['/og-image.png']}};
-}
+export const metadata:Metadata={
+ title:'신세계싱크 | 부산·경남 싱크볼 교체 전문',
+ description:'신세계싱크 | 부산·경남 전 지역 싱크볼 교체 전문 업체. 사각 싱크볼, 언더 싱크볼, 씽크볼·개수대 교체 및 설치 상담.',
+ alternates:{canonical:'/'},
+ openGraph:{type:'website',locale:'ko_KR',siteName:'신세계싱크',title:'신세계싱크 | 부산·경남 싱크볼 교체 전문',description:'부산·경남 전 지역 싱크볼 교체 전문 신세계싱크. 대표가 직접 상담부터 시공까지 진행합니다.',url:'/',images:[{url:'/og-image.png',width:1200,height:630,alt:'신세계싱크 싱크볼 교체 전문'}]},
+ twitter:{card:'summary_large_image',images:['/og-image.png']}
+};
 export const revalidate=60;
 const areas=[['부산','busan'],['창원','changwon'],['마산','masan'],['진해','jinhae'],['김해','gimhae'],['양산','yangsan'],['진주','jinju'],['사천','sacheon'],['거제','geoje'],['통영','tongyeong'],['고성','goseong'],['창녕','changnyeong'],['함안','haman'],['밀양','miryang'],['기타 지역','gyeongnam']];
 export default async function Home(){
  const cases=(await getManualCases()).filter(item=>Boolean(item.after_url)).slice(0,3);
  const siteUrl=(process.env.NEXT_PUBLIC_SITE_URL||'https://ssg-sink.vercel.app').replace(/\/$/,'');
- const website={'@context':'https://schema.org','@type':'WebSite',name:'신세계싱크',alternateName:'SHINSEGAE SINK',url:siteUrl+'/'};
+ const website={'@context':'https://schema.org','@type':'WebSite',name:'신세계싱크',alternateName:['신세계싱크 싱크볼 교체','SHINSEGAE SINK'],url:siteUrl+'/'};
  return <main className="ref-home"><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(website).replace(/</g,'\\u003c')}}/>
   <section className="ref-hero"><div className="ref-hero-shade"><div className="wrap ref-hero-content">
    <span className="ref-eyebrow">SHINSEGAE SINK</span>
